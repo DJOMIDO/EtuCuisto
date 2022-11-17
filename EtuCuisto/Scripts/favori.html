@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Accueil</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/etucuisto_logo.png"
+        type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/CSS/accueil.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Hind">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" href="https://fonts.font.im/css?family=Pontano+Sans">
+    <script type="text/javascript"
+        src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+
+<body id="favori">
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-card notranslate w3-white w3-hind" style="overflow:visible;">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-hover-red w3-right"
+                href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
+                    class="fa fa-bars"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+                class="w3-bar-item w3-button w3-hover-none w3-padding-large w3-left" title="Logo"><img class="logo"
+                    src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/logo_text.svg" alt="logo"
+                    style="position:relative;z-index:1;" width="90px"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Acceuil"><i
+                    class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i></a>
+            <a href="#" class="w3-bar-item w3-button w3-padding-large w3-light-green w3-text-white w3-hover-blue"
+                title="Liste d'envies"><i class="fa fa-heart fa-beat"
+                    style="--fa-animation-duration: 0.5s; color:red"></i> Liste d'envies</a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/about_us.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Nous contacter"><i
+                    class="fa fa-envelope"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/faq.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Aide"><i
+                    class="fa fa-circle-question"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Partager"><i
+                        class="fa fa-share-nodes"></i></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-discord"></i> Discord</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Mail</a>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red"><i
+                    class="fa fa-search"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red w3-right">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Déconnexion"><i
+                        class="fa fa-user"></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button" name="logout" id="logout" value="Log Out"><i
+                            class="fa fa-arrow-right-from-bracket"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar sur petit écan -->
+    <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i>Accueil</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/about_us.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-envelope"></i>
+            Nous contacter</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/faq.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-circle-question"></i> Aide</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-search"></i> Recherche</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" name="logout" id="logout"
+            value="Log Out" onclick=""><i class="fa fa-arrow-right-from-bracket"></i> Déconnexion</a>
+    </div>
+
+    <!-- Liste d'envies -->
+    <div class="w3-container w3-padding-64 w3-light-grey">
+        <h2>Ma liste d'envies</h2>
+        <p>Voilà une liste de recettes que tu as dans ta collection : </p>
+        <ul class="w3-ul w3-card-4 w3-white">
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div id="recipelinks" class="w3-bar-item">
+                    <span class="w3-large">Ratatouille</span><br>
+                    <span>ÉTAPE 1
+                        tomate
+                        Coupez les tomates pelées en quartiers,<br>
+
+                        ÉTAPE 2
+                        aubergine
+                        courgette
+                        les aubergines et les courgettes en rondelles.<br>
+
+                        ÉTAPE 3
+                        poivron
+                        Emincez les poivrons en lamelles<br>
+
+                        ÉTAPE 4
+                        oignon
+                        et l'oignon en rouelles.<br>
+
+                        ÉTAPE 5
+                        huile d'olive
+                        Chauffez 2 cuillères à soupe d'huile dans une poêle<br>
+
+                        ÉTAPE 6
+                        et faites-y fondre les oignons et les poivrons.<br>
+
+                        ÉTAPE 7
+                        ail
+                        thym
+                        laurier
+                        Lorsqu'ils sont tendres, ajoutez les tomates, l'ail haché, le thym et le laurier.<br>
+
+                        ÉTAPE 8
+                        sel
+                        poivre
+                        Salez, poivrez et laissez mijoter doucement à couvert durant 45 minutes.<br>
+
+                        ÉTAPE 9
+                        huile d'olive
+                        Pendant ce temps, préparez les aubergines et les courgettes. Faites les cuire séparemment ou non
+                        dans l'huile d'olive pendant 15 minutes.<br>
+
+                        ÉTAPE 10
+                        Vérifiez la cuisson des légumes pour qu'ils ne soient plus fermes. Ajoutez les alors au mélange
+                        de tomates et prolongez la cuisson sur tout petit feu pendant 10 min.<br>
+
+                        ÉTAPE 11
+                        Salez et poivrez si besoin.</span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+
+            <li class="w3-bar">
+                <span onclick="this.parentElement.style.display='none'"
+                    class="w3-bar-item w3-button w3-white w3-xlarge w3-right">×</span>
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/EtuCuisto.svg"
+                    class="w3-bar-item w3-hide-small" style="width:85px">
+                <div class="w3-bar-item">
+                    <span class="w3-large"></span><br>
+                    <span></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+        <i class="fa-brands fa-tiktok w3-hover-opacity"></i>
+        <i class="fa-brands fa-twitter w3-hover-opacity"></i>
+        <i class="fa-brands fa-facebook w3-hover-opacity"></i>
+        <i class="fa-brands fa-instagram w3-hover-opacity"></i>
+        <i class="fa-brands fa-whatsapp w3-hover-opacity"></i>
+        <i class="fa-brands fa-discord w3-hover-opacity"></i>
+        <i class="fa fa-envelope w3-hover-opacity"></i>
+        <p class="w3-medium">&copy; 2022 EtuCuisto</a>
+        </p>
+        <div style="position:relative;bottom:10px;z-index:1;" class="w3-tooltip w3-right w3-medium">
+            <span class="w3-text w3-padding w3-light-green w3-hide-small">Haut de page</span>
+            <a class="w3-button w3-theme" href="#favori"><span class="w3-large">
+                    <i class="fa fa-chevron-circle-up"></i></span></a>
+        </div>
+    </footer>
+
+    <script>
+
+        // Sert à faire apparaître le menu sur les petits écrans lorsqu'on clique sur le bouton du menu
+        function myFunction() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        // Logout
+        $(document).ready(function () {
+            $('#logout').on('click', function (e) {
+                if (confirm("Vous voulez quitter ?"))
+                    window.location.href = "login.html";
+
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

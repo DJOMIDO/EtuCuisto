@@ -1,0 +1,74 @@
+html,
+body,
+h2 {
+    font-family: "Hind", sans-serif
+}
+
+.w3-hind {
+    font-family: "Hind", sans-serif
+}
+
+.w3-sofia {
+    font-family: "Sofia", cursive;
+}
+
+.w3-top {
+    height: 80px;
+}
+
+.w3-top a {
+    align-items: center;
+}
+
+.mySlides {
+    display: none
+}
+
+/* The grid: 9 colonnes égales qui flottent les unes à côté des autres */
+.column {
+    margin         : 0 auto;
+    float          : left;
+    display        : flex;
+    position       : relative;
+    justify-content: center;
+    align-items    : center;
+    text-align     : center;
+    width          : 11.11%;
+    height         : 70px;
+    padding        : 0;
+    cursor         : pointer;
+}
+
+.containerTab {
+    padding  : 20px;
+    font-size: 15px;
+    color    : #303030;
+}
+
+/* Effacer les floats après les colonnes */
+.row:after {
+    content: "";
+    display: table;
+    clear  : both;
+}
+
+/* Bouton refermable dans l'onglet du conteneur */
+.closebtn {
+    float    : right;
+    color    : white;
+    font-size: 35px;
+    cursor   : pointer;
+}
+
+/* Les images dans les colonnes */
+.imgColumn {
+    width      : 50%;
+    height     : 50px;
+    align-items: center;
+}
+
+/* Addresse de l'UGA */
+.adduga {
+    display    : flex;
+    align-items: baseline;
+}

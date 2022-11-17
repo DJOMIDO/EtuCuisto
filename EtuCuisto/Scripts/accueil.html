@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Accueil</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/etucuisto_logo.png"
+        type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/CSS/accueil.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Hind">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" href="https://fonts.font.im/css?family=Pontano+Sans">
+    <script type="text/javascript"
+        src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="js/extention/choices.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+
+<body id="accueil">
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-card notranslate w3-white w3-hind" style="overflow:visible;">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-hover-red w3-right"
+                href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
+                    class="fa fa-bars"></i></a>
+            <a href="#" class="w3-bar-item w3-button w3-hover-none w3-padding-large w3-left" title="Logo"><img
+                    class="logo" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/logo_text.svg"
+                    alt="logo" style="position:relative;z-index:1;" width="90px"></i></a>
+            <a href="#" class="w3-bar-item w3-button w3-padding-large w3-light-green w3-text-white w3-hover-red"
+                title="Acceuil"><i class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i> Accueil</a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/favori.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Liste d'envies"><i
+                    class="fa fa-heart fa-beat" style="--fa-animation-duration: 0.5s"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/about_us.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Nous contacter"><i
+                    class="fa fa-envelope"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/faq.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Aide"><i
+                    class="fa fa-circle-question"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Partager"><i
+                        class="fa fa-share-nodes"></i></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-discord"></i> Discord</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Mail</a>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red"><i
+                    class="fa fa-search"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red w3-right">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Déconnexion"><i
+                        class="fa fa-user"></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button" name="logout" id="logout" value="Log Out"><i
+                            class="fa fa-arrow-right-from-bracket"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Navbar sur petit écan -->
+    <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/favori.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-heart fa-beat" style="--fa-animation-duration: 0.5s"></i> Liste d'envies</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/about_us.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-envelope"></i>
+            Nous contacter</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/faq.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-circle-question"></i> Aide</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-search"></i> Recherche</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" name="logout"
+            id="logout" value="Log Out"><i class="fa fa-arrow-right-from-bracket"></i> Déconnexion</a>
+    </div>
+
+    <div class="w3-content" style="max-width:2000px;margin-top:46px">
+        <!-- Slideshow des images automatique -->
+        <div class="mySlides w3-display-container w3-center">
+            <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/banner.jpeg" class="w3-opacity-min"
+                style="width:100%">
+            <div class="w3-display-bottommiddle w3-container w3-sofia w3-text-white w3-padding-16 w3-hide-small">
+                <p class="w3-xxxlarge"><b>C'est toi le cuisto !</b></p>
+                <p class="w3-xlarge"><b>Que cuisine-t-on aujourd'hui ?</b></p>
+            </div>
+        </div>
+        <div class="mySlides w3-display-container w3-center">
+            <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/banner2.jpeg" class="w3-opacity-min"
+                style="width:100%">
+            <div class="w3-display-bottommiddle w3-container w3-sofia w3-text-white w3-padding-16 w3-hide-small">
+                <p class="w3-xxxlarge"><b>C'est toi le cuisto !</b></p>
+                <p class="w3-xlarge"><b>Que cuisine-t-on aujourd'hui ?</b></p>
+            </div>
+        </div>
+        <div class="mySlides w3-display-container w3-center">
+            <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/banner3.jpeg" class="w3-opacity-min"
+                style="width:100%">
+            <div class="w3-display-bottommiddle w3-container w3-sofia w3-text-white w3-padding-16 w3-hide-small">
+                <p class="w3-xxxlarge"><b>C'est toi le cuisto !</b></p>
+                <p class="w3-xlarge"><b>Que cuisine-t-on aujourd'hui ?</b></p>
+            </div>
+        </div>
+        <div class="mySlides w3-display-container w3-center">
+            <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/banner4.jpeg" class="w3-opacity-min"
+                style="width:100%">
+            <div class="w3-display-bottommiddle w3-container w3-sofia w3-text-white w3-padding-16 w3-hide-small">
+                <p class="w3-xxxlarge"><b>C'est toi le cuisto !</b></p>
+                <p class="w3-xlarge"><b>Que cuisine-t-on aujourd'hui ?</b></p>
+            </div>
+        </div>
+        <div class="mySlides w3-display-container w3-center">
+            <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/banner5.jpeg" class="w3-opacity-min"
+                style="width:100%">
+            <div class="w3-display-bottommiddle w3-container w3-sofia w3-text-white w3-padding-16 w3-hide-small">
+                <p class="w3-xxxlarge"><b>C'est toi le cuisto !</b></p>
+                <p class="w3-xlarge"><b>Que cuisine-t-on aujourd'hui ?</b></p>
+            </div>
+        </div>
+        <div class="mySlides w3-display-container w3-center">
+            <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/banner6.jpeg" class="w3-opacity-min"
+                style="width:100%">
+            <div class="w3-display-bottommiddle w3-container w3-sofia w3-text-white w3-padding-16 w3-hide-small">
+                <p class="w3-xxxlarge"><b>C'est toi le cuisto !</b></p>
+                <p class="w3-xlarge"><b>Que cuisine-t-on aujourd'hui ?</b></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9 colonnes d'ingrédients -->
+    <div>
+        <form id="query">
+            <div class="row">
+                <div class="column" onclick="openTab('b1');" style="background:lightcoral;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/beef.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b2');" style="background:skyblue;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/poisson.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b3');" style="background:orange;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/carrot.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b4');" style="background:pink;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/kiwi.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b5');" style="background:beige;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/fromage.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b6');" style="background:lightsalmon;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/pain.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b7');" style="background:gold;">
+                    <img class="imgColumn"
+                        src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/assaisonnement.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b8');" style="background:rgba(0, 190, 0, 0.767)">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/epices.svg"
+                        alt="imgColumn">
+                </div>
+                <div class="column" onclick="openTab('b9');" style="background:lavender;">
+                    <img class="imgColumn" src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/else.svg"
+                        alt="imgColumn">
+                </div>
+            </div>
+
+            <!-- Colonnes de pleine taille : (cachées par défaut) -->
+            <div id="b1" class="containerTab w3-hind" style="display:none;background:lightcoral">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-table-all" id="vi">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Viandes</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="boeuf" />Boeuf
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="porc" />Porc
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="poulet" />Poulet
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="agneau" />Agneau
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="veau" />Veau
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="jambon" />Jambon
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="charcuterie" />Charcuterie</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="lardons" />Lardons
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="chorizo" />Chorizo
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="cervelas" />Cervelas
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b2" class="containerTab w3-hind" style="display:none;background:skyblue">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-table-all" id="po">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Poissons</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="saumon" />Saumon
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="truite" />Truite
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="cabillaud" />Cabillaud</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="thon" />Thon
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="dorade" />Dorade
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="anchois" />Anchois
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="bar" />Bar
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="lieu" />Lieu
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="lotte" />Lotte
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="merlan" />Merlan
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="colin" />Colin
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="rouget" />Rouget
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="sole" />Sole
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="sardine" />Sardine
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b3" class="containerTab w3-hind" style="display:none;background:orange">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="legu">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Légumes</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="carottes" />Carottes
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="poireaux" />Poireaux
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="tomates" />Tomates
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="haricots" />Haricots
+                                verts
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="courgettes" />Courgettes</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="aubergines" />Aubergines</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="concombres" />Concombres</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="oignons" />Oignons
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="ail" />Ail
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="asperges" />Asperges
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="salade" />Salade
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="betteraves" />Betteraves</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="brocolis" />Brocolis
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="celeri" />Céleri
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="chou" />Chou
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="chou-fleur" />Chou-fleur</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="citrouille" />Citrouille</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="echalotes" />Echalotes</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="endives" />Endives
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="epinards" />Epinards
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="lentilles" />Lentilles</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="mais" />Maïs
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="melon" />Melon
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="navet" />Navet
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="petit-pois" />Petits
+                                pois
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="potiron" />Potiron
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="poivron" />Poivron
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="pois-chiche" />Pois
+                                chiche
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="radis" />Radis
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="salsifis" />Salsifis
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="champignons" />Champignons</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b4" class="containerTab w3-hind" style="display:none;background:pink">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="fru">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Fruits</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="pommes" />Pommes
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="poires" />Poires
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="bananes" />Bananes
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="clementines" />Clémentines</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="oranges" />Oranges
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="abricots" />Abricots
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="cerises" />Cerises
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="ananas" />Ananas
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="fraises" />Fraises
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="framboises" />Framboises</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="groseilles" />Groseilles</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="kiwis" />Kiwis
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="mangues" />Mangues
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="citrons" />Citrons
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="mûres" />Mûres
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="pêches" />Pêches
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="noix" />Noix
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="prunes" />Prunes
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="raisins" />Raisins
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="mirabelles" />Mirabelles</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b5" class="containerTab w3-hind" style="display:none;background:beige">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="pls">
+                    </table>
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Produits laitiers</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="lait" />Lait
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="yaourts" />Yaourts
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="beurre" />Beurre
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="fromage-blanc" />Fromage blanc
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="gruyère" />Gruyère
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="comté" />Comté
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="crème-fraîche" />Crème
+                                faîche
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name=""
+                                    value="fromage-de-chèvre" />Fromage
+                                de
+                                chèvre
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="roquefort" />Roquefort</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="mozzarella" />Mozzarella</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b6" class="containerTab w3-hind" style="display:none;background:lightsalmon">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="fec">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Féculents</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="pâtes" />Pâtes
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="riz" />Riz
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="pommes-de-terre" />Pommes de terre
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="semoule" />Semoule
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b7" class="containerTab w3-hind" style="display:none;background:gold">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="condi">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Condiments</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="vinaigre" />Vinaigre
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="huile" />Huile
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="moutarde" />Moutarde
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="mayonnaise" />Mayonnaise</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b8" class="containerTab w3-hind" style="display:none;background:rgba(0, 190, 0, 0.767)">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="ep">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Épices et herbes</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="thym" />Thym
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="romarin" />Romarin
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="ciboulette" />Ciboulette</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="basilic" />Basilic
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="paprika" />Paprika
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="curry" />Curry
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="menthe" />Menthe
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="wasabi" />Wasabi
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="cannelle" />Cannelle
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="coriandre" />Coriandre</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="curcuma" />Curcuma
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="muscade" />Muscade
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="cumin" />Cumin
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="girofle" />Girofle
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="piment" />Piment
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="estragon" />Estragon
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="herbes-de-provence" />Herbes
+                                de
+                                Provence
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="persil" />Persil
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="gingembre" />Gingembre</td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="sarriette" />Sarriette</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="b9" class="containerTab w3-hind" style="display:none;background:lavender">
+                <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
+                <h3>Faites votre choix</h3>
+                <div class="w3-responsive" id="aut">
+                    <table class="w3-table-all">
+                        <thead>
+                            <tr class="w3-lime">
+                                <th>Autres</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="sucre" />Sucre
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="chocolat" />Chocolat
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt" value="oeufs" />Œufs
+                            </td>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="cornichons" />Cornichons</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="w3-check w3-margin-right" name="aqt"
+                                    value="farine" />Farine
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recherche avancée -->
+            <div class="w3-container w3-pale-blue w3-padding-64 w3-hind">
+                <h3 class="w3-center w3-sofia w3-margin-bottom">Recherche avancée</h3>
+                <div class="w3-sand w3-container w3-card-2 w3-content w3-center w3-padding-32 w3-round">
+                    <select name="dt" class="w3-select w3-margin-bottom w3-yellow w3-round w3-center">
+                        <option value="" disabled selected>Que souhaitez-vous faire ?</option>
+                        <option value="entree">Une entrée</option>
+                        <option value="platprincipal">Un plat</option>
+                        <option value="soupe">Une soupe</option>
+                        <option value="dessert">Un dessert</option>
+                        <option value="boisson">Une boisson</option>
+                    </select>
+                    <select name="ttlt" class="w3-select w3-margin-bottom w3-light-blue w3-round w3-center">
+                        <option value="" disabled selected>Temps de préparation souhaité</option>
+                        <option value="15">Moins de 15 minutes</option>
+                        <option value="30">Moins de 30 minutes</option>
+                        <option value="45">Moins de 45 minutes</option>
+                    </select>
+                    <select name="ustensile" class="w3-select w3-margin-bottom w3-lime w3-round w3-center">
+                        <option value="" disabled selected>Ustensile que vous possédez</option>
+                        <option value="four">Four</option>
+                        <option value="micro-ondes">Micro-ondes</option>
+                        <option value="poele">Poêle</option>
+                        <option value="wok">Wok</option>
+                        <option value="marmite">Marmite</option>
+                        <option value="friteuse">Friteuse</option>
+                        <option value="cocotte-minutes">Cocotte-minutes</option>
+                        <option value="moule-a-gateau">Moule à gâteau</option>
+                        <option value="moule-a-tartes">Moule à tartes</option>
+                        <option value="plat-a-gratin">Plat à gratin</option>
+                        <option value="crepiere">Crêpière</option>
+                    </select>
+                    <select name="personnes" class="w3-select w3-cyan w3-round w3-center" name="option">
+                        <option value="" disabled selected>Nombre de personne</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="5">Entre 2 et 5</option>
+                        <option value="10">Entre 5 et 10</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <!-- Réinitialisation et validation des choix -->
+        <div class="w3-container w3-center w3-pale-blue w3-hind w3-padding-16">
+            <button class="w3-button w3-light-green w3-ripple w3-margin-top" id="delete"
+                style="width:120px">Réinitialiser</button>
+            <button class="w3-button w3-light-green w3-ripple w3-margin-left w3-margin-top" style="width:120px"
+                id="validation">Valider</button>
+        </div>
+        <div id="showSeria" class="w3-pale-blue w3-container w3-padding-32 w3-center">
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+        <i class="fa-brands fa-tiktok w3-hover-opacity"></i>
+        <i class="fa-brands fa-twitter w3-hover-opacity"></i>
+        <i class="fa-brands fa-facebook w3-hover-opacity"></i>
+        <i class="fa-brands fa-instagram w3-hover-opacity"></i>
+        <i class="fa-brands fa-whatsapp w3-hover-opacity"></i>
+        <i class="fa-brands fa-discord w3-hover-opacity"></i>
+        <i class="fa fa-envelope w3-hover-opacity"></i>
+        <p class="w3-medium">&copy; 2022 EtuCuisto</a>
+        </p>
+        <div style="position:relative;bottom:10px;z-index:1;" class="w3-tooltip w3-right w3-medium">
+            <span class="w3-text w3-padding w3-light-green w3-hide-small">Haut de page</span>
+            <a class="w3-button w3-theme" href="#accueil"><span class="w3-large">
+                    <i class="fa fa-chevron-circle-up"></i></span></a>
+        </div>
+    </footer>
+
+    <script>
+        // Slideshow automatique - changement d'image toutes les 4 secondes
+        var myIndex = 0;
+        carousel();
+
+        function carousel() {
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            myIndex++;
+            if (myIndex > x.length) { myIndex = 1 }
+            x[myIndex - 1].style.display = "block";
+            setTimeout(carousel, 4000);
+        }
+
+        // Sert à faire apparaître le menu sur les petits écrans lorsqu'on clique sur le bouton du menu
+        function myFunction() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        // Fontion colonne
+        function openTab(tabName) {
+            var i, x;
+            x = document.getElementsByClassName("containerTab");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
+
+        // Réinitialisation
+        $("#delete").on("click", function () {
+            $("form")[0].reset();
+        });
+
+        // Sérialization et validation
+        $("#validation").click(function () {
+            var aqtData = []
+            var selecData = []
+            ingre = $('form').find('input:not([name="aqt"])').serialize();
+            $('form').find('input[type=checkbox]:checked').each(function () {
+                aqtData.push(this.value);
+            });
+            ingre += 'aqt=' + aqtData.join('-') + '&';
+            selec = $('form').find('select').serialize();
+            $('form').find('select[option]:selected').each(function () {
+                selecData.push(this.value);
+            });
+            //selec += 'dt=' + selecData.join('&') + 'ttlt=' + selecData.join('&') + 'ustensile=' + selecData.join('&') + 'personnes=' + selecData.join('&');
+            data = ingre + selec;
+            console.log(data);
+            //alert(data);
+            $.ajax({
+                url: "envoie.php",
+                method: "POST",
+                data: { formData: data },
+                success: function (data) {
+                    $("#showSeria").html($.parseJSON(data));
+                    console.log("Result PHP : " + data);
+                }
+            });
+        });
+
+        // Logout
+        $(document).ready(function () {
+            $('#logout').on('click', function (e) {
+                if (confirm("Vous voulez quitter ?"))
+                    window.location.href = "login.html";
+
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

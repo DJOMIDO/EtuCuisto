@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FAQs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/etucuisto_logo.png"
+        type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/CSS/accueil.css">
+    <link rel="stylesheet" type="text/css" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/CSS/faq.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Hind">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" href="https://fonts.font.im/css?family=Pontano+Sans">
+    <script type="text/javascript"
+        src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body id="faqs">
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-card notranslate w3-white w3-hind" style="overflow:visible;">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-hover-red w3-right"
+                href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
+                    class="fa fa-bars"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+                class="w3-bar-item w3-button w3-hover-none w3-padding-large w3-left" title="Logo"><img class="logo"
+                    src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/logo_text.svg" alt="logo"
+                    style="position:relative;z-index:1;" width="90px"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Acceuil"><i
+                    class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/favori.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Liste d'envies"><i
+                    class="fa fa-heart fa-beat" style="--fa-animation-duration: 0.5s;"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/about_us.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hover-red w3-hide-small" title="Nous contacter"><i
+                    class="fa fa-envelope"></i></a>
+            <a href="#" class="w3-bar-item w3-button w3-padding-large w3-light-green w3-text-white w3-hover-red"
+                title="Aide"><i class="fa fa-circle-question"></i> Aide</a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Partager"><i
+                        class="fa fa-share-nodes"></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-discord"></i> Discord</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Mail</a>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red"><i
+                    class="fa fa-search"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red w3-right">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Déconnexion"><i
+                        class="fa fa-user"></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button" name="logout" id="logout" value="Log Out"><i
+                            class="fa fa-arrow-right-from-bracket"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar sur petit écan -->
+    <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i> Acceuil</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/favori.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-heart fa-beat" style="--fa-animation-duration: 0.5s"></i> Liste d'envies</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/about_us.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-envelope"></i> À propos</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-search"></i> Recherche</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" name="logout" id="logout"
+            value="Log Out" onclick=""><i class="fa fa-arrow-right-from-bracket"></i> Déconnexion</a>
+    </div>
+
+    <!-- FAQs Section -->
+    <div class="faq w3-container w3-padding-64" id="faq">
+
+        <div class="global-label w3-padding-64">
+            <div class="global-label-text w3-xlarge">
+                Foire Aux Questions &#10067;
+            </div>
+        </div>
+
+        <!-- 1ère question -->
+        <div class="faq-container">
+            <div class="faq-label w3-light-green">
+                <div class="faq-label-text w3-text-white">
+                    À quoi sert ce site ?
+                </div>
+                <div class="faq-label-icon w3-light-green">
+                    <span class="material-icons">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    Ce site spécialement conçu pour les étudiants vous permet de transformer vos ingrédients perdus
+                    au fond du placard et du frigo en délicieux repas ! </br>
+                    Vous pouvez, en quelques clics, vous régaler et ne rien gâcher ! </br>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2e question -->
+        <div class="faq-container">
+            <div class="faq-label w3-light-green">
+                <div class="faq-label-text w3-text-white">
+                    Comment ça marche ?
+                </div>
+                <div class="faq-label-icon">
+                    <span class="material-icons w3-light-green">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    1. Renseignez les ingrédients que vous possédez.</br>
+                    2. Renseignez les informations qui vous concernent.</br>
+                    3. Lancez la recherche en cliquant sur le bouton.</br>
+                    4. Découvrez les résultats.</br>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3e question -->
+        <div class="faq-container">
+            <div class="faq-label w3-light-green">
+                <div class="faq-label-text w3-text-white">
+                    Dans quel but avons-nous créé ce site ?
+                </div>
+                <div class="faq-label-icon w3-light-green">
+                    <span class="material-icons">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    Notre ambition est de permettre aux étudiants de découvrir des recettes simples, peu chères,
+                    rapides, et bonnes.</br>
+                    Pour changer des pâtes et du riz !
+                </div>
+            </div>
+        </div>
+
+        <!-- 4e question -->
+        <div class="faq-container">
+            <div class="faq-label w3-light-green">
+                <div class="faq-label-text w3-text-white">
+                    Pourquoi n'est-il accessible qu'aux étudiants ?
+                </div>
+                <div class="faq-label-icon w3-light-green">
+                    <span class="material-icons">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    Nous voulons que ceux qui ont peu de moyens puissent accéder à de la qualité au même titre que ceux
+                    pour qui les moyens ne sont pas un problème.</br>
+                    Car bien manger ne doit pas être un luxe, mais un choix à la portée de tous.
+                </div>
+            </div>
+        </div>
+
+        <!-- 5e question -->
+        <div class="faq-container">
+            <div class="faq-label w3-light-green">
+                <div class="faq-label-text w3-text-white">
+                    Un problème plus profond...
+                </div>
+                <div class="faq-label-icon w3-light-green">
+                    <span class="material-icons">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="faq-answer-content">
+                    Certains étudiants n'ayant pas les moyens peuvent développer des problèmes de santé, dont la gravité
+                    n'est souvent pas reconnue à sa juste valeur.</br>
+                    Mais cela engendre de vraies conséquences sur la vie de ces étudiants, qui peuvent les poursuivre
+                    pendant des années.</br>
+                    Nous espérons pouvoir jouer un rôle minime avec notre site dans ce grand projet.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+        <i class="fa-brands fa-tiktok w3-hover-opacity"></i>
+        <i class="fa-brands fa-twitter w3-hover-opacity"></i>
+        <i class="fa-brands fa-facebook w3-hover-opacity"></i>
+        <i class="fa-brands fa-instagram w3-hover-opacity"></i>
+        <i class="fa-brands fa-whatsapp w3-hover-opacity"></i>
+        <i class="fa-brands fa-discord w3-hover-opacity"></i>
+        <i class="fa fa-envelope w3-hover-opacity"></i>
+        <p class="w3-medium">&copy; 2022 EtuCuisto</a>
+        </p>
+        <div style="position:relative;bottom:10px;z-index:1;" class="w3-tooltip w3-right w3-medium">
+            <span class="w3-text w3-padding w3-light-green w3-hide-small">Haut de page</span>
+            <a class="w3-button w3-theme" href="#faqs"><span class="w3-large">
+                    <i class="fa fa-chevron-circle-up"></i></span></a>
+        </div>
+    </footer>
+
+    <script>
+
+        // Sert à faire apparaître le menu sur les petits écrans lorsqu'on clique sur le bouton du menu
+        function myFunction() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        // Expand
+        let faqLabel = document.querySelectorAll(".faq-label");
+
+        faqLabel.forEach(item => item.onclick = () => {
+            // Selection de réponse
+            item.nextElementSibling.classList.toggle('active');
+
+
+            let labelIcon = item.lastElementChild;
+            let icons = labelIcon.lastElementChild;
+            icons.classList.toggle('rotate');
+        })
+
+        // Logout
+        $(document).ready(function () {
+            $('#logout').on('click', function (e) {
+                if (confirm("Vous voulez quitter ?"))
+                    window.location.href = "login.html";
+
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

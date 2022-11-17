@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>À propos de nous</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/etucuisto_logo.png"
+        type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/CSS/accueil.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Hind">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" href="https://fonts.font.im/css?family=Pontano+Sans">
+    <script type="text/javascript"
+        src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+
+<body id="about_us">
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-card notranslate w3-white w3-hind" style="overflow:visible;">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-hover-red w3-right"
+                href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
+                    class="fa fa-bars"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+                class="w3-bar-item w3-button w3-hover-none w3-padding-large w3-left" title="Logo"><img class="logo"
+                    src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/logo_text.svg" alt="logo"
+                    style="position:relative;z-index:1;" width="90px"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Acceuil"><i
+                    class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i></a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/favori.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Liste d'envies"><i
+                    class="fa fa-heart fa-beat" style="--fa-animation-duration: 0.5s;"></i></a>
+            <a href="#" class="w3-bar-item w3-button w3-padding-large w3-light-green w3-text-white w3-hover-red"
+                title="Nous contacter"><i class="fa fa-envelope"></i> À propos</a>
+            <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/faq.html"
+                class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red" title="Aide"><i
+                    class="fa fa-circle-question"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Partager"><i
+                        class="fa fa-share-nodes"></i></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa-brands fa-discord"></i> Discord</a>
+                    <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> Mail</a>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hover-red"><i
+                    class="fa fa-search"></i></a>
+            <div class="w3-dropdown-hover w3-hide-small w3-hover-red w3-right">
+                <button class="w3-padding-large w3-button w3-hover-red" title="Déconnexion"><i
+                        class="fa fa-user"></i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                    <a href="#" class="w3-bar-item w3-button" name="logout" id="logout" value="Log Out"><i
+                            class="fa fa-arrow-right-from-bracket"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar sur petit écan -->
+    <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/accueil.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-home fa-flip" style="--fa-animation-duration: 3s;"></i> Acceuil</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/favori.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-heart fa-beat" style="--fa-animation-duration: 0.5s"></i> Liste d'envies</a>
+        <a href="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Scripts/faq.html"
+            class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-circle-question"></i> Aide</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" onclick="myFunction()"><i
+                class="fa fa-search"></i> Recherche</a>
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-red" name="logout" id="logout"
+            value="Log Out" onclick=""><i class="fa fa-arrow-right-from-bracket"></i> Déconnexion</a>
+    </div>
+
+    <!-- About Section -->
+    <div class="w3-light-grey w3-hind" id="about">
+        <div class="w3-container w3-padding-64 w3-hind">
+            <h2 class="w3-wide w3-center w3-padding-64">&#128064; Qui sommes-nous ?</h2>
+
+            <div class="w3-panel w3-lime w3-center w3-padding-64">
+                <span style="font-size:100px; opacity:0.2">❝</span>
+                <p class="w3-large" style="margin-top:-40px"><i>Nous sommes étudiants en première année de
+                        Master Sciences du
+                        langage dans le domaine IDL à l'Université Grenoble Alpes.</i></p>
+            </div>
+
+            <h2 class="w3-wide w3-center w3-padding-64">Notre équipe &#128175;</h2>
+
+            <div class="w3-padding-large w3-center">
+                <div class="w3-cell-row w3-content" style="width:70.5%">
+                    <div class="w3-cell w3-mobile w3-container w3-card w3-white">
+                        <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/IMG_7008.JPG" alt="Florine"
+                            style="width:60%; display:block; margin:0 auto">
+                        <div class="w3-container w3-white">
+                            <p><b>HECQUET Florine</b></p>
+                            <p class="w3-opacity">Co-créatrice</p>
+                            <p>Cat person with a real cat.</p>
+                            <p><i class="fa fa-envelope-open"></i> florine.hecquet@etu.univ-grenoble-alpes.fr</p>
+                            <button class="w3-button w3-light-green w3-margin-bottom w3-block">Contacter</button>
+                        </div>
+                    </div>
+                    <div class="w3-cell w3-mobile" style="padding:1em"></div>
+                    <div class="w3-cell w3-mobile w3-container w3-card w3-white">
+                        <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/IMG_7423.JPG" alt="Xiao"
+                            style="width:60%; display:block; margin:0 auto">
+                        <div class="w3-container w3-white">
+                            <p><b>MA Xiao</b></p>
+                            <p class="w3-opacity">Co-créateur</p>
+                            <p>Cat person with cats on Instagram.</p>
+                            <p><i class="fa fa-envelope-open"></i> xiao.ma@etu.univ-grenoble-alpes.fr</p>
+                            <button class="w3-button w3-light-green w3-margin-bottom w3-block">Contacter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="w3-content w3-container w3-padding-64 w3-hind w3-text-grey" id="contact">
+        <h3 class="w3-center">Nous contacter</h3>
+        <p class="w3-center"><em>Nous aimerions avoir votre avis !</em></p>
+
+        <div class="w3-row w3-padding-64 w3-section">
+            <div class="w3-col m4 w3-container">
+                <img src="http://i3l.univ-grenoble-alpes.fr/~maxiao/EtuCuisto/Images/carte.png"
+                    class="w3-image w3-round" style="width:100%">
+            </div>
+            <div class="w3-col m8 w3-panel">
+                <div class="w3-large w3-margin-bottom">
+                    <div class="adduga">
+                        <i class="fa fa-map-pin fa-fw fa-lg w3-hover-text-black w3-large w3-margin-right"></i>
+                        Université Grenoble Alpes<br>
+                        UFR LLASIC<br>
+                        Bâtiment Stendhal<br>
+                        1180 avenue centrale<br>
+                        38400 Saint-Martin-d'Hères<br>
+                    </div>
+                    <i class="fa fa-phone fa-fw fa-lg w3-hover-text-black w3-large w3-margin-right"></i>+33
+                    (0) 0
+                    00 00 00 00<br>
+                    <i
+                        class="fa fa-envelope fa-fw fa-lg w3-hover-text-black w3-large w3-margin-right"></i>contact@etucuisto.com<br>
+                </div>
+                <p>Laissez un message :</p>
+                <form id="feedback" target="_blank">
+                    <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+                        <div class="w3-half">
+                            <input id="usrname" class="w3-input w3-border" type="text" placeholder="Nom" required
+                                name="Name">
+                        </div>
+                        <div class="w3-half">
+                            <input id="usrmail" class="w3-input w3-border" type="text" placeholder="Email" required
+                                name="Email">
+                        </div>
+                    </div>
+                    <input id="usrmesg" class="w3-input w3-border" type="text" placeholder="Message" required
+                        name="Message">
+                </form>
+                <!-- Le résultat de la réponse AJAX sera affiché à l'intérieur de ce div. -->
+                <div id="result"></div>
+                <button id="vld" class="w3-button w3-light-green w3-right w3-section" type="submit">
+                    <i class="fa fa-paper-plane"></i> Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+        <i class="fa-brands fa-tiktok w3-hover-opacity"></i>
+        <i class="fa-brands fa-twitter w3-hover-opacity"></i>
+        <i class="fa-brands fa-facebook w3-hover-opacity"></i>
+        <i class="fa-brands fa-instagram w3-hover-opacity"></i>
+        <i class="fa-brands fa-whatsapp w3-hover-opacity"></i>
+        <i class="fa-brands fa-discord w3-hover-opacity"></i>
+        <i class="fa fa-envelope w3-hover-opacity"></i>
+        <p class="w3-medium">&copy; 2022 EtuCuisto</a>
+        </p>
+        <div style="position:relative;bottom:10px;z-index:1;" class="w3-tooltip w3-right w3-medium">
+            <span class="w3-text w3-padding w3-light-green w3-hide-small">Haut de page</span>
+            <a class="w3-button w3-theme" href="#about_us"><span class="w3-large">
+                    <i class="fa fa-chevron-circle-up"></i></span></a>
+        </div>
+    </footer>
+
+    <script>
+
+        // Sert à faire apparaître le menu sur les petits écrans lorsqu'on clique sur le bouton du menu
+        function myFunction() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+
+        // Feedback
+        $(document).on('click', '#vld', function (e) {
+
+            e.preventDefault();
+
+            var username = $('#usrname').val();
+            var usermail = $('#usrmail').val();
+            var usermesg = $('#usrmesg').val();
+            
+            if (username == '') {
+                alert('Veuillez saisir votre nom ! ');
+            }
+            else if (usermail == '') {
+                alert('Veuillez saisir votre mail ! ');
+            }
+            else if (usermesg == '') {
+                alert('Veuillez laisser un message ! ');
+            }
+            else {
+                $.ajax({
+                    url: 'sendmessage.php',
+                    type: 'POST',
+                    data:
+                    {
+                        newusrname: username,
+                        newusrmail: usermail,
+                        newusrmesg: usermesg
+                    },
+                    success: function (response) {
+                        $('#result').html(response);
+                        alert(data);
+                        console.log(data);
+                    }
+                });
+                $('#feedback')[0].reset();
+            }
+        });
+
+        // Logout
+        $(document).ready(function () {
+            $('#logout').on('click', function (e) {
+                if (confirm("Vous voulez quitter ?"))
+                    window.location.href = "login.html";
+
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>
