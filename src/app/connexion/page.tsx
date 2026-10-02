@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth/client";
@@ -32,8 +31,7 @@ export default function ConnexionPage() {
   }
 
   return (
-    <main id="content" className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-4 py-10">
-      <Image src="/logo.svg" alt="EtuCuisto" width={56} height={56} className="self-center" />
+    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-4 py-10">
       <h1 className="text-center text-2xl font-semibold">
         {mode === "signin" ? "Connexion" : "Créer un compte"}
       </h1>
