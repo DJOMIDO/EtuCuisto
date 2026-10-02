@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// Les pages Recettes et Favoris s'ajouteront ici (étapes 5 et 6).
+// La page Favoris s'ajoutera ici (étape 6).
 const LINKS = [
   { href: "/", label: "Frigo", icon: "🧊" },
+  { href: "/recettes", label: "Recettes", icon: "🍲" },
   { href: "/cuisine", label: "Cuisine", icon: "🍳" },
 ];
 

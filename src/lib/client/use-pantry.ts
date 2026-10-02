@@ -127,5 +127,21 @@ export function usePantry() {
     [userId],
   );
 
-  return { items, loaded, error, isGuest: !userId, add, update, remove };
+  // « J'ai cuisiné ça » : retire d'un coup les ingrédients utilisés.
+  const consume = useCallback(
+    async (ids: string[]) => {
+      if (userId) {
+        await fetchJson("/api/pantry/consume", { method: "POST", body: JSON.stringify({ ids }) });
+      }
+      const gone = new Set(ids);
+      setItems((prev) => {
+        const next = prev.filter((i) => !gone.has(i.id));
+        if (!userId) writeLocal(next);
+        return next;
+      });
+    },
+    [userId],
+  );
+
+  return { items, loaded, error, isGuest: !userId, add, update, remove, consume };
 }
