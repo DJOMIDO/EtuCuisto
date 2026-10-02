@@ -3,14 +3,12 @@ import { z } from "zod";
 import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredRequest } from "../types";
 
 // Modèles du niveau gratuit (voir ai.google.dev/gemini-api/docs/pricing).
-// 3.5-flash d'abord : plus rapide, et 3.8-flash est souvent saturé (503) en gratuit.
-// En cas de surcharge (503) ou de quota (429) sur le premier, on bascule sur le second.
-const DEFAULT_MODEL = "gemini-3.5-flash";
-const FALLBACK_MODEL = "gemini-3.8-flash";
-// gemini-3.8-flash refuse "minimal" (400) : "low" est le niveau le plus bas accepté.
-// Recettes en "low" : ~30 % plus rapide que "medium" à qualité égale sur nos tests.
-const THINKING: Record<AiTask, "low" | "medium"> = {
-  textParse: "low",
+// Les « flash-lite » répondent en 2-4 s et saturent moins que les « flash » en gratuit.
+// En cas de surcharge (503), de quota (429) ou de lenteur sur le premier, on bascule sur le second.
+const DEFAULT_MODEL = "gemini-3.5-flash-lite";
+const FALLBACK_MODEL = "gemini-3.1-flash-lite";
+const THINKING: Record<AiTask, "minimal" | "low"> = {
+  textParse: "minimal",
   vision: "low",
   recipes: "low",
 };
