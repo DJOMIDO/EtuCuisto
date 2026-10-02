@@ -19,7 +19,7 @@ const PROVIDERS: Record<string, AiProvider> = {
 
 /** Génère une sortie JSON validée par `schema`, via le fournisseur choisi par AI_PROVIDER. */
 export function generateStructured<T extends z.ZodType>(req: StructuredRequest<T>): Promise<z.infer<T>> {
-  const name = process.env.AI_PROVIDER || "gemini";
+  const name = (process.env.AI_PROVIDER || "gemini").trim().toLowerCase();
   const provider = PROVIDERS[name];
   if (!provider) throw new Error(`AI_PROVIDER inconnu : ${name}`);
   return provider.generate(req);
