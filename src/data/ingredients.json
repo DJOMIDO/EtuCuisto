@@ -1,0 +1,587 @@
+[
+ {
+  "id": "boeuf",
+  "label": "Boeuf",
+  "category": "viande"
+ },
+ {
+  "id": "porc",
+  "label": "Porc",
+  "category": "viande"
+ },
+ {
+  "id": "poulet",
+  "label": "Poulet",
+  "category": "viande"
+ },
+ {
+  "id": "agneau",
+  "label": "Agneau",
+  "category": "viande"
+ },
+ {
+  "id": "veau",
+  "label": "Veau",
+  "category": "viande"
+ },
+ {
+  "id": "jambon",
+  "label": "Jambon",
+  "category": "viande"
+ },
+ {
+  "id": "charcuterie",
+  "label": "Charcuterie",
+  "category": "viande"
+ },
+ {
+  "id": "lardons",
+  "label": "Lardons",
+  "category": "viande"
+ },
+ {
+  "id": "chorizo",
+  "label": "Chorizo",
+  "category": "viande"
+ },
+ {
+  "id": "cervelas",
+  "label": "Cervelas",
+  "category": "viande"
+ },
+ {
+  "id": "saumon",
+  "label": "Saumon",
+  "category": "poisson"
+ },
+ {
+  "id": "truite",
+  "label": "Truite",
+  "category": "poisson"
+ },
+ {
+  "id": "cabillaud",
+  "label": "Cabillaud",
+  "category": "poisson"
+ },
+ {
+  "id": "thon",
+  "label": "Thon",
+  "category": "poisson"
+ },
+ {
+  "id": "dorade",
+  "label": "Dorade",
+  "category": "poisson"
+ },
+ {
+  "id": "anchois",
+  "label": "Anchois",
+  "category": "poisson"
+ },
+ {
+  "id": "bar",
+  "label": "Bar",
+  "category": "poisson"
+ },
+ {
+  "id": "lieu",
+  "label": "Lieu",
+  "category": "poisson"
+ },
+ {
+  "id": "lotte",
+  "label": "Lotte",
+  "category": "poisson"
+ },
+ {
+  "id": "merlan",
+  "label": "Merlan",
+  "category": "poisson"
+ },
+ {
+  "id": "colin",
+  "label": "Colin",
+  "category": "poisson"
+ },
+ {
+  "id": "rouget",
+  "label": "Rouget",
+  "category": "poisson"
+ },
+ {
+  "id": "sole",
+  "label": "Sole",
+  "category": "poisson"
+ },
+ {
+  "id": "sardine",
+  "label": "Sardine",
+  "category": "poisson"
+ },
+ {
+  "id": "carottes",
+  "label": "Carottes",
+  "category": "legume"
+ },
+ {
+  "id": "poireaux",
+  "label": "Poireaux",
+  "category": "legume"
+ },
+ {
+  "id": "tomates",
+  "label": "Tomates",
+  "category": "legume"
+ },
+ {
+  "id": "haricots",
+  "label": "Haricots verts",
+  "category": "legume"
+ },
+ {
+  "id": "courgettes",
+  "label": "Courgettes",
+  "category": "legume"
+ },
+ {
+  "id": "aubergines",
+  "label": "Aubergines",
+  "category": "legume"
+ },
+ {
+  "id": "concombres",
+  "label": "Concombres",
+  "category": "legume"
+ },
+ {
+  "id": "oignons",
+  "label": "Oignons",
+  "category": "legume"
+ },
+ {
+  "id": "ail",
+  "label": "Ail",
+  "category": "legume"
+ },
+ {
+  "id": "asperges",
+  "label": "Asperges",
+  "category": "legume"
+ },
+ {
+  "id": "salade",
+  "label": "Salade",
+  "category": "legume"
+ },
+ {
+  "id": "betteraves",
+  "label": "Betteraves",
+  "category": "legume"
+ },
+ {
+  "id": "brocolis",
+  "label": "Brocolis",
+  "category": "legume"
+ },
+ {
+  "id": "celeri",
+  "label": "Céleri",
+  "category": "legume"
+ },
+ {
+  "id": "chou",
+  "label": "Chou",
+  "category": "legume"
+ },
+ {
+  "id": "chou-fleur",
+  "label": "Chou-fleur",
+  "category": "legume"
+ },
+ {
+  "id": "citrouille",
+  "label": "Citrouille",
+  "category": "legume"
+ },
+ {
+  "id": "echalotes",
+  "label": "Echalotes",
+  "category": "legume"
+ },
+ {
+  "id": "endives",
+  "label": "Endives",
+  "category": "legume"
+ },
+ {
+  "id": "epinards",
+  "label": "Epinards",
+  "category": "legume"
+ },
+ {
+  "id": "lentilles",
+  "label": "Lentilles",
+  "category": "legume"
+ },
+ {
+  "id": "mais",
+  "label": "Maïs",
+  "category": "legume"
+ },
+ {
+  "id": "melon",
+  "label": "Melon",
+  "category": "legume"
+ },
+ {
+  "id": "navet",
+  "label": "Navet",
+  "category": "legume"
+ },
+ {
+  "id": "petit-pois",
+  "label": "Petits pois",
+  "category": "legume"
+ },
+ {
+  "id": "potiron",
+  "label": "Potiron",
+  "category": "legume"
+ },
+ {
+  "id": "poivron",
+  "label": "Poivron",
+  "category": "legume"
+ },
+ {
+  "id": "pois-chiche",
+  "label": "Pois chiche",
+  "category": "legume"
+ },
+ {
+  "id": "radis",
+  "label": "Radis",
+  "category": "legume"
+ },
+ {
+  "id": "salsifis",
+  "label": "Salsifis",
+  "category": "legume"
+ },
+ {
+  "id": "champignons",
+  "label": "Champignons",
+  "category": "legume"
+ },
+ {
+  "id": "pommes",
+  "label": "Pommes",
+  "category": "fruit"
+ },
+ {
+  "id": "poires",
+  "label": "Poires",
+  "category": "fruit"
+ },
+ {
+  "id": "bananes",
+  "label": "Bananes",
+  "category": "fruit"
+ },
+ {
+  "id": "clementines",
+  "label": "Clémentines",
+  "category": "fruit"
+ },
+ {
+  "id": "oranges",
+  "label": "Oranges",
+  "category": "fruit"
+ },
+ {
+  "id": "abricots",
+  "label": "Abricots",
+  "category": "fruit"
+ },
+ {
+  "id": "cerises",
+  "label": "Cerises",
+  "category": "fruit"
+ },
+ {
+  "id": "ananas",
+  "label": "Ananas",
+  "category": "fruit"
+ },
+ {
+  "id": "fraises",
+  "label": "Fraises",
+  "category": "fruit"
+ },
+ {
+  "id": "framboises",
+  "label": "Framboises",
+  "category": "fruit"
+ },
+ {
+  "id": "groseilles",
+  "label": "Groseilles",
+  "category": "fruit"
+ },
+ {
+  "id": "kiwis",
+  "label": "Kiwis",
+  "category": "fruit"
+ },
+ {
+  "id": "mangues",
+  "label": "Mangues",
+  "category": "fruit"
+ },
+ {
+  "id": "citrons",
+  "label": "Citrons",
+  "category": "fruit"
+ },
+ {
+  "id": "mûres",
+  "label": "Mûres",
+  "category": "fruit"
+ },
+ {
+  "id": "pêches",
+  "label": "Pêches",
+  "category": "fruit"
+ },
+ {
+  "id": "noix",
+  "label": "Noix",
+  "category": "fruit"
+ },
+ {
+  "id": "prunes",
+  "label": "Prunes",
+  "category": "fruit"
+ },
+ {
+  "id": "raisins",
+  "label": "Raisins",
+  "category": "fruit"
+ },
+ {
+  "id": "mirabelles",
+  "label": "Mirabelles",
+  "category": "fruit"
+ },
+ {
+  "id": "lait",
+  "label": "Lait",
+  "category": "laitier"
+ },
+ {
+  "id": "yaourts",
+  "label": "Yaourts",
+  "category": "laitier"
+ },
+ {
+  "id": "beurre",
+  "label": "Beurre",
+  "category": "laitier"
+ },
+ {
+  "id": "fromage-blanc",
+  "label": "Fromage blanc",
+  "category": "laitier"
+ },
+ {
+  "id": "gruyère",
+  "label": "Gruyère",
+  "category": "laitier"
+ },
+ {
+  "id": "comté",
+  "label": "Comté",
+  "category": "laitier"
+ },
+ {
+  "id": "crème-fraîche",
+  "label": "Crème faîche",
+  "category": "laitier"
+ },
+ {
+  "id": "roquefort",
+  "label": "Roquefort",
+  "category": "laitier"
+ },
+ {
+  "id": "mozzarella",
+  "label": "Mozzarella",
+  "category": "laitier"
+ },
+ {
+  "id": "pâtes",
+  "label": "Pâtes",
+  "category": "feculent"
+ },
+ {
+  "id": "riz",
+  "label": "Riz",
+  "category": "feculent"
+ },
+ {
+  "id": "pommes-de-terre",
+  "label": "Pommes de terre",
+  "category": "feculent"
+ },
+ {
+  "id": "semoule",
+  "label": "Semoule",
+  "category": "feculent"
+ },
+ {
+  "id": "vinaigre",
+  "label": "Vinaigre",
+  "category": "condiment"
+ },
+ {
+  "id": "huile",
+  "label": "Huile",
+  "category": "condiment"
+ },
+ {
+  "id": "moutarde",
+  "label": "Moutarde",
+  "category": "condiment"
+ },
+ {
+  "id": "mayonnaise",
+  "label": "Mayonnaise",
+  "category": "condiment"
+ },
+ {
+  "id": "thym",
+  "label": "Thym",
+  "category": "epice"
+ },
+ {
+  "id": "romarin",
+  "label": "Romarin",
+  "category": "epice"
+ },
+ {
+  "id": "ciboulette",
+  "label": "Ciboulette",
+  "category": "epice"
+ },
+ {
+  "id": "basilic",
+  "label": "Basilic",
+  "category": "epice"
+ },
+ {
+  "id": "paprika",
+  "label": "Paprika",
+  "category": "epice"
+ },
+ {
+  "id": "curry",
+  "label": "Curry",
+  "category": "epice"
+ },
+ {
+  "id": "menthe",
+  "label": "Menthe",
+  "category": "epice"
+ },
+ {
+  "id": "wasabi",
+  "label": "Wasabi",
+  "category": "epice"
+ },
+ {
+  "id": "cannelle",
+  "label": "Cannelle",
+  "category": "epice"
+ },
+ {
+  "id": "coriandre",
+  "label": "Coriandre",
+  "category": "epice"
+ },
+ {
+  "id": "curcuma",
+  "label": "Curcuma",
+  "category": "epice"
+ },
+ {
+  "id": "muscade",
+  "label": "Muscade",
+  "category": "epice"
+ },
+ {
+  "id": "cumin",
+  "label": "Cumin",
+  "category": "epice"
+ },
+ {
+  "id": "girofle",
+  "label": "Girofle",
+  "category": "epice"
+ },
+ {
+  "id": "piment",
+  "label": "Piment",
+  "category": "epice"
+ },
+ {
+  "id": "estragon",
+  "label": "Estragon",
+  "category": "epice"
+ },
+ {
+  "id": "herbes-de-provence",
+  "label": "Herbes de Provence",
+  "category": "epice"
+ },
+ {
+  "id": "persil",
+  "label": "Persil",
+  "category": "epice"
+ },
+ {
+  "id": "gingembre",
+  "label": "Gingembre",
+  "category": "epice"
+ },
+ {
+  "id": "sarriette",
+  "label": "Sarriette",
+  "category": "epice"
+ },
+ {
+  "id": "sucre",
+  "label": "Sucre",
+  "category": "autre"
+ },
+ {
+  "id": "chocolat",
+  "label": "Chocolat",
+  "category": "autre"
+ },
+ {
+  "id": "oeufs",
+  "label": "Œufs",
+  "category": "autre"
+ },
+ {
+  "id": "cornichons",
+  "label": "Cornichons",
+  "category": "autre"
+ },
+ {
+  "id": "farine",
+  "label": "Farine",
+  "category": "autre"
+ }
+]
