@@ -8,10 +8,11 @@ import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredReques
 const DEFAULT_MODEL = "gemini-3.5-flash";
 const FALLBACK_MODEL = "gemini-3.8-flash";
 // gemini-3.8-flash refuse "minimal" (400) : "low" est le niveau le plus bas accepté.
+// Recettes en "low" : ~30 % plus rapide que "medium" à qualité égale sur nos tests.
 const THINKING: Record<AiTask, "low" | "medium"> = {
   textParse: "low",
   vision: "low",
-  recipes: "medium",
+  recipes: "low",
 };
 
 let client: GoogleGenAI | undefined;
