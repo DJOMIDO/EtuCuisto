@@ -3,9 +3,10 @@ import { z } from "zod";
 import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredRequest } from "../types";
 
 // Modèles du niveau gratuit (voir ai.google.dev/gemini-api/docs/pricing).
+// 3.5-flash d'abord : plus rapide, et 3.8-flash est souvent saturé (503) en gratuit.
 // En cas de surcharge (503) ou de quota (429) sur le premier, on bascule sur le second.
-const DEFAULT_MODEL = "gemini-3.8-flash";
-const FALLBACK_MODEL = "gemini-3.5-flash";
+const DEFAULT_MODEL = "gemini-3.5-flash";
+const FALLBACK_MODEL = "gemini-3.8-flash";
 // gemini-3.8-flash refuse "minimal" (400) : "low" est le niveau le plus bas accepté.
 const THINKING: Record<AiTask, "low" | "medium"> = {
   textParse: "low",
