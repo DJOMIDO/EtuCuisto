@@ -1,25 +1,83 @@
 @import "tailwindcss";
 
+/* Couleurs du logo EtuCuisto : turquoise #00b6cd, rouge #ef3f32, jaune #ffd556.
+   Les variantes « -strong » sont assombries pour un contraste texte ≥ 4.5:1. */
 :root {
+  color-scheme: light dark;
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2328;
+  --muted: #5b636b;
+  --surface: #f4f7f8;
+  --border: #c9d1d6;
+  --accent: #00b6cd;
+  --accent-strong: #00707e;
+  --on-accent: #ffffff;
+  --warn-bg: #fff4cc;
+  --warn-fg: #6b4e00;
+  --danger: #c4271c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #121416;
+    --foreground: #eef1f3;
+    --muted: #a3acb3;
+    --surface: #1c2024;
+    --border: #3b4248;
+    --accent: #00b6cd;
+    --accent-strong: #4fd3e4;
+    --on-accent: #0b1a1d;
+    --warn-bg: #3d3000;
+    --warn-fg: #ffe082;
+    --danger: #ff7b70;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-on-accent: var(--on-accent);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-fg: var(--warn-fg);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+:where(a, button, input, textarea, select, summary, label:has(input[type="file"])):focus-visible {
+  outline: 3px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* Visible seulement pour les lecteurs d'écran (sauf si l'élément prend le focus). */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

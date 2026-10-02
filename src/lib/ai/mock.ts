@@ -1,4 +1,4 @@
-import { INGREDIENTS } from "@/lib/ingredients";
+import { findIngredient } from "@/lib/ingredients";
 import type { ParsedIngredients, PantryForPrompt, Recommendations } from "./schemas";
 
 // Données factices pour développer sans clé d'API (AI_PROVIDER=mock).
@@ -18,7 +18,7 @@ export function mockParse(text: string): ParsedIngredients {
         .trim()
         .toLowerCase()
         .replace(/^(?:(?:une|un|du|des|les|le|la|de la)\s+|de l'|l'|d')/, "");
-      const known = INGREDIENTS.find((i) => name.includes(i.id) || name.includes(i.label.toLowerCase()));
+      const known = findIngredient(name) ?? findIngredient(name.split(" ").at(-1) ?? "");
       return {
         name,
         quantity: qty ? qty[1].trim() : null,
@@ -33,7 +33,7 @@ export function mockParse(text: string): ParsedIngredients {
 export function mockRecognize(): ParsedIngredients {
   return {
     items: [
-      { name: "œuf", quantity: "4", category: "laitier", expiresSoon: false },
+      { name: "œuf", quantity: "4", category: "autre", expiresSoon: false },
       { name: "courgette", quantity: "1", category: "legume", expiresSoon: true },
       { name: "fromage râpé", quantity: "1/2 sachet", category: "laitier", expiresSoon: false },
       { name: "tomate", quantity: "2", category: "legume", expiresSoon: false },

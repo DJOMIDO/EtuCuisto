@@ -8,7 +8,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "EtuCuisto",
+  title: { default: "EtuCuisto", template: "%s | EtuCuisto" },
   description:
     "Vide ton frigo : des recettes rapides avec ce que tu as déjà, pensées pour les cuisines d'étudiants.",
   icons: { icon: "/logo.svg" },

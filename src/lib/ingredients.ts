@@ -27,3 +27,21 @@ export const CATEGORIES: { id: CategoryId; label: string; icon: string }[] = [
 ];
 
 export const INGREDIENTS = ingredients as Ingredient[];
+
+/** « Œufs », « oeuf », « tomate » → même clé : sans accents, sans pluriel. */
+function normalize(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/œ/g, "oe")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .trim()
+    .replace(/[sx]$/, "");
+}
+
+const BY_KEY = new Map(INGREDIENTS.flatMap((i) => [[normalize(i.id), i], [normalize(i.label), i]]));
+
+/** Retrouve un ingrédient de la liste d'origine, ou undefined. */
+export function findIngredient(name: string): Ingredient | undefined {
+  return BY_KEY.get(normalize(name));
+}
