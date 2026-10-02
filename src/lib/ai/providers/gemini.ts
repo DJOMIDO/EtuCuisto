@@ -15,16 +15,26 @@ const THINKING: Record<AiTask, "low" | "medium"> = {
   recipes: "low",
 };
 
+// Netlify coupe une requête après ~26-30 s : tout l'appel IA doit tenir en 24 s,
+// sinon l'utilisateur reçoit une page 504 au lieu d'un message d'erreur clair.
+const TOTAL_BUDGET_MS = 24_000;
+// Temps max laissé au premier modèle ; le reste du budget va au modèle de repli.
+const FIRST_ATTEMPT_MS: Record<AiTask, number> = { textParse: 10_000, vision: 10_000, recipes: 16_000 };
+const MIN_ATTEMPT_MS = 4_000;
+
 let client: GoogleGenAI | undefined;
 
 export const geminiProvider: AiProvider = {
   async generate<T extends z.ZodType>(req: StructuredRequest<T>) {
     const models = [...new Set([process.env.GEMINI_MODEL || DEFAULT_MODEL, FALLBACK_MODEL])];
+    const deadline = Date.now() + TOTAL_BUDGET_MS;
     for (const [index, model] of models.entries()) {
+      const remaining = deadline - Date.now();
+      const last = index === models.length - 1 || remaining - FIRST_ATTEMPT_MS[req.task] < MIN_ATTEMPT_MS;
+      const timeout = last ? remaining : FIRST_ATTEMPT_MS[req.task];
       try {
-        return await generateOnce(model, req);
+        return await generateOnce(model, req, timeout);
       } catch (error) {
-        const last = index === models.length - 1;
         if (last || !isTransient(error)) throw toAiError(error);
         console.warn(`Gemini ${model} indisponible, bascule sur ${models[index + 1]}:`, (error as Error).message);
       }
@@ -33,7 +43,11 @@ export const geminiProvider: AiProvider = {
   },
 };
 
-async function generateOnce<T extends z.ZodType>(model: string, req: StructuredRequest<T>): Promise<z.infer<T>> {
+async function generateOnce<T extends z.ZodType>(
+  model: string,
+  req: StructuredRequest<T>,
+  timeoutMs: number,
+): Promise<z.infer<T>> {
   client ??= new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const interaction = await client.interactions.create(
     {
@@ -54,7 +68,7 @@ async function generateOnce<T extends z.ZodType>(model: string, req: StructuredR
     },
     // Pas de nouvelle tentative dans le SDK : sous Next.js, elle réutilise un corps de
     // requête déjà lu (« TypeError: unusable »). On gère la bascule nous-mêmes.
-    { maxRetries: 0, timeout: 90_000 },
+    { maxRetries: 0, timeout: timeoutMs },
   );
 
   if (!interaction.output_text) throw AI_ERRORS.incomplete();
@@ -126,6 +140,11 @@ function toAiError(error: unknown): Error {
     }
     console.error(`Gemini API ${status}:`, (error as Error).message);
     return AI_ERRORS.unavailable();
+  }
+  // Délai dépassé ou réseau (APIConnectionError, APIConnectionTimeoutError) : pas de code HTTP.
+  if (/Connection|Timeout/.test((error as Error)?.constructor?.name ?? "")) {
+    console.error("Gemini injoignable ou trop lent:", (error as Error).message);
+    return AI_ERRORS.busy();
   }
   return error instanceof Error ? error : new Error(String(error));
 }
