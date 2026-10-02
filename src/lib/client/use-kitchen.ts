@@ -28,6 +28,33 @@ function writeLocal(kitchen: KitchenProfile | null) {
   }
 }
 
+type KitchenResponse = { kitchen: KitchenProfile; isDefault: boolean };
+
+// Même principe que pour le frigo : un seul envoi des réglages invité, partagé.
+let migration: Promise<KitchenResponse> | null = null;
+
+function migrateLocalKitchen(local: KitchenProfile | null): Promise<KitchenResponse> {
+  if (migration) return migration;
+  writeLocal(null);
+  migration = (async () => {
+    try {
+      const data = await fetchJson<KitchenResponse>("/api/kitchen");
+      if (!local || !data.isDefault) return data;
+      const saved = await fetchJson<{ kitchen: KitchenProfile }>("/api/kitchen", {
+        method: "PUT",
+        body: JSON.stringify(local),
+      });
+      return { ...saved, isDefault: false };
+    } catch (e) {
+      if (local) writeLocal(local);
+      throw e;
+    } finally {
+      migration = null;
+    }
+  })();
+  return migration;
+}
+
 export function useKitchen() {
   const { data: session, isPending: sessionPending } = authClient.useSession();
   const userId = session?.user?.id ?? null;
@@ -47,14 +74,7 @@ export function useKitchen() {
         return;
       }
       try {
-        let data = await fetchJson<{ kitchen: KitchenProfile; isDefault: boolean }>("/api/kitchen");
-        if (local && data.isDefault) {
-          data = { ...(await fetchJson<{ kitchen: KitchenProfile }>("/api/kitchen", {
-            method: "PUT",
-            body: JSON.stringify(local),
-          })), isDefault: false };
-        }
-        writeLocal(null);
+        const data = await migrateLocalKitchen(local);
         if (!cancelled) setKitchen(data.kitchen);
       } catch (e) {
         if (!cancelled) setError((e as Error).message);

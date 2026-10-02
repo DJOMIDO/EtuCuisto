@@ -39,6 +39,30 @@ function toItem(row: PantryItem): PantryItem {
   return { id, name, quantity, category, expiresSoon };
 }
 
+// Envoi en cours du frigo invité. Partagé : si l'effet se relance pendant l'envoi
+// (rafraîchissement de session), il attend cet envoi au lieu de lire un frigo incomplet.
+let migration: Promise<void> | null = null;
+
+function migrateLocalPantry() {
+  const local = readLocal();
+  if (local.length) {
+    writeLocal([]); // vidé tout de suite : jamais envoyé deux fois
+    migration = fetchJson("/api/pantry", {
+      method: "POST",
+      body: JSON.stringify({ items: local.map(toInput) }),
+    })
+      .then(() => undefined)
+      .catch((e) => {
+        writeLocal(local);
+        throw e;
+      })
+      .finally(() => {
+        migration = null;
+      });
+  }
+  return migration ?? Promise.resolve();
+}
+
 export function usePantry() {
   const { data: session, isPending: sessionPending } = authClient.useSession();
   const userId = session?.user?.id ?? null;
@@ -57,14 +81,7 @@ export function usePantry() {
         return;
       }
       try {
-        const local = readLocal();
-        if (local.length) {
-          await fetchJson("/api/pantry", {
-            method: "POST",
-            body: JSON.stringify({ items: local.map(toInput) }),
-          });
-          writeLocal([]);
-        }
+        await migrateLocalPantry();
         const data = await fetchJson<{ items: PantryItem[] }>("/api/pantry");
         if (!cancelled) setItems(data.items.map(toItem));
       } catch (e) {

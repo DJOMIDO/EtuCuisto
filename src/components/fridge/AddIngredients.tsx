@@ -189,7 +189,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
               accept="image/*"
               onChange={analyzePhoto}
               disabled={busy !== null}
-              className="visually-hidden"
+              className="sr-only"
             />
           </label>
         </div>

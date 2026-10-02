@@ -165,7 +165,7 @@ export function RecipesPage() {
                   value={t}
                   checked={maxMinutes === t}
                   onChange={() => setMaxMinutes(t)}
-                  className="visually-hidden"
+                  className="sr-only"
                 />
                 {t} min
               </label>

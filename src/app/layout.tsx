@@ -13,11 +13,15 @@ export const metadata: Metadata = {
   title: { default: "EtuCuisto", template: "%s | EtuCuisto" },
   description:
     "Vide ton frigo : des recettes rapides avec ce que tu as déjà, pensées pour les cuisines d'étudiants.",
-  icons: { icon: "/logo.svg" },
+  icons: { icon: "/logo.svg", apple: "/icons/app/apple-touch-icon.png" },
+  appleWebApp: { title: "EtuCuisto", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#121416" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

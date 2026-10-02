@@ -13,11 +13,15 @@ type Props = {
   busy: boolean;
   onFavorite: () => void;
   onCooked: () => void;
+  /** Page Favoris : on peut refaire une recette déjà cuisinée, et la supprimer. */
+  allowRecook?: boolean;
+  note?: string;
+  onDelete?: () => void;
 };
 
 const TOOL_LABEL = Object.fromEntries(TOOL_OPTIONS.map((o) => [o.id, o.label]));
 
-export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked }: Props) {
+export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked, allowRecook, note, onDelete }: Props) {
   const id = useId();
   const fromFridge = recipe.ingredients.filter((i) => i.pantryItemId);
   const toBuy = recipe.missing;
@@ -30,6 +34,7 @@ export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked }: Props)
           {recipe.title}
         </h2>
         <p className="text-muted">{recipe.summary}</p>
+        {note && <p className="text-sm text-muted">{note}</p>}
         <ul role="list" className="mt-1 flex flex-wrap gap-2 text-sm">
           <li className="rounded-full bg-surface px-3 py-1">
             <span aria-hidden="true">⏱ </span>
@@ -102,10 +107,10 @@ export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked }: Props)
         <button
           type="button"
           onClick={onCooked}
-          disabled={busy || saved.cooked}
+          disabled={busy || (saved.cooked && !allowRecook)}
           className="rounded-lg bg-accent-strong px-4 py-2.5 font-medium text-on-accent disabled:opacity-60"
         >
-          {saved.cooked ? "✓ Cuisiné" : "J'ai cuisiné ça"}
+          {allowRecook ? "Je la refais" : saved.cooked ? "✓ Cuisiné" : "J'ai cuisiné ça"}
           <span className="visually-hidden"> : {recipe.title}</span>
         </button>
         <button
@@ -118,6 +123,16 @@ export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked }: Props)
           <span aria-hidden="true">{saved.favorite ? "★ " : "☆ "}</span>
           Favori<span className="visually-hidden"> : {recipe.title}</span>
         </button>
+        {onDelete && (
+          <button
+            type="button"
+            onClick={onDelete}
+            disabled={busy}
+            className="rounded-lg px-4 py-2.5 text-sm text-danger underline disabled:opacity-60"
+          >
+            Supprimer<span className="visually-hidden"> : {recipe.title}</span>
+          </button>
+        )}
       </div>
     </article>
   );

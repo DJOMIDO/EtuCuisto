@@ -55,7 +55,9 @@ body {
   line-height: 1.5;
 }
 
-:where(a, button, input, textarea, select, summary, label:has(input[type="file"])):focus-visible {
+:where(a, button, input, textarea, select, summary):focus-visible,
+/* Champs masqués (sr-only) dans un label stylé en bouton : le focus se voit sur le label. */
+label:has(> input.sr-only:focus-visible) {
   outline: 3px solid var(--accent-strong);
   outline-offset: 2px;
 }
