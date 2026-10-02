@@ -1,11 +1,14 @@
-import { ApiError, GoogleGenAI } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredRequest } from "../types";
 
-// Modèle du niveau gratuit (voir ai.google.dev/gemini-api/docs/pricing).
+// Modèles du niveau gratuit (voir ai.google.dev/gemini-api/docs/pricing).
+// En cas de surcharge (503) ou de quota (429) sur le premier, on bascule sur le second.
 const DEFAULT_MODEL = "gemini-3.8-flash";
-const THINKING: Record<AiTask, "minimal" | "low" | "medium"> = {
-  textParse: "minimal",
+const FALLBACK_MODEL = "gemini-3.5-flash";
+// gemini-3.8-flash refuse "minimal" (400) : "low" est le niveau le plus bas accepté.
+const THINKING: Record<AiTask, "low" | "medium"> = {
+  textParse: "low",
   vision: "low",
   recipes: "medium",
 };
@@ -14,35 +17,62 @@ let client: GoogleGenAI | undefined;
 
 export const geminiProvider: AiProvider = {
   async generate<T extends z.ZodType>(req: StructuredRequest<T>) {
-    client ??= new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    try {
-      const interaction = await client.interactions.create({
-        model: process.env.GEMINI_MODEL || DEFAULT_MODEL,
-        system_instruction: req.system,
-        input: [
-          ...(req.image
-            ? [{ type: "image" as const, mime_type: req.image.mediaType, data: req.image.base64 }]
-            : []),
-          { type: "text" as const, text: req.text },
-        ],
-        generation_config: { thinking_level: THINKING[req.task], max_output_tokens: 16000 },
-        response_format: {
-          type: "text",
-          mime_type: "application/json",
-          schema: toGeminiSchema(req.schema),
-        },
-      });
-
-      if (!interaction.output_text) throw AI_ERRORS.incomplete();
-      // Gemini garantit du JSON valide, pas le respect de toutes nos contraintes : on revalide.
-      const parsed = req.schema.safeParse(safeJson(interaction.output_text));
-      if (!parsed.success) throw AI_ERRORS.incomplete();
-      return parsed.data;
-    } catch (error) {
-      throw toAiError(error);
+    const models = [...new Set([process.env.GEMINI_MODEL || DEFAULT_MODEL, FALLBACK_MODEL])];
+    for (const [index, model] of models.entries()) {
+      try {
+        return await generateOnce(model, req);
+      } catch (error) {
+        const last = index === models.length - 1;
+        if (last || !isTransient(error)) throw toAiError(error);
+        console.warn(`Gemini ${model} indisponible, bascule sur ${models[index + 1]}:`, (error as Error).message);
+      }
     }
+    throw AI_ERRORS.unavailable();
   },
 };
+
+async function generateOnce<T extends z.ZodType>(model: string, req: StructuredRequest<T>): Promise<z.infer<T>> {
+  client ??= new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const interaction = await client.interactions.create(
+    {
+      model,
+      system_instruction: req.system,
+      input: [
+        ...(req.image
+          ? [{ type: "image" as const, mime_type: req.image.mediaType, data: req.image.base64 }]
+          : []),
+        { type: "text" as const, text: req.text },
+      ],
+      generation_config: { thinking_level: THINKING[req.task], max_output_tokens: 16000 },
+      response_format: {
+        type: "text",
+        mime_type: "application/json",
+        schema: toGeminiSchema(req.schema),
+      },
+    },
+    // Pas de nouvelle tentative dans le SDK : sous Next.js, elle réutilise un corps de
+    // requête déjà lu (« TypeError: unusable »). On gère la bascule nous-mêmes.
+    { maxRetries: 0, timeout: 90_000 },
+  );
+
+  if (!interaction.output_text) throw AI_ERRORS.incomplete();
+  // Gemini garantit du JSON valide, pas le respect de toutes nos contraintes : on revalide.
+  const parsed = req.schema.safeParse(safeJson(interaction.output_text));
+  if (!parsed.success) throw AI_ERRORS.incomplete();
+  return parsed.data;
+}
+
+function httpStatus(error: unknown): number | undefined {
+  const status = (error as { status?: unknown })?.status;
+  return typeof status === "number" ? status : undefined;
+}
+
+/** Surcharge, quota, erreur serveur ou réseau : ça vaut le coup d'essayer l'autre modèle. */
+function isTransient(error: unknown): boolean {
+  if (error instanceof AiError) return false;
+  const status = httpStatus(error);
+  return status === undefined || status === 429 || status >= 500;
+}
 
 /**
  * JSON Schema compatible Gemini : sans `$schema`, `["x","null"]` → `anyOf`,
@@ -83,13 +113,16 @@ function safeJson(text: string): unknown {
 
 function toAiError(error: unknown): Error {
   if (error instanceof AiError) return error;
-  if (error instanceof ApiError) {
-    if (error.status === 429) return AI_ERRORS.busy();
-    if (error.status === 401 || error.status === 403) {
+  // L'API Interactions lève des classes (BadRequestError, RateLimitError…) que le SDK
+  // n'exporte pas : on se fie au code HTTP qu'elles portent toutes.
+  const status = httpStatus(error);
+  if (status !== undefined) {
+    if (status === 429 || status === 503) return AI_ERRORS.busy();
+    if (status === 401 || status === 403) {
       console.error("Clé GEMINI_API_KEY invalide");
       return AI_ERRORS.misconfigured();
     }
-    console.error(`Gemini API ${error.status}:`, error.message);
+    console.error(`Gemini API ${status}:`, (error as Error).message);
     return AI_ERRORS.unavailable();
   }
   return error instanceof Error ? error : new Error(String(error));

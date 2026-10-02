@@ -5,7 +5,7 @@ import { RECOGNIZE_SYSTEM } from "@/lib/ai/prompts";
 import { ParsedIngredients } from "@/lib/ai/schemas";
 import { handleRouteError, jsonError, quotaExceeded } from "@/lib/api";
 import { getUserId } from "@/lib/auth/server";
-import { consumeAiQuota } from "@/lib/quota";
+import { consumeAiQuota, withRefund } from "@/lib/quota";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -23,17 +23,20 @@ export async function POST(request: Request) {
     const quota = await consumeAiQuota(request, await getUserId());
     if (!quota.allowed) return quotaExceeded(quota.isGuest);
 
-    const result = await generateStructured({
-      task: "vision",
-      system: RECOGNIZE_SYSTEM,
-      text: "Quels aliments vois-tu ?",
-      image: {
-        mediaType: image.type as ImageMediaType,
-        base64: Buffer.from(await image.arrayBuffer()).toString("base64"),
-      },
-      schema: ParsedIngredients,
-      mock: mockRecognize,
-    });
+    const base64 = Buffer.from(await image.arrayBuffer()).toString("base64");
+    const result = await withRefund(quota, () =>
+      generateStructured({
+        task: "vision",
+        system: RECOGNIZE_SYSTEM,
+        text: "Quels aliments vois-tu ?",
+        image: {
+          mediaType: image.type as ImageMediaType,
+          base64,
+        },
+        schema: ParsedIngredients,
+        mock: mockRecognize,
+      }),
+    );
     return NextResponse.json(result);
   } catch (error) {
     return handleRouteError(error);

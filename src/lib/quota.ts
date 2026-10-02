@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { aiUsage, getDb } from "@/db";
 
 // Appels IA autorisés par jour (parse + photo + recettes confondus).
@@ -19,7 +19,27 @@ export async function consumeAiQuota(request: Request, userId: string | null) {
     })
     .returning({ count: aiUsage.count });
 
-  return { allowed: row.count <= limit, isGuest: !userId };
+  return {
+    allowed: row.count <= limit,
+    isGuest: !userId,
+    /** Rend l'appel si l'IA a échoué : une panne ne doit pas coûter de quota. */
+    refund: async () => {
+      await getDb()
+        .update(aiUsage)
+        .set({ count: sql`greatest(${aiUsage.count} - 1, 0)` })
+        .where(and(eq(aiUsage.key, key), sql`${aiUsage.day} = current_date`));
+    },
+  };
+}
+
+/** Exécute un appel IA en rendant le quota si l'appel échoue. */
+export async function withRefund<T>(quota: { refund: () => Promise<void> }, call: () => Promise<T>): Promise<T> {
+  try {
+    return await call();
+  } catch (error) {
+    await quota.refund().catch(() => {});
+    throw error;
+  }
 }
 
 function clientIp(request: Request) {

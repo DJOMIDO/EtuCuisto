@@ -13,7 +13,7 @@ import {
 } from "@/lib/ai/schemas";
 import { handleRouteError, jsonError, quotaExceeded, readJson } from "@/lib/api";
 import { getUserId } from "@/lib/auth/server";
-import { consumeAiQuota } from "@/lib/quota";
+import { consumeAiQuota, withRefund } from "@/lib/quota";
 
 // Connecté : frigo et cuisine lus en base. Invité : envoyés par le client.
 const Body = z.object({
@@ -52,13 +52,15 @@ export async function POST(request: Request) {
     const quota = await consumeAiQuota(request, userId);
     if (!quota.allowed) return quotaExceeded(quota.isGuest);
 
-    const result = await generateStructured({
-      task: "recipes",
-      system: RECIPES_SYSTEM,
-      text: recipesUserPrompt(pantry, kitchen, body.data.maxMinutes),
-      schema: Recommendations,
-      mock: () => mockRecipes(pantry),
-    });
+    const result = await withRefund(quota, () =>
+      generateStructured({
+        task: "recipes",
+        system: RECIPES_SYSTEM,
+        text: recipesUserPrompt(pantry, kitchen, body.data.maxMinutes),
+        schema: Recommendations,
+        mock: () => mockRecipes(pantry),
+      }),
+    );
 
     // Ne garder que des ids qui existent vraiment dans le frigo.
     const ids = new Set(pantry.map((p) => p.id));
