@@ -1,16 +1,15 @@
 "use client";
 
+import { Check, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 import { useId, useState } from "react";
 import { KitchenProfile } from "@/lib/ai/schemas";
 import { useKitchen } from "@/lib/client/use-kitchen";
 import { BUDGET_OPTIONS, DIET_OPTIONS, TOOL_OPTIONS } from "@/lib/kitchen-options";
+import { button, card, choiceChip, PageTitle } from "../ui";
 
-const FIELDSET = "flex flex-col gap-3 rounded-xl border border-border p-4";
-const LEGEND = "px-1 text-lg font-semibold";
-const CHOICE =
-  "flex items-center gap-3 rounded-lg border border-border px-3 py-2.5 has-[:checked]:border-accent-strong has-[:checked]:bg-surface";
-const INPUT = "size-5 shrink-0 accent-[var(--accent-strong)]";
+const LEGEND = "mb-3 text-lg font-extrabold";
+const CHECK_CHIP = `${choiceChip} pr-4 [&:not(:has(:checked))>svg]:hidden`;
 
 export function KitchenPage() {
   const ids = useId();
@@ -44,49 +43,53 @@ export function KitchenPage() {
   }
 
   return (
-    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Ma cuisine</h1>
-        <p className="text-muted">Pour ne te proposer que des recettes que tu peux vraiment faire.</p>
-      </div>
+    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
+      <PageTitle title="Ma cuisine" subtitle="Pour ne te proposer que des recettes que tu peux vraiment faire." />
 
-      {loadError && <p role="alert" className="text-sm text-danger">{loadError}</p>}
+      {loadError && <p role="alert" className="text-sm font-semibold text-cherry-ink">{loadError}</p>}
 
       {!loaded ? (
         <p className="text-muted">Chargement…</p>
       ) : (
         // `key` : réinitialise le formulaire quand les réglages arrivent de l'API.
-        <form key={JSON.stringify(kitchen)} onSubmit={onSubmit} className="flex flex-col gap-5">
-          <fieldset className={FIELDSET} aria-describedby={`${ids}-tools-hint`}>
+        <form key={JSON.stringify(kitchen)} onSubmit={onSubmit} className="flex flex-col gap-4">
+          <div className={card}>
+            <fieldset aria-describedby={`${ids}-tools-hint`}>
             <legend className={LEGEND}>Ustensiles</legend>
-            <p id={`${ids}-tools-hint`} className="text-sm text-muted">
+            <p id={`${ids}-tools-hint`} className="-mt-2 mb-3 text-sm text-muted">
               Coche seulement ce que tu as vraiment.
             </p>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="flex flex-wrap gap-2">
               {TOOL_OPTIONS.map((o) => (
-                <label key={o.id} className={CHOICE}>
-                  <input type="checkbox" name="tools" value={o.id} defaultChecked={kitchen.tools.includes(o.id)} className={INPUT} />
+                <label key={o.id} className={CHECK_CHIP}>
+                  <input type="checkbox" name="tools" value={o.id} defaultChecked={kitchen.tools.includes(o.id)} className="sr-only" />
+                  <Check aria-hidden="true" className="size-4" strokeWidth={3} />
                   {o.label}
                 </label>
               ))}
             </div>
           </fieldset>
+          </div>
 
-          <fieldset className={FIELDSET}>
+          <div className={card}>
+            <fieldset>
             <legend className={LEGEND}>Budget</legend>
             <div className="flex flex-col gap-2">
               {BUDGET_OPTIONS.map((o) => (
-                <label key={o.id} className={CHOICE}>
+                <label
+                  key={o.id}
+                  className="flex cursor-pointer items-center gap-3 rounded-2xl bg-surface-muted px-4 py-3 has-[:checked]:bg-accent-soft has-[:checked]:ring-2 has-[:checked]:ring-accent-strong"
+                >
                   <input
                     type="radio"
                     name="budget"
                     value={o.id}
                     defaultChecked={kitchen.budget === o.id}
                     aria-describedby={`${ids}-budget-${o.id}`}
-                    className={INPUT}
+                    className="size-5 shrink-0 accent-[var(--accent-strong)]"
                   />
                   <span className="flex flex-col">
-                    {o.label}
+                    <span className="font-bold">{o.label}</span>
                     <span id={`${ids}-budget-${o.id}`} className="text-sm text-muted">
                       {o.hint}
                     </span>
@@ -95,49 +98,39 @@ export function KitchenPage() {
               ))}
             </div>
           </fieldset>
+          </div>
 
-          <fieldset className={FIELDSET}>
+          <div className={card}>
+            <fieldset>
             <legend className={LEGEND}>Régime alimentaire</legend>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="flex flex-wrap gap-2">
               {DIET_OPTIONS.map((o) => (
-                <label key={o.id} className={CHOICE}>
-                  <input type="checkbox" name="diet" value={o.id} defaultChecked={kitchen.diet.includes(o.id)} className={INPUT} />
+                <label key={o.id} className={CHECK_CHIP}>
+                  <input type="checkbox" name="diet" value={o.id} defaultChecked={kitchen.diet.includes(o.id)} className="sr-only" />
+                  <Check aria-hidden="true" className="size-4" strokeWidth={3} />
                   {o.label}
                 </label>
               ))}
             </div>
           </fieldset>
-
-          <div className={FIELDSET}>
-            <label htmlFor={`${ids}-servings`} className="text-lg font-semibold">
-              Nombre de personnes
-            </label>
-            <input
-              id={`${ids}-servings`}
-              name="servings"
-              type="number"
-              inputMode="numeric"
-              min={1}
-              max={8}
-              required
-              defaultValue={kitchen.servings}
-              className="w-24 rounded-lg border border-border bg-transparent px-3 py-2"
-            />
           </div>
 
-          {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+          <div className={`${card} flex items-center justify-between gap-3`}>
+            <label htmlFor={`${ids}-servings`} className="text-lg font-extrabold">
+              Nombre de personnes
+            </label>
+            <ServingsStepper id={`${ids}-servings`} defaultValue={kitchen.servings} />
+          </div>
+
+          {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
 
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="submit"
-              disabled={saving}
-              className="rounded-lg bg-accent-strong px-5 py-2.5 font-medium text-on-accent disabled:opacity-60"
-            >
+            <button type="submit" disabled={saving} className={button.primary}>
               {saving ? "Enregistrement…" : "Enregistrer"}
             </button>
             {status && (
-              <span className="text-sm text-muted" aria-hidden="true">
-                <span aria-hidden="true">✓ </span>
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-herb-ink" aria-hidden="true">
+                <Check className="size-4" strokeWidth={3} />
                 {status}
               </span>
             )}
@@ -146,7 +139,7 @@ export function KitchenPage() {
           {isGuest && (
             <p className="text-sm text-muted">
               Mode invité : réglages gardés sur cet appareil.{" "}
-              <Link href="/connexion" className="font-medium text-accent-strong underline">
+              <Link href="/connexion" className="font-bold text-accent-strong underline">
                 Connecte-toi
               </Link>{" "}
               pour les retrouver partout.
@@ -159,5 +152,34 @@ export function KitchenPage() {
         {status}
       </p>
     </main>
+  );
+}
+
+function ServingsStepper({ id, defaultValue }: { id: string; defaultValue: number }) {
+  const [value, setValue] = useState(defaultValue);
+  const step = (delta: number) => setValue((v) => Math.min(8, Math.max(1, v + delta)));
+  return (
+    <div className="flex items-center gap-1 rounded-full bg-surface-muted p-1">
+      <button type="button" onClick={() => step(-1)} disabled={value <= 1} className={`${button.icon} size-9 bg-surface`}>
+        <Minus aria-hidden="true" className="size-4" />
+        <span className="visually-hidden">Une personne de moins</span>
+      </button>
+      <input
+        id={id}
+        name="servings"
+        type="number"
+        inputMode="numeric"
+        min={1}
+        max={8}
+        required
+        value={value}
+        onChange={(e) => setValue(Number(e.target.value))}
+        className="w-10 bg-transparent text-center text-lg font-extrabold [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+      />
+      <button type="button" onClick={() => step(1)} disabled={value >= 8} className={`${button.icon} size-9 bg-surface`}>
+        <Plus aria-hidden="true" className="size-4" />
+        <span className="visually-hidden">Une personne de plus</span>
+      </button>
+    </div>
   );
 }

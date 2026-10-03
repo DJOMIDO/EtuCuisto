@@ -1,5 +1,6 @@
 "use client";
 
+import { ChefHat, Refrigerator, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import type { Recipe, Recommendations } from "@/lib/ai/schemas";
@@ -9,6 +10,7 @@ import { usePantry } from "@/lib/client/use-pantry";
 import { BUDGET_OPTIONS, TOOL_OPTIONS } from "@/lib/kitchen-options";
 import { CookedDialog } from "./CookedDialog";
 import { RecipeCard, type SavedState } from "./RecipeCard";
+import { button, card, choiceChip, PageTitle } from "../ui";
 
 const TIMES = [10, 20, 30, 45];
 const SESSION_KEY = "etucuisto:last-recipes";
@@ -141,24 +143,18 @@ export function RecipesPage() {
   const empty = pantry.loaded && pantry.items.length === 0;
 
   return (
-    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Recettes</h1>
-        <p className="text-muted">3 idées avec ce que tu as, en priorité ce qui va périmer.</p>
-      </div>
+    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
+      <PageTitle title="Recettes" subtitle="3 idées avec ce que tu as, en priorité ce qui va périmer." />
 
-      <section aria-labelledby={`${ids}-ask`} className="flex flex-col gap-4 rounded-xl border border-border p-4">
+      <section aria-labelledby={`${ids}-ask`} className={`${card} flex flex-col gap-4`}>
         <h2 id={`${ids}-ask`} className="visually-hidden">
           Demander des recettes
         </h2>
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 font-medium">Temps maximum</legend>
+        <fieldset>
+          <legend className="mb-2 text-sm font-bold text-muted">Temps maximum</legend>
           <div className="flex flex-wrap gap-2">
             {TIMES.map((t) => (
-              <label
-                key={t}
-                className="cursor-pointer rounded-full border border-border px-4 py-1.5 has-[:checked]:border-accent-strong has-[:checked]:bg-accent-strong has-[:checked]:text-on-accent has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-strong"
-              >
+              <label key={t} className={choiceChip}>
                 <input
                   type="radio"
                   name="maxMinutes"
@@ -173,43 +169,45 @@ export function RecipesPage() {
           </div>
         </fieldset>
 
-        <p className="text-sm text-muted">
-          Avec : {tools || "aucun ustensile"} · budget {budget} ·{" "}
-          <Link href="/cuisine" className="text-accent-strong underline">
-            modifier
-          </Link>
+        <p className="flex items-start gap-2 text-sm text-muted">
+          <Settings2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+          <span>
+            {tools || "aucun ustensile"} · budget {budget} ·{" "}
+            <Link href="/cuisine" className="font-bold text-accent-strong underline">
+              modifier
+            </Link>
+          </span>
         </p>
 
         {empty ? (
-          <p>
-            Ton frigo est vide.{" "}
-            <Link href="/" className="font-medium text-accent-strong underline">
-              Ajoute des ingrédients
-            </Link>{" "}
-            d&apos;abord.
+          <p className="flex items-center gap-2 rounded-2xl bg-surface-muted px-4 py-3">
+            <Refrigerator aria-hidden="true" className="size-5 shrink-0 text-muted" />
+            <span>
+              Ton frigo est vide.{" "}
+              <Link href="/" className="font-bold text-accent-strong underline">
+                Ajoute des ingrédients
+              </Link>{" "}
+              d&apos;abord.
+            </span>
           </p>
         ) : (
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={generate}
-              disabled={loading || !pantry.loaded}
-              className="rounded-lg bg-accent-strong px-5 py-2.5 font-medium text-on-accent disabled:opacity-60"
-            >
+            <button type="button" onClick={generate} disabled={loading || !pantry.loaded} className={button.primary}>
+              <ChefHat aria-hidden="true" className="size-5" />
               {loading ? "Le chef réfléchit…" : recipes ? "Autres idées" : "Trouver des recettes"}
             </button>
-            {loading && <span className="text-sm text-muted">Ça peut prendre une vingtaine de secondes.</span>}
+            {loading && <span className="text-sm text-muted">Quelques secondes…</span>}
           </div>
         )}
       </section>
 
       {error && (
-        <p role="alert" className="text-sm text-danger">
+        <p role="alert" className="text-sm font-semibold text-cherry-ink">
           {error}
           {isGuest && error.startsWith("Connecte-toi") && (
             <>
               {" "}
-              <Link href="/connexion" className="font-medium underline">
+              <Link href="/connexion" className="underline">
                 Connexion
               </Link>
             </>

@@ -1,57 +1,102 @@
 @import "tailwindcss";
 
-/* Couleurs du logo EtuCuisto : turquoise #00b6cd, rouge #ef3f32, jaune #ffd556.
-   Les variantes « -strong » sont assombries pour un contraste texte ≥ 4.5:1. */
+/* Palette du logo EtuCuisto : cerise #ef3f32, lagon #00b6cd, soleil #ffd556, herbe #a1d067.
+   Chaque couleur a une variante « -ink » (texte, contraste ≥ 4.5:1 sur fond clair/sombre)
+   et une variante « -soft » (fond de pastille ou de bandeau). */
 :root {
   color-scheme: light dark;
-  --background: #ffffff;
-  --foreground: #1f2328;
-  --muted: #5b636b;
-  --surface: #f4f7f8;
-  --border: #c9d1d6;
+  --background: #faf8f4;
+  --surface: #ffffff;
+  --surface-muted: #f2eee7;
+  --foreground: #26231f;
+  --muted: #6b655c;
+  --border: #e8e2d8;
+  --field: #8f877b;
+
   --accent: #00b6cd;
   --accent-strong: #00707e;
   --on-accent: #ffffff;
-  --warn-bg: #fff4cc;
-  --warn-fg: #6b4e00;
-  --danger: #c4271c;
+  --accent-soft: #dff4f7;
+
+  --cherry: #ef3f32;
+  --cherry-ink: #b3261e;
+  --cherry-soft: #fde7e4;
+  --lagoon-ink: #00707e;
+  --lagoon-soft: #dff4f7;
+  --sun: #ffd556;
+  --sun-ink: #6f5000;
+  --sun-soft: #fff3c7;
+  --herb: #a1d067;
+  --herb-ink: #3f6b14;
+  --herb-soft: #edf6e0;
+  --neutral-ink: #5c564d;
+  --neutral-soft: #eeeae3;
+
+  --shadow-card: 0 1px 2px rgb(38 35 31 / 0.05), 0 6px 20px rgb(38 35 31 / 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #121416;
-    --foreground: #eef1f3;
-    --muted: #a3acb3;
-    --surface: #1c2024;
-    --border: #3b4248;
-    --accent: #00b6cd;
+    --background: #141312;
+    --surface: #1f1d1b;
+    --surface-muted: #2b2825;
+    --foreground: #f2eee8;
+    --muted: #b3aca2;
+    --border: #37332f;
+    --field: #7f786e;
+
     --accent-strong: #4fd3e4;
     --on-accent: #0b1a1d;
-    --warn-bg: #3d3000;
-    --warn-fg: #ffe082;
-    --danger: #ff7b70;
+    --accent-soft: rgb(0 182 205 / 0.16);
+
+    --cherry-ink: #ff8f85;
+    --cherry-soft: rgb(239 63 50 / 0.18);
+    --lagoon-ink: #4fd3e4;
+    --lagoon-soft: rgb(0 182 205 / 0.16);
+    --sun-ink: #ffd556;
+    --sun-soft: rgb(255 213 86 / 0.15);
+    --herb-ink: #b9e08a;
+    --herb-soft: rgb(161 208 103 / 0.16);
+    --neutral-ink: #c9c2b8;
+    --neutral-soft: #2f2c29;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
   }
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
-  --color-surface: var(--surface);
   --color-border: var(--border);
+  --color-field: var(--field);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-on-accent: var(--on-accent);
-  --color-warn-bg: var(--warn-bg);
-  --color-warn-fg: var(--warn-fg);
-  --color-danger: var(--danger);
-  --font-sans: var(--font-geist-sans);
+  --color-accent-soft: var(--accent-soft);
+  --color-cherry: var(--cherry);
+  --color-cherry-ink: var(--cherry-ink);
+  --color-cherry-soft: var(--cherry-soft);
+  --color-lagoon-ink: var(--lagoon-ink);
+  --color-lagoon-soft: var(--lagoon-soft);
+  --color-sun: var(--sun);
+  --color-sun-ink: var(--sun-ink);
+  --color-sun-soft: var(--sun-soft);
+  --color-herb: var(--herb);
+  --color-herb-ink: var(--herb-ink);
+  --color-herb-soft: var(--herb-soft);
+  --color-neutral-ink: var(--neutral-ink);
+  --color-neutral-soft: var(--neutral-soft);
+  --font-sans: var(--font-nunito), system-ui, sans-serif;
+  --shadow-card: var(--shadow-card);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-nunito), system-ui, sans-serif;
   line-height: 1.5;
 }
 
@@ -73,6 +118,21 @@ label:has(> input.sr-only:focus-visible) {
   padding: 0 !important;
   border: 0 !important;
   white-space: nowrap !important;
+}
+
+/* Menu d'actions en feuille du bas : pas besoin d'ancrage CSS (peu supporté). */
+.sheet[popover] {
+  position: fixed;
+  inset: auto 0 0 0;
+  margin: 0 auto;
+  width: min(100%, 28rem);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+.sheet[popover]::backdrop {
+  background: rgb(0 0 0 / 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {

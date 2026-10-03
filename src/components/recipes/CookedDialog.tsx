@@ -1,8 +1,11 @@
 "use client";
 
+import { PartyPopper } from "lucide-react";
 import { useEffect, useId, useRef } from "react";
 import type { Recipe } from "@/lib/ai/schemas";
 import type { PantryItem } from "@/lib/client/use-pantry";
+import { CategoryIcon } from "../CategoryIcon";
+import { button } from "../ui";
 
 type Props = {
   recipe: Recipe | null;
@@ -37,34 +40,40 @@ export function CookedDialog({ recipe, pantry, onConfirm, onClose }: Props) {
       ref={ref}
       onClose={onClose}
       aria-labelledby={`${id}-title`}
-      className="m-auto w-[min(32rem,calc(100%-2rem))] rounded-xl bg-background p-0 text-foreground backdrop:bg-black/50"
+      className="m-auto w-[min(28rem,calc(100%-1.5rem))] rounded-3xl bg-surface p-0 text-foreground shadow-card backdrop:bg-black/40"
     >
       {recipe && (
-        <form onSubmit={onSubmit} className="flex flex-col gap-4 p-5">
-          <h2 id={`${id}-title`} className="text-lg font-semibold">
-            Bravo ! On retire quoi du frigo ?
-          </h2>
+        <form onSubmit={onSubmit} className="flex flex-col gap-4 p-6">
+          <span aria-hidden="true" className="flex size-12 items-center justify-center rounded-full bg-sun-soft text-sun-ink">
+            <PartyPopper className="size-6" />
+          </span>
+          <div>
+            <h2 id={`${id}-title`} className="text-xl font-extrabold">
+              Bravo ! On retire quoi du frigo ?
+            </h2>
+          </div>
           {used.length === 0 ? (
             <p className="text-muted">Ces ingrédients ne sont plus dans ton frigo.</p>
           ) : (
-            <fieldset className="flex flex-col gap-2">
+            <fieldset className="flex flex-col gap-1">
               <legend className="mb-2 text-sm text-muted">Décoche ce qu&apos;il te reste encore.</legend>
               {used.map((p) => (
-                <label key={p.id} className="flex items-center gap-3">
-                  <input type="checkbox" name="used" value={p.id} defaultChecked className="size-5 accent-[var(--accent-strong)]" />
-                  <span>
+                <label key={p.id} className="flex items-center gap-3 rounded-2xl px-2 py-2 hover:bg-surface-muted">
+                  <input type="checkbox" name="used" value={p.id} defaultChecked className="size-5 shrink-0 accent-[var(--accent-strong)]" />
+                  <CategoryIcon category={p.category} size="sm" />
+                  <span className="font-semibold">
                     {p.name}
-                    {p.quantity && <span className="text-muted"> · {p.quantity}</span>}
+                    {p.quantity && <span className="font-normal text-muted"> · {p.quantity}</span>}
                   </span>
                 </label>
               ))}
             </fieldset>
           )}
           <div className="flex flex-wrap gap-2">
-            <button type="submit" className="rounded-lg bg-accent-strong px-4 py-2.5 font-medium text-on-accent">
+            <button type="submit" className={button.primary}>
               Valider
             </button>
-            <button type="button" onClick={onClose} className="rounded-lg border border-border px-4 py-2.5 font-medium">
+            <button type="button" onClick={onClose} className={button.ghost}>
               Annuler
             </button>
           </div>

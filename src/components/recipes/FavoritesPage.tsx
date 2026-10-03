@@ -1,5 +1,6 @@
 "use client";
 
+import { ChefHat, Heart, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Recipe } from "@/lib/ai/schemas";
@@ -8,6 +9,7 @@ import { fetchJson } from "@/lib/client/fetch-json";
 import { usePantry } from "@/lib/client/use-pantry";
 import { CookedDialog } from "./CookedDialog";
 import { RecipeCard } from "./RecipeCard";
+import { button, choiceChip, PageTitle } from "../ui";
 
 type SavedRecipe = { id: string; data: Recipe; favorite: boolean; cookedAt: string | null };
 type Filter = "all" | "favorite" | "cooked";
@@ -99,29 +101,26 @@ export function FavoritesPage() {
     rows?.filter((r) => (filter === "favorite" ? r.favorite : filter === "cooked" ? !!r.cookedAt : true)) ?? [];
 
   return (
-    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Mes recettes</h1>
-        <p className="text-muted">Tes favoris et ce que tu as déjà cuisiné.</p>
-      </div>
+    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
+      <PageTitle title="Mes recettes" subtitle="Tes favoris et ce que tu as déjà cuisiné." />
 
       {isPending ? null : !signedIn ? (
-        <p className="rounded-lg bg-surface px-4 py-3">
-          <Link href="/connexion" className="font-medium text-accent-strong underline">
-            Connecte-toi
-          </Link>{" "}
-          pour garder tes recettes favorites et ton historique.
-        </p>
+        <EmptyState
+          message="Connecte-toi pour garder tes recettes favorites et ton historique."
+          action={
+            <Link href="/connexion" className={button.primary}>
+              <LogIn aria-hidden="true" className="size-5" />
+              Connexion
+            </Link>
+          }
+        />
       ) : (
         <>
           <fieldset>
             <legend className="visually-hidden">Afficher</legend>
             <div className="flex flex-wrap gap-2">
               {FILTERS.map((f) => (
-                <label
-                  key={f.id}
-                  className="cursor-pointer rounded-full border border-border px-4 py-1.5 has-[:checked]:border-accent-strong has-[:checked]:bg-accent-strong has-[:checked]:text-on-accent has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent-strong"
-                >
+                <label key={f.id} className={choiceChip}>
                   <input
                     type="radio"
                     name="filter"
@@ -135,17 +134,20 @@ export function FavoritesPage() {
             </div>
           </fieldset>
 
-          {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+          {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
 
           {rows === null ? (
             !error && <p className="text-muted">Chargement…</p>
           ) : shown.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-border px-4 py-8 text-center text-muted">
-              {rows.length === 0 ? "Aucune recette enregistrée pour l'instant. " : "Rien dans cette catégorie. "}
-              <Link href="/recettes" className="font-medium text-accent-strong underline">
-                Trouver des recettes
-              </Link>
-            </p>
+            <EmptyState
+              message={rows.length === 0 ? "Aucune recette enregistrée pour l'instant." : "Rien dans cette catégorie."}
+              action={
+                <Link href="/recettes" className={button.secondary}>
+                  <ChefHat aria-hidden="true" className="size-5" />
+                  Trouver des recettes
+                </Link>
+              }
+            />
           ) : (
             shown.map((row) => (
               <RecipeCard
@@ -175,5 +177,17 @@ export function FavoritesPage() {
         {status}
       </p>
     </main>
+  );
+}
+
+function EmptyState({ message, action }: { message: string; action: React.ReactNode }) {
+  return (
+    <div className="flex flex-col items-center gap-4 px-4 py-10 text-center">
+      <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-full bg-cherry-soft text-cherry-ink">
+        <Heart className="size-8" />
+      </span>
+      <p className="max-w-sm text-muted">{message}</p>
+      {action}
+    </div>
   );
 }

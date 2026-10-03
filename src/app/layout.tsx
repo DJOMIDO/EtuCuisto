@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Nunito } from "next/font/google";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
+import { PopoverPolyfill } from "@/components/PopoverPolyfill";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Police arrondie, proche du logo.
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
 });
 
@@ -19,15 +21,16 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#121416" },
+    { media: "(prefers-color-scheme: light)", color: "#faf8f4" },
+    { media: "(prefers-color-scheme: dark)", color: "#141312" },
   ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col pb-20">
+    <html lang="fr" className={`${nunito.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col pb-28">
+        <PopoverPolyfill />
         <AppHeader />
         {children}
         <BottomNav />

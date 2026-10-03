@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
+import { LogIn, Refrigerator } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { usePantry, type PantryItem } from "@/lib/client/use-pantry";
-import { CATEGORIES } from "@/lib/ingredients";
 import { AddIngredients } from "./AddIngredients";
 import { PantryList } from "./PantryList";
+import { PageTitle } from "../ui";
 
 export function FridgePage() {
   const pantry = usePantry();
@@ -26,31 +26,31 @@ export function FridgePage() {
   const toggle = (item: PantryItem) =>
     run(
       () => pantry.update(item.id, { expiresSoon: !item.expiresSoon }),
-      item.expiresSoon ? `${item.name} n'est plus marqué comme bientôt périmé.` : `${item.name} marqué bientôt périmé.`,
+      item.expiresSoon ? `${item.name} n'est plus à utiliser vite.` : `${item.name} est à utiliser vite.`,
     );
   const remove = (item: PantryItem) => run(() => pantry.remove(item.id), `${item.name} retiré du frigo.`);
 
   return (
-    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Mon frigo</h1>
-        <p className="text-muted">Ce que tu as sous la main. Les recettes partiront de là.</p>
-      </div>
+    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
+      <PageTitle title="Mon frigo" subtitle="Ce que tu as sous la main. Les recettes partiront de là." />
 
       {pantry.isGuest && pantry.loaded && (
-        <p className="rounded-lg bg-surface px-4 py-3 text-sm">
-          Mode invité : ton frigo est gardé sur cet appareil.{" "}
-          <Link href="/connexion" className="font-medium text-accent-strong underline">
-            Connecte-toi
-          </Link>{" "}
-          pour le retrouver partout.
+        <p className="flex items-start gap-3 rounded-2xl bg-accent-soft px-4 py-3 text-sm">
+          <LogIn aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent-strong" />
+          <span>
+            Mode invité : ton frigo reste sur cet appareil.{" "}
+            <Link href="/connexion" className="font-bold text-accent-strong underline">
+              Connecte-toi
+            </Link>{" "}
+            pour le retrouver partout.
+          </span>
         </p>
       )}
 
       <AddIngredients onAdd={pantry.add} announce={setStatus} />
 
       {(error ?? pantry.error) && (
-        <p role="alert" className="text-sm text-danger">
+        <p role="alert" className="text-sm font-semibold text-cherry-ink">
           {error ?? pantry.error}
         </p>
       )}
@@ -61,9 +61,12 @@ export function FridgePage() {
         <EmptyFridge />
       ) : (
         <>
-          <p className="text-sm text-muted">
-            {pantry.items.length} ingrédient{pantry.items.length > 1 ? "s" : ""}
-          </p>
+          <h2 className="mt-2 flex items-baseline justify-between text-xl font-extrabold">
+            Dans ton frigo
+            <span className="text-sm font-bold text-muted">
+              {pantry.items.length} ingrédient{pantry.items.length > 1 ? "s" : ""}
+            </span>
+          </h2>
           <PantryList items={pantry.items} onToggleExpiring={toggle} onRemove={remove} />
         </>
       )}
@@ -78,15 +81,13 @@ export function FridgePage() {
 
 function EmptyFridge() {
   return (
-    <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-border px-4 py-8 text-center">
-      <div className="grid grid-cols-5 gap-3" aria-hidden="true">
-        {CATEGORIES.slice(0, 5).map((c) => (
-          <Image key={c.id} src={c.icon} alt="" width={36} height={36} />
-        ))}
-      </div>
-      <p className="font-medium">Ton frigo est vide.</p>
-      <p className="max-w-sm text-sm text-muted">
-        Prends une photo de ton frigo ou écris ce que tu as : on s&apos;occupe de trier.
+    <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
+      <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
+        <Refrigerator className="size-8" />
+      </span>
+      <p className="text-lg font-extrabold">Ton frigo est vide</p>
+      <p className="max-w-sm text-muted">
+        Écris ce que tu as ou prends une photo : on s&apos;occupe de trier.
       </p>
     </div>
   );

@@ -1,11 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
+import { button, card, field } from "@/components/ui";
 import { authClient } from "@/lib/auth/client";
 
 export default function ConnexionPage() {
   const router = useRouter();
+  const ids = useId();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -31,59 +33,73 @@ export default function ConnexionPage() {
   }
 
   return (
-    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-4 py-10">
-      <h1 className="text-center text-2xl font-semibold">
-        {mode === "signin" ? "Connexion" : "Créer un compte"}
-      </h1>
-
-      <button
-        type="button"
-        onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/" })}
-        className="rounded-lg border border-foreground/20 px-4 py-2.5 font-medium hover:bg-foreground/5"
-      >
-        Continuer avec Google
-      </button>
-
-      <div className="flex items-center gap-3 text-sm text-foreground/60">
-        <span className="h-px flex-1 bg-foreground/15" /> ou <span className="h-px flex-1 bg-foreground/15" />
+    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-5 px-4 py-8">
+      <div className="text-center">
+        <h1 className="text-3xl font-extrabold tracking-tight">{mode === "signin" ? "Content de te revoir" : "Bienvenue !"}</h1>
+        <p className="mt-1 text-muted">
+          {mode === "signin" ? "Connecte-toi pour retrouver ton frigo." : "Crée ton compte pour garder ton frigo et tes recettes."}
+        </p>
       </div>
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-3">
-        {mode === "signup" && (
-          <label className="flex flex-col gap-1 text-sm">
-            Prénom
-            <input name="name" autoComplete="given-name" className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2" />
-          </label>
-        )}
-        <label className="flex flex-col gap-1 text-sm">
-          E-mail
-          <input name="email" type="email" required autoComplete="email" className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2" />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Mot de passe
-          <input
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            autoComplete={mode === "signin" ? "current-password" : "new-password"}
-            className="rounded-lg border border-foreground/20 bg-transparent px-3 py-2"
-          />
-        </label>
-        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+      <div className={`${card} flex flex-col gap-4`}>
         <button
-          type="submit"
-          disabled={pending}
-          className="rounded-lg bg-foreground px-4 py-2.5 font-medium text-background disabled:opacity-60"
+          type="button"
+          onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/" })}
+          className={`${button.secondary} w-full py-3`}
         >
-          {pending ? "…" : mode === "signin" ? "Se connecter" : "Créer mon compte"}
+          Continuer avec Google
         </button>
-      </form>
+
+        <div className="flex items-center gap-3 text-sm font-semibold text-muted">
+          <span className="h-px flex-1 bg-border" /> ou <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <form onSubmit={onSubmit} className="flex flex-col gap-3">
+          {mode === "signup" && (
+            <div className="flex flex-col gap-1">
+              <label htmlFor={`${ids}-name`} className="text-sm font-bold">
+                Prénom
+              </label>
+              <input id={`${ids}-name`} name="name" autoComplete="given-name" className={field} />
+            </div>
+          )}
+          <div className="flex flex-col gap-1">
+            <label htmlFor={`${ids}-email`} className="text-sm font-bold">
+              E-mail
+            </label>
+            <input id={`${ids}-email`} name="email" type="email" required autoComplete="email" className={field} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor={`${ids}-password`} className="text-sm font-bold">
+              Mot de passe
+            </label>
+            {mode === "signup" && (
+              <p id={`${ids}-password-hint`} className="text-sm text-muted">
+                8 caractères minimum.
+              </p>
+            )}
+            <input
+              id={`${ids}-password`}
+              name="password"
+              type="password"
+              required
+              minLength={8}
+              aria-describedby={mode === "signup" ? `${ids}-password-hint` : undefined}
+              autoComplete={mode === "signin" ? "current-password" : "new-password"}
+              className={field}
+            />
+          </div>
+          {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
+          <button type="submit" disabled={pending} className={`${button.primary} mt-1 w-full py-3`}>
+            {pending ? "…" : mode === "signin" ? "Se connecter" : "Créer mon compte"}
+          </button>
+        </form>
+      </div>
 
       <button
         type="button"
         onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-        className="text-sm text-foreground/70 underline"
+        className={`${button.ghost} self-center`}
       >
         {mode === "signin" ? "Pas encore de compte ? Inscris-toi" : "Déjà un compte ? Connecte-toi"}
       </button>

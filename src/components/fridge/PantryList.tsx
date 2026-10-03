@@ -1,8 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import { AlarmClock } from "lucide-react";
 import type { PantryItem } from "@/lib/client/use-pantry";
 import { CATEGORIES } from "@/lib/ingredients";
+import { CategoryIcon } from "../CategoryIcon";
+import { card } from "../ui";
+import { ItemMenu } from "./ItemMenu";
 
 type Props = {
   items: PantryItem[];
@@ -18,53 +21,43 @@ export function PantryList({ items, onToggleExpiring, onRemove }: Props) {
   })).filter((g) => g.items.length > 0);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       {expiring.length > 0 && (
-        <section aria-labelledby="fridge-expiring" className="rounded-xl bg-warn-bg p-4 text-warn-fg">
-          <h2 id="fridge-expiring" className="mb-2 font-semibold">
-            <span aria-hidden="true">⏰ </span>À utiliser vite
+        <section aria-labelledby="fridge-expiring" className="rounded-3xl bg-sun-soft p-5">
+          <h2 id="fridge-expiring" className="mb-2 flex items-center gap-2 text-lg font-extrabold text-sun-ink">
+            <AlarmClock aria-hidden="true" className="size-5" />À utiliser vite
           </h2>
-          <ItemRows items={expiring} onToggleExpiring={onToggleExpiring} onRemove={onRemove} />
+          <ItemRows items={expiring} showCategory onToggleExpiring={onToggleExpiring} onRemove={onRemove} />
         </section>
       )}
-      {groups.map((g) => (
-        <section key={g.id} aria-labelledby={`fridge-${g.id}`}>
-          <h2 id={`fridge-${g.id}`} className="mb-2 flex items-center gap-2 font-semibold">
-            <Image src={g.icon} alt="" width={28} height={28} />
-            {g.label}
-          </h2>
-          <ItemRows items={g.items} onToggleExpiring={onToggleExpiring} onRemove={onRemove} />
-        </section>
-      ))}
+      {groups.length > 0 && (
+        <div className={`${card} flex flex-col gap-5`}>
+          {groups.map((g) => (
+            <section key={g.id} aria-labelledby={`fridge-${g.id}`}>
+              <h2 id={`fridge-${g.id}`} className="mb-1 flex items-center gap-2.5 font-extrabold">
+                <CategoryIcon category={g.id} size="sm" />
+                {g.label}
+              </h2>
+              <ItemRows items={g.items} onToggleExpiring={onToggleExpiring} onRemove={onRemove} />
+            </section>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function ItemRows({ items, onToggleExpiring, onRemove }: Props) {
+function ItemRows({ items, showCategory, ...actions }: Props & { showCategory?: boolean }) {
   return (
-    <ul role="list" className="flex flex-col divide-y divide-border/60">
+    <ul role="list" className="flex flex-col">
       {items.map((item) => (
-        <li key={item.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2">
-          <span className="flex-1">
+        <li key={item.id} className="flex items-center gap-3 py-1 pl-1">
+          {showCategory && <CategoryIcon category={item.category} size="sm" onColor />}
+          <span className={`flex-1 font-semibold ${showCategory ? "" : "pl-[2.625rem]"}`}>
             {item.name}
-            {item.quantity && <span className="opacity-75"> · {item.quantity}</span>}
+            {item.quantity && <span className="font-normal text-muted"> · {item.quantity}</span>}
           </span>
-          <button
-            type="button"
-            aria-pressed={item.expiresSoon}
-            onClick={() => onToggleExpiring(item)}
-            className="rounded-full border border-current px-3 py-1 text-sm opacity-90"
-          >
-            Bientôt périmé<span className="visually-hidden"> : {item.name}</span>
-            <span aria-hidden="true">{item.expiresSoon ? " ✓" : ""}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => onRemove(item)}
-            className="rounded-full px-3 py-1 text-sm underline"
-          >
-            Retirer<span className="visually-hidden"> {item.name}</span>
-          </button>
+          <ItemMenu item={item} {...actions} />
         </li>
       ))}
     </ul>
