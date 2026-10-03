@@ -1,6 +1,6 @@
 "use client";
 
-import { ChefHat, Heart, Refrigerator, UtensilsCrossed } from "lucide-react";
+import { ChefHat, CircleUser, Heart, Refrigerator } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,7 +8,7 @@ const LINKS = [
   { href: "/", label: "Frigo", icon: Refrigerator },
   { href: "/recettes", label: "Recettes", icon: ChefHat },
   { href: "/favoris", label: "Favoris", icon: Heart },
-  { href: "/cuisine", label: "Cuisine", icon: UtensilsCrossed },
+  { href: "/profil", label: "Profil", icon: CircleUser },
 ];
 
 export function BottomNav() {
@@ -28,7 +28,7 @@ export function BottomNav() {
                 href={href}
                 aria-current={current ? "page" : undefined}
                 className={`flex flex-col items-center gap-0.5 rounded-full py-1.5 text-xs font-bold ${
-                  current ? "bg-accent text-on-accent" : "text-muted hover:text-foreground"
+                  current ? "bg-accent-soft text-accent-strong" : "text-muted hover:text-foreground"
                 }`}
               >
                 <Icon aria-hidden="true" className="size-5" strokeWidth={current ? 2.4 : 2} />

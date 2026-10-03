@@ -1,6 +1,6 @@
 "use client";
 
-import { ChefHat, Heart, LogIn } from "lucide-react";
+import { ChefHat, Heart } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Recipe } from "@/lib/ai/schemas";
@@ -105,15 +105,7 @@ export function FavoritesPage() {
       <PageTitle title="Mes recettes" subtitle="Tes favoris et ce que tu as déjà cuisiné." />
 
       {isPending ? null : !signedIn ? (
-        <EmptyState
-          message="Connecte-toi pour garder tes recettes favorites et ton historique."
-          action={
-            <Link href="/connexion" className={button.primary}>
-              <LogIn aria-hidden="true" className="size-5" />
-              Connexion
-            </Link>
-          }
-        />
+        <EmptyState message="Crée un compte depuis l'onglet Profil pour garder tes recettes favorites et ton historique." />
       ) : (
         <>
           <fieldset>
@@ -180,7 +172,7 @@ export function FavoritesPage() {
   );
 }
 
-function EmptyState({ message, action }: { message: string; action: React.ReactNode }) {
+function EmptyState({ message, action }: { message: string; action?: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-4 px-4 py-10 text-center">
       <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-full bg-cherry-soft text-cherry-ink">

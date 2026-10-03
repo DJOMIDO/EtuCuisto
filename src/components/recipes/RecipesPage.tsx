@@ -3,11 +3,12 @@
 import { ChefHat, Refrigerator, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
-import type { Recipe, Recommendations } from "@/lib/ai/schemas";
+import type { KitchenProfile, Recipe, Recommendations } from "@/lib/ai/schemas";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { useKitchen } from "@/lib/client/use-kitchen";
 import { usePantry } from "@/lib/client/use-pantry";
 import { BUDGET_OPTIONS, TOOL_OPTIONS } from "@/lib/kitchen-options";
+import { KitchenDialog } from "../kitchen/KitchenDialog";
 import { CookedDialog } from "./CookedDialog";
 import { RecipeCard, type SavedState } from "./RecipeCard";
 import { button, card, choiceChip, PageTitle } from "../ui";
@@ -36,7 +37,9 @@ function writeSession(session: Session) {
 export function RecipesPage() {
   const ids = useId();
   const pantry = usePantry();
-  const { kitchen, isGuest } = useKitchen();
+  const { kitchen, configured, loaded: kitchenLoaded, isGuest, save: saveKitchen } = useKitchen();
+  // "first" : réglages demandés avant la toute première recherche.
+  const [kitchenDialog, setKitchenDialog] = useState<null | "edit" | "first">(null);
   const [maxMinutes, setMaxMinutes] = useState(20);
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [saved, setSaved] = useState<SavedState[]>([]);
@@ -60,12 +63,16 @@ export function RecipesPage() {
     if (recipes) writeSession({ recipes, saved, maxMinutes });
   }, [recipes, saved, maxMinutes]);
 
-  async function generate() {
+  async function generate(savedKitchen?: KitchenProfile) {
+    if (!configured && !savedKitchen) {
+      setKitchenDialog("first");
+      return;
+    }
     setError(null);
     setStatus("");
     setLoading(true);
     try {
-      const body = isGuest ? { maxMinutes, pantry: pantry.items, kitchen } : { maxMinutes };
+      const body = isGuest ? { maxMinutes, pantry: pantry.items, kitchen: savedKitchen ?? kitchen } : { maxMinutes };
       const data = await fetchJson<Recommendations>("/api/ai/recipes", {
         method: "POST",
         body: JSON.stringify(body),
@@ -100,7 +107,7 @@ export function RecipesPage() {
 
   async function toggleFavorite(index: number) {
     if (isGuest) {
-      setError("Connecte-toi pour garder tes recettes favorites.");
+      setError("Crée un compte depuis l'onglet Profil pour garder tes recettes favorites.");
       return;
     }
     const favorite = !saved[index].favorite;
@@ -172,10 +179,16 @@ export function RecipesPage() {
         <p className="flex items-start gap-2 text-sm text-muted">
           <Settings2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
           <span>
-            {tools || "aucun ustensile"} · budget {budget} ·{" "}
-            <Link href="/cuisine" className="font-bold text-accent-strong underline">
-              modifier
-            </Link>
+            {configured ? `${tools || "aucun ustensile"} · budget ${budget} · ` : "Ta cuisine n'est pas encore configurée · "}
+            <button
+              type="button"
+              onClick={() => setKitchenDialog("edit")}
+              disabled={!kitchenLoaded}
+              className="font-bold text-accent-strong underline"
+            >
+              {configured ? "modifier" : "configurer"}
+              <span className="visually-hidden"> ma cuisine</span>
+            </button>
           </span>
         </p>
 
@@ -192,7 +205,12 @@ export function RecipesPage() {
           </p>
         ) : (
           <div className="flex flex-wrap items-center gap-3">
-            <button type="button" onClick={generate} disabled={loading || !pantry.loaded} className={button.primary}>
+            <button
+              type="button"
+              onClick={() => generate()}
+              disabled={loading || !pantry.loaded || !kitchenLoaded}
+              className={button.primary}
+            >
               <ChefHat aria-hidden="true" className="size-5" />
               {loading ? "Le chef réfléchit…" : recipes ? "Autres idées" : "Trouver des recettes"}
             </button>
@@ -204,14 +222,6 @@ export function RecipesPage() {
       {error && (
         <p role="alert" className="text-sm font-semibold text-cherry-ink">
           {error}
-          {isGuest && error.startsWith("Connecte-toi") && (
-            <>
-              {" "}
-              <Link href="/connexion" className="underline">
-                Connexion
-              </Link>
-            </>
-          )}
         </p>
       )}
 
@@ -225,6 +235,21 @@ export function RecipesPage() {
           onCooked={() => setCookingIndex(index)}
         />
       ))}
+
+      <KitchenDialog
+        open={kitchenDialog !== null}
+        kitchen={kitchen}
+        firstTime={kitchenDialog === "first"}
+        isGuest={isGuest}
+        onSave={saveKitchen}
+        onSaved={(saved) => {
+          const first = kitchenDialog === "first";
+          setKitchenDialog(null);
+          setStatus("Réglages de ta cuisine enregistrés.");
+          if (first) generate(saved);
+        }}
+        onClose={() => setKitchenDialog(null)}
+      />
 
       <CookedDialog
         recipe={cookingIndex === null ? null : recipes![cookingIndex]}

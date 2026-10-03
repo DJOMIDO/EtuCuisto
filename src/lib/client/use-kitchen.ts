@@ -33,7 +33,7 @@ type KitchenResponse = { kitchen: KitchenProfile; isDefault: boolean };
 // Même principe que pour le frigo : un seul envoi des réglages invité, partagé.
 let migration: Promise<KitchenResponse> | null = null;
 
-function migrateLocalKitchen(local: KitchenProfile | null): Promise<KitchenResponse> {
+export function migrateLocalKitchen(local: KitchenProfile | null): Promise<KitchenResponse> {
   if (migration) return migration;
   writeLocal(null);
   migration = (async () => {
@@ -59,6 +59,8 @@ export function useKitchen() {
   const { data: session, isPending: sessionPending } = authClient.useSession();
   const userId = session?.user?.id ?? null;
   const [kitchen, setKitchen] = useState<KitchenProfile>(DEFAULT_KITCHEN);
+  // Faux tant que l'utilisateur n'a jamais enregistré ses réglages (on lui demande avant la 1re recherche).
+  const [configured, setConfigured] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,12 +72,16 @@ export function useKitchen() {
       const local = readLocalKitchen();
       if (!userId) {
         setKitchen(local ?? DEFAULT_KITCHEN);
+        setConfigured(!!local);
         setLoaded(true);
         return;
       }
       try {
         const data = await migrateLocalKitchen(local);
-        if (!cancelled) setKitchen(data.kitchen);
+        if (!cancelled) {
+          setKitchen(data.kitchen);
+          setConfigured(!data.isDefault);
+        }
       } catch (e) {
         if (!cancelled) setError((e as Error).message);
       } finally {
@@ -97,9 +103,10 @@ export function useKitchen() {
         writeLocal(next);
       }
       setKitchen(next);
+      setConfigured(true);
     },
     [userId],
   );
 
-  return { kitchen, loaded, error, isGuest: !userId, save };
+  return { kitchen, configured, loaded, error, isGuest: !userId, save };
 }

@@ -43,7 +43,7 @@ function toItem(row: PantryItem): PantryItem {
 // (rafraîchissement de session), il attend cet envoi au lieu de lire un frigo incomplet.
 let migration: Promise<void> | null = null;
 
-function migrateLocalPantry() {
+export function migrateLocalPantry() {
   const local = readLocal();
   if (local.length) {
     writeLocal([]); // vidé tout de suite : jamais envoyé deux fois

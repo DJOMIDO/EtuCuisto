@@ -2,13 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
-import { button, card, field } from "@/components/ui";
+import { button, card, field } from "../ui";
 import { authClient } from "@/lib/auth/client";
+import { migrateLocalKitchen, readLocalKitchen } from "@/lib/client/use-kitchen";
+import { migrateLocalPantry } from "@/lib/client/use-pantry";
 
-export default function ConnexionPage() {
+export function AuthForm() {
   const router = useRouter();
   const ids = useId();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup">("signup");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -23,21 +25,27 @@ export default function ConnexionPage() {
       mode === "signin"
         ? await authClient.signIn.email({ email, password })
         : await authClient.signUp.email({ email, password, name: String(form.get("name") || email) });
-    setPending(false);
     if (error) {
+      setPending(false);
       setError(error.message ?? "Échec, réessaie.");
       return;
     }
+    // Envoie tout de suite le frigo et les réglages de l'invité vers le compte,
+    // sans attendre qu'une page qui les utilise soit ouverte.
+    await Promise.allSettled([migrateLocalPantry(), migrateLocalKitchen(readLocalKitchen())]);
+    setPending(false);
     router.push("/");
     router.refresh();
   }
 
   return (
-    <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-5 px-4 py-8">
+    <div className="flex flex-col gap-5">
       <div className="text-center">
         <h1 className="text-3xl font-extrabold tracking-tight">{mode === "signin" ? "Content de te revoir" : "Bienvenue !"}</h1>
         <p className="mt-1 text-muted">
-          {mode === "signin" ? "Connecte-toi pour retrouver ton frigo." : "Crée ton compte pour garder ton frigo et tes recettes."}
+          {mode === "signin"
+            ? "Connecte-toi pour retrouver ton frigo, tes réglages et tes recettes."
+            : "Crée ton compte pour garder ton frigo et tes recettes sur tous tes appareils."}
         </p>
       </div>
 
@@ -103,6 +111,6 @@ export default function ConnexionPage() {
       >
         {mode === "signin" ? "Pas encore de compte ? Inscris-toi" : "Déjà un compte ? Connecte-toi"}
       </button>
-    </main>
+    </div>
   );
 }

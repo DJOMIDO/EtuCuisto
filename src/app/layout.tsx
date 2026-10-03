@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
+import { GuestDataSync } from "@/components/account/GuestDataSync";
 import { AppHeader } from "@/components/AppHeader";
 import { BottomNav } from "@/components/BottomNav";
 import { PopoverPolyfill } from "@/components/PopoverPolyfill";
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className={`${nunito.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col pb-[calc(env(safe-area-inset-bottom)+7rem)]">
         <PopoverPolyfill />
+        <GuestDataSync />
         <AppHeader />
         {children}
         <BottomNav />

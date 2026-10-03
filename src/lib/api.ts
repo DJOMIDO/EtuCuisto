@@ -36,7 +36,7 @@ export function handleRouteError(error: unknown) {
 export function quotaExceeded(isGuest: boolean) {
   return jsonError(
     isGuest
-      ? "Limite d'essai atteinte pour aujourd'hui. Connecte-toi pour continuer."
+      ? "Limite d'essai atteinte pour aujourd'hui. Crée un compte depuis l'onglet Profil pour continuer."
       : "Tu as atteint la limite du jour. Reviens demain !",
     429,
   );
