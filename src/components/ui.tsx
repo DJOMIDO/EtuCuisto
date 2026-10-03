@@ -10,6 +10,14 @@ export const button = {
   secondary: `${BUTTON_BASE} bg-accent-soft px-5 py-2.5 text-accent-strong hover:brightness-95`,
   ghost: `${BUTTON_BASE} px-3 py-2 text-muted hover:bg-surface-muted hover:text-foreground`,
   icon: `${BUTTON_BASE} size-10 shrink-0 text-muted hover:bg-surface-muted hover:text-foreground`,
+  // Variantes complètes plutôt que des classes ajoutées par-dessus : deux utilitaires
+  // sur la même propriété (bg, size, text) ne se départagent pas de façon fiable.
+  iconDanger: `${BUTTON_BASE} size-10 shrink-0 text-muted hover:bg-cherry-soft hover:text-cherry-ink`,
+  iconSun: `${BUTTON_BASE} size-10 shrink-0 bg-sun-soft text-sun-ink`,
+  stepper: `${BUTTON_BASE} size-9 shrink-0 bg-surface text-muted hover:text-foreground`,
+  favoriteOn: `${BUTTON_BASE} bg-cherry-soft px-5 py-2.5 text-cherry-ink hover:brightness-95`,
+  // Rouge foncé fixe : texte blanc lisible (≥ 4.5:1) en clair comme en sombre.
+  danger: `${BUTTON_BASE} bg-[#b3261e] px-5 py-2.5 text-white shadow-sm hover:brightness-110`,
 };
 
 export const card = "rounded-3xl bg-surface p-5 shadow-card";

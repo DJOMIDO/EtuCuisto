@@ -61,3 +61,10 @@ export const aiUsage = pgTable(
   },
   (t) => [primaryKey({ columns: [t.key, t.day] })],
 );
+
+// Préférences liées au compte (le thème, lui, reste propre à chaque appareil).
+export const userSettings = pgTable("user_settings", {
+  userId: text("user_id").primaryKey(),
+  locale: text("locale").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});

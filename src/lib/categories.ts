@@ -12,16 +12,15 @@ export type CategoryId =
   | "epice"
   | "autre";
 
-export const CATEGORIES: { id: CategoryId; label: string; examples: string }[] = [
-  { id: "legume", label: "Légumes", examples: "courgette, tomate, carotte, poivron, salade, champignon, brocoli, épinard, maïs" },
-  { id: "fruit", label: "Fruits", examples: "pomme, banane, citron, orange, avocat, fraise, kiwi" },
-  { id: "viande", label: "Viandes", examples: "poulet, bœuf, steak haché, jambon, lardons, saucisse, dinde" },
-  { id: "poisson", label: "Poissons & fruits de mer", examples: "thon, saumon, sardine, crevette, cabillaud, surimi" },
-  { id: "laitier", label: "Œufs & produits laitiers", examples: "œuf, lait, yaourt, fromage, gruyère râpé, beurre, crème fraîche, mozzarella" },
-  { id: "feculent", label: "Féculents & pain", examples: "pâtes, riz, pain, baguette, pomme de terre, semoule, quinoa, lentilles, pois chiches, farine" },
-  { id: "condiment", label: "Sauces & condiments", examples: "sauce tomate, sauce soja, moutarde, mayonnaise, ketchup, pesto, huile, vinaigre, bouillon" },
-  { id: "epice", label: "Épices & aromates", examples: "sel, poivre, paprika, curry, cumin, ail, oignon, échalote, gingembre, basilic, persil" },
-  { id: "autre", label: "Autres", examples: "sucre, chocolat, biscuits, céréales, miel, confiture" },
+// Libellés affichés : messages/*.json → « categories ».
+export const CATEGORIES: { id: CategoryId; examples: string }[] = [
+  { id: "legume", examples: "courgette, tomate, carotte, poivron, salade, champignon, brocoli, épinard, maïs" },
+  { id: "fruit", examples: "pomme, banane, citron, orange, avocat, fraise, kiwi" },
+  { id: "viande", examples: "poulet, bœuf, steak haché, jambon, lardons, saucisse, dinde" },
+  { id: "poisson", examples: "thon, saumon, sardine, crevette, cabillaud, surimi" },
+  { id: "laitier", examples: "œuf, lait, yaourt, fromage, gruyère râpé, beurre, crème fraîche, mozzarella" },
+  { id: "feculent", examples: "pâtes, riz, pain, baguette, pomme de terre, semoule, quinoa, lentilles, pois chiches, farine" },
+  { id: "condiment", examples: "sauce tomate, sauce soja, moutarde, mayonnaise, ketchup, pesto, huile, vinaigre, bouillon" },
+  { id: "epice", examples: "sel, poivre, paprika, curry, cumin, ail, oignon, échalote, gingembre, basilic, persil" },
+  { id: "autre", examples: "sucre, chocolat, biscuits, céréales, miel, confiture" },
 ];
-
-export const CATEGORY_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.id, c.label])) as Record<CategoryId, string>;

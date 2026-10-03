@@ -1,6 +1,7 @@
 "use client";
 
 import { PartyPopper } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef } from "react";
 import type { Recipe } from "@/lib/ai/schemas";
 import type { PantryItem } from "@/lib/client/use-pantry";
@@ -18,6 +19,7 @@ type Props = {
 export function CookedDialog({ recipe, pantry, onConfirm, onClose }: Props) {
   const id = useId();
   const ref = useRef<HTMLDialogElement>(null);
+  const t = useTranslations();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -49,14 +51,14 @@ export function CookedDialog({ recipe, pantry, onConfirm, onClose }: Props) {
           </span>
           <div>
             <h2 id={`${id}-title`} className="text-xl font-extrabold">
-              Bravo ! On retire quoi du frigo ?
+              {t("cookedDialog.title")}
             </h2>
           </div>
           {used.length === 0 ? (
-            <p className="text-muted">Ces ingrédients ne sont plus dans ton frigo.</p>
+            <p className="text-muted">{t("cookedDialog.gone")}</p>
           ) : (
             <fieldset className="flex flex-col gap-1">
-              <legend className="mb-2 text-sm text-muted">Décoche ce qu&apos;il te reste encore.</legend>
+              <legend className="mb-2 text-sm text-muted">{t("cookedDialog.hint")}</legend>
               {used.map((p) => (
                 <label key={p.id} className="flex items-center gap-3 rounded-2xl px-2 py-2 hover:bg-surface-muted">
                   <input type="checkbox" name="used" value={p.id} defaultChecked className="size-5 shrink-0 accent-[var(--accent-strong)]" />
@@ -71,10 +73,10 @@ export function CookedDialog({ recipe, pantry, onConfirm, onClose }: Props) {
           )}
           <div className="flex flex-wrap gap-2">
             <button type="submit" className={button.primary}>
-              Valider
+              {t("common.validate")}
             </button>
             <button type="button" onClick={onClose} className={button.ghost}>
-              Annuler
+              {t("common.cancel")}
             </button>
           </div>
         </form>

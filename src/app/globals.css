@@ -36,8 +36,40 @@
   --shadow-card: 0 1px 2px rgb(38 35 31 / 0.05), 0 6px 20px rgb(38 35 31 / 0.06);
 }
 
+/* Sombre : choisi explicitement, ou « Système » quand l'appareil est en sombre.
+   Les deux blocs portent les mêmes valeurs (une règle @media ne peut pas être fusionnée
+   avec un sélecteur hors media). */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #141312;
+  --surface: #1f1d1b;
+  --surface-muted: #2b2825;
+  --foreground: #f2eee8;
+  --muted: #b3aca2;
+  --border: #37332f;
+  --field: #7f786e;
+
+  --accent-strong: #b9e08a;
+  --on-accent: #1d2a0c;
+  --accent-soft: rgb(161 208 103 / 0.16);
+
+  --cherry-ink: #ff8f85;
+  --cherry-soft: rgb(239 63 50 / 0.18);
+  --lagoon-ink: #4fd3e4;
+  --lagoon-soft: rgb(0 182 205 / 0.16);
+  --sun-ink: #ffd556;
+  --sun-soft: rgb(255 213 86 / 0.15);
+  --herb-ink: #b9e08a;
+  --herb-soft: rgb(161 208 103 / 0.16);
+  --neutral-ink: #c9c2b8;
+  --neutral-soft: #2f2c29;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root[data-theme="system"] {
+    color-scheme: dark;
     --background: #141312;
     --surface: #1f1d1b;
     --surface-muted: #2b2825;
@@ -65,6 +97,10 @@
   }
 }
 
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -90,14 +126,15 @@
   --color-herb-soft: var(--herb-soft);
   --color-neutral-ink: var(--neutral-ink);
   --color-neutral-soft: var(--neutral-soft);
-  --font-sans: var(--font-nunito), system-ui, sans-serif;
+  --font-sans: var(--font-nunito), system-ui, "PingFang SC", "PingFang TC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
   --shadow-card: var(--shadow-card);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-nunito), system-ui, sans-serif;
+  /* Nunito n'a pas de glyphes chinois : polices système CJK en relais. */
+  font-family: var(--font-nunito), system-ui, "PingFang SC", "PingFang TC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
   line-height: 1.5;
 }
 

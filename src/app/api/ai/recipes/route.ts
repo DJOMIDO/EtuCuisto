@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getDb, kitchenProfiles, pantryItems } from "@/db";
 import { generateStructured } from "@/lib/ai";
 import { mockRecipes } from "@/lib/ai/mock";
-import { RECIPES_SYSTEM, recipesUserPrompt } from "@/lib/ai/prompts";
+import { recipesSystem, recipesUserPrompt } from "@/lib/ai/prompts";
 import {
   DEFAULT_KITCHEN,
   KitchenProfile,
@@ -14,6 +14,8 @@ import {
 import { handleRouteError, jsonError, quotaExceeded, readJson } from "@/lib/api";
 import { getUserId } from "@/lib/auth/server";
 import { consumeAiQuota, withRefund } from "@/lib/quota";
+import { AI_LANGUAGE } from "@/i18n/locales";
+import { getRequestLocale } from "@/i18n/request";
 
 // Connecté : frigo et cuisine lus en base. Invité : envoyés par le client.
 const Body = z.object({
@@ -47,15 +49,16 @@ export async function POST(request: Request) {
       if (profile) kitchen = KitchenProfile.parse(profile);
     }
 
-    if (pantry.length === 0) return jsonError("Ton frigo est vide : ajoute des ingrédients.", 400);
+    if (pantry.length === 0) return jsonError("emptyFridge", 400);
 
+    const language = AI_LANGUAGE[await getRequestLocale()];
     const quota = await consumeAiQuota(request, userId);
     if (!quota.allowed) return quotaExceeded(quota.isGuest);
 
     const result = await withRefund(quota, () =>
       generateStructured({
         task: "recipes",
-        system: RECIPES_SYSTEM,
+        system: recipesSystem(language),
         text: recipesUserPrompt(pantry, kitchen, body.data.maxMinutes),
         schema: Recommendations,
         mock: () => mockRecipes(pantry),

@@ -66,7 +66,7 @@ export const DEFAULT_KITCHEN: KitchenProfile = {
 export const ParsedIngredients = z.object({
   items: z.array(
     z.object({
-      name: z.string().describe("Nom de l'ingrédient en français, au singulier, en minuscules"),
+      name: z.string().describe("Nom de l'ingrédient dans la langue demandée, au singulier"),
       quantity: z.string().nullable().describe("Quantité telle que comprise, ex. « 2 », « 1/2 paquet », ou null"),
       category: z.enum(CATEGORY_IDS),
       expiresSoon: z.boolean().describe("Vrai si l'utilisateur dit que ça va bientôt périmer, ou si c'est visiblement abîmé"),

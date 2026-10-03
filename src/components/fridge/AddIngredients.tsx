@@ -1,6 +1,7 @@
 "use client";
 
 import { AlarmClock, Camera, Plus, WandSparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 import type { ParsedIngredients, PantryItemInput } from "@/lib/ai/schemas";
 import { downscaleImage } from "@/lib/client/image";
@@ -17,6 +18,7 @@ type Props = {
 
 export function AddIngredients({ onAdd, announce }: Props) {
   const ids = useId();
+  const t = useTranslations();
   const [text, setText] = useState("");
   const [busy, setBusy] = useState<null | "text" | "photo" | "save">(null);
   const [error, setError] = useState<string | null>(null);
@@ -24,11 +26,11 @@ export function AddIngredients({ onAdd, announce }: Props) {
 
   function showCandidates(result: ParsedIngredients) {
     if (result.items.length === 0) {
-      setError("Je n'ai trouvé aucun aliment. Essaie de reformuler ou une autre photo.");
+      setError(t("add.noneFound"));
       return;
     }
     setCandidates(result.items.map((i) => ({ ...i, key: crypto.randomUUID(), selected: true })));
-    announce(`${result.items.length} ingrédient(s) trouvé(s), vérifie la liste avant d'ajouter.`);
+    announce(t("add.found", { count: result.items.length }));
   }
 
   async function analyzeText(e: React.FormEvent) {
@@ -75,7 +77,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
       await onAdd(chosen.map(({ name, quantity, category, expiresSoon }) => ({ name, quantity, category, expiresSoon })));
       setCandidates(null);
       setText("");
-      announce(`${chosen.length} ingrédient(s) ajouté(s) au frigo.`);
+      announce(t("add.added", { count: chosen.length }));
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -93,9 +95,9 @@ export function AddIngredients({ onAdd, announce }: Props) {
       <section aria-labelledby={`${ids}-review`} className={`${card} flex flex-col gap-4`}>
         <div>
           <h2 id={`${ids}-review`} className="text-xl font-extrabold">
-            Vérifie avant d&apos;ajouter
+            {t("add.reviewTitle")}
           </h2>
-          <p className="text-sm text-muted">Décoche ce qui est faux, signale ce qui va périmer.</p>
+          <p className="text-sm text-muted">{t("add.reviewHint")}</p>
         </div>
         <ul role="list" className="flex flex-col gap-1">
           {candidates.map((c) => (
@@ -116,10 +118,10 @@ export function AddIngredients({ onAdd, announce }: Props) {
                 type="button"
                 aria-pressed={c.expiresSoon}
                 onClick={() => patchCandidate(c.key, { expiresSoon: !c.expiresSoon })}
-                className={`${button.icon} ${c.expiresSoon ? "bg-sun-soft text-sun-ink hover:bg-sun-soft" : ""}`}
+                className={c.expiresSoon ? button.iconSun : button.icon}
               >
                 <AlarmClock aria-hidden="true" className="size-5" />
-                <span className="visually-hidden">À utiliser vite : {c.name}</span>
+                <span className="visually-hidden">{t("add.expiringToggle", { name: c.name })}</span>
               </button>
             </li>
           ))}
@@ -128,10 +130,10 @@ export function AddIngredients({ onAdd, announce }: Props) {
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={confirmCandidates} disabled={busy === "save" || count === 0} className={button.primary}>
             <Plus aria-hidden="true" className="size-5" />
-            {busy === "save" ? "Ajout…" : `Ajouter ${count} ingrédient${count > 1 ? "s" : ""}`}
+            {busy === "save" ? t("add.adding") : t("add.addCount", { count })}
           </button>
           <button type="button" onClick={() => setCandidates(null)} className={button.ghost}>
-            Annuler
+            {t("common.cancel")}
           </button>
         </div>
       </section>
@@ -143,10 +145,10 @@ export function AddIngredients({ onAdd, announce }: Props) {
       <form onSubmit={analyzeText} className="flex flex-col gap-3">
         <div>
           <h2 id={`${ids}-add`} className="text-xl font-extrabold">
-            <label htmlFor={`${ids}-text`}>Qu&apos;est-ce que tu as ?</label>
+            <label htmlFor={`${ids}-text`}>{t("add.title")}</label>
           </h2>
           <p id={`${ids}-text-hint`} className="text-sm text-muted">
-            Écris comme tu parles, ou prends ton frigo en photo.
+            {t("add.hint")}
           </p>
         </div>
         <textarea
@@ -154,7 +156,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
           aria-describedby={`${ids}-text-hint`}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="3 œufs, un reste de riz, une courgette qui va bientôt périmer…"
+          placeholder={t("add.placeholder")}
           required
           maxLength={1000}
           rows={3}
@@ -163,11 +165,11 @@ export function AddIngredients({ onAdd, announce }: Props) {
         <div className="flex flex-wrap gap-2">
           <button type="submit" disabled={busy !== null || !text.trim()} className={button.primary}>
             <WandSparkles aria-hidden="true" className="size-5" />
-            {busy === "text" ? "Analyse…" : "Analyser"}
+            {busy === "text" ? t("add.analyzing") : t("add.analyze")}
           </button>
           <label className={`${button.secondary} cursor-pointer ${busy ? "pointer-events-none opacity-50" : ""}`}>
             <Camera aria-hidden="true" className="size-5" />
-            {busy === "photo" ? "Analyse de la photo…" : "Photo"}
+            {busy === "photo" ? t("add.analyzingPhoto") : t("add.photo")}
             <input type="file" accept="image/*" onChange={analyzePhoto} disabled={busy !== null} className="sr-only" />
           </label>
         </div>

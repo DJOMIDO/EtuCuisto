@@ -1,14 +1,16 @@
 "use client";
 
 import { Refrigerator } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { CATEGORY_LABEL, type CategoryId } from "@/lib/categories";
+import type { CategoryId } from "@/lib/categories";
 import { usePantry, type PantryItem } from "@/lib/client/use-pantry";
 import { AddIngredients } from "./AddIngredients";
 import { PantryList } from "./PantryList";
 import { PageTitle } from "../ui";
 
 export function FridgePage() {
+  const t = useTranslations();
   const pantry = usePantry();
   const [status, setStatus] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -26,15 +28,18 @@ export function FridgePage() {
   const toggle = (item: PantryItem) =>
     run(
       () => pantry.update(item.id, { expiresSoon: !item.expiresSoon }),
-      item.expiresSoon ? `${item.name} n'est plus à utiliser vite.` : `${item.name} est à utiliser vite.`,
+      t(item.expiresSoon ? "fridge.statusExpiringOff" : "fridge.statusExpiringOn", { name: item.name }),
     );
-  const remove = (item: PantryItem) => run(() => pantry.remove(item.id), `${item.name} retiré du frigo.`);
+  const remove = (item: PantryItem) => run(() => pantry.remove(item.id), t("fridge.statusRemoved", { name: item.name }));
   const changeCategory = (item: PantryItem, category: CategoryId) =>
-    run(() => pantry.update(item.id, { category }), `${item.name} : ${CATEGORY_LABEL[category]}.`);
+    run(
+      () => pantry.update(item.id, { category }),
+      t("fridge.statusCategory", { name: item.name, category: t(`categories.${category}`) }),
+    );
 
   return (
     <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
-      <PageTitle title="Mon frigo" subtitle="Ce que tu as sous la main. Les recettes partiront de là." />
+      <PageTitle title={t("fridge.title")} subtitle={t("fridge.subtitle")} />
 
       <AddIngredients onAdd={pantry.add} announce={setStatus} />
 
@@ -45,16 +50,14 @@ export function FridgePage() {
       )}
 
       {!pantry.loaded ? (
-        <p className="text-muted">Chargement du frigo…</p>
+        <p className="text-muted">{t("fridge.loading")}</p>
       ) : pantry.items.length === 0 ? (
         <EmptyFridge />
       ) : (
         <>
           <h2 className="mt-2 flex items-baseline justify-between text-xl font-extrabold">
-            Dans ton frigo
-            <span className="text-sm font-bold text-muted">
-              {pantry.items.length} ingrédient{pantry.items.length > 1 ? "s" : ""}
-            </span>
+            {t("fridge.listTitle")}
+            <span className="text-sm font-bold text-muted">{t("fridge.count", { count: pantry.items.length })}</span>
           </h2>
           <PantryList items={pantry.items} onToggleExpiring={toggle} onRemove={remove} onChangeCategory={changeCategory} />
         </>
@@ -69,15 +72,14 @@ export function FridgePage() {
 }
 
 function EmptyFridge() {
+  const t = useTranslations("fridge");
   return (
     <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
       <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
         <Refrigerator className="size-8" />
       </span>
-      <p className="text-lg font-extrabold">Ton frigo est vide</p>
-      <p className="max-w-sm text-muted">
-        Écris ce que tu as ou prends une photo : on s&apos;occupe de trier.
-      </p>
+      <p className="text-lg font-extrabold">{t("emptyTitle")}</p>
+      <p className="max-w-sm text-muted">{t("emptyText")}</p>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
   // Anciennes pages : la cuisine se règle depuis Recettes, le compte depuis Profil.
@@ -11,4 +12,5 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Lit src/i18n/request.ts (langue + messages de chaque requête).
+export default createNextIntlPlugin()(nextConfig);

@@ -1,9 +1,9 @@
 "use client";
 
 import { Check, Minus, Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState } from "react";
-import { KitchenProfile } from "@/lib/ai/schemas";
-import { BUDGET_OPTIONS, DIET_OPTIONS, TOOL_OPTIONS } from "@/lib/kitchen-options";
+import { BUDGET_IDS, DIET_IDS, KitchenProfile, TOOL_IDS } from "@/lib/ai/schemas";
 import { button, choiceChip } from "../ui";
 
 type Props = {
@@ -24,6 +24,7 @@ const CHECK_CHIP = `${choiceChip} pr-4 [&:not(:has(:checked))>svg]:hidden`;
 // Réglages de la cuisine (ustensiles, budget, régime, personnes) dans une fenêtre modale.
 export function KitchenDialog({ open, kitchen, firstTime, isGuest, onSave, onSaved, onClose }: Props) {
   const ids = useId();
+  const t = useTranslations();
   const ref = useRef<HTMLDialogElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -44,8 +45,8 @@ export function KitchenDialog({ open, kitchen, firstTime, isGuest, onSave, onSav
       diet: form.getAll("diet"),
       servings: Number(form.get("servings")),
     });
-    if (!parsed.success) return setError("Vérifie les réglages : nombre de personnes entre 1 et 8.");
-    if (parsed.data.tools.length === 0) return setError("Coche au moins un ustensile.");
+    if (!parsed.success) return setError(t("kitchen.invalid"));
+    if (parsed.data.tools.length === 0) return setError(t("kitchen.noTool"));
     setError(null);
     setSaving(true);
     try {
@@ -72,57 +73,55 @@ export function KitchenDialog({ open, kitchen, firstTime, isGuest, onSave, onSav
           <div className="flex items-start justify-between gap-3 px-6 pb-2 pt-6">
             <div>
               <h2 id={`${ids}-title`} className="text-2xl font-extrabold">
-                {firstTime ? "D'abord, ta cuisine" : "Ma cuisine"}
+                {t(firstTime ? "kitchen.titleFirst" : "kitchen.title")}
               </h2>
               <p id={`${ids}-intro`} className="mt-1 text-muted">
-                {firstTime
-                  ? "Dis-moi ce que tu as, pour ne recevoir que des recettes faisables chez toi. Tu pourras changer ça plus tard."
-                  : "Pour ne te proposer que des recettes que tu peux vraiment faire."}
+                {t(firstTime ? "kitchen.introFirst" : "kitchen.intro")}
               </p>
             </div>
             <button type="button" onClick={onClose} className={button.icon}>
               <X aria-hidden="true" className="size-5" />
-              <span className="visually-hidden">Fermer</span>
+              <span className="visually-hidden">{t("common.close")}</span>
             </button>
           </div>
 
           <div className="flex flex-col gap-5 overflow-y-auto px-6 py-4">
             <fieldset aria-describedby={`${ids}-tools-hint`}>
-              <legend className={LEGEND}>Ustensiles</legend>
+              <legend className={LEGEND}>{t("kitchen.tools")}</legend>
               <p id={`${ids}-tools-hint`} className="-mt-2 mb-3 text-sm text-muted">
-                Coche seulement ce que tu as vraiment.
+                {t("kitchen.toolsHint")}
               </p>
               <div className="flex flex-wrap gap-2">
-                {TOOL_OPTIONS.map((o) => (
-                  <label key={o.id} className={CHECK_CHIP}>
-                    <input type="checkbox" name="tools" value={o.id} defaultChecked={kitchen.tools.includes(o.id)} className="sr-only" />
+                {TOOL_IDS.map((tool) => (
+                  <label key={tool} className={CHECK_CHIP}>
+                    <input type="checkbox" name="tools" value={tool} defaultChecked={kitchen.tools.includes(tool)} className="sr-only" />
                     <Check aria-hidden="true" className="size-4" strokeWidth={3} />
-                    {o.label}
+                    {t(`kitchen.toolOptions.${tool}`)}
                   </label>
                 ))}
               </div>
             </fieldset>
 
             <fieldset className={SECTION}>
-              <legend className={`${LEGEND} float-left w-full`}>Budget</legend>
+              <legend className={`${LEGEND} float-left w-full`}>{t("kitchen.budget")}</legend>
               <div className="clear-left flex flex-col gap-2">
-                {BUDGET_OPTIONS.map((o) => (
+                {BUDGET_IDS.map((budget) => (
                   <label
-                    key={o.id}
+                    key={budget}
                     className="flex cursor-pointer items-center gap-3 rounded-2xl bg-surface-muted px-4 py-3 has-[:checked]:bg-accent-soft has-[:checked]:ring-2 has-[:checked]:ring-accent-strong"
                   >
                     <input
                       type="radio"
                       name="budget"
-                      value={o.id}
-                      defaultChecked={kitchen.budget === o.id}
-                      aria-describedby={`${ids}-budget-${o.id}`}
+                      value={budget}
+                      defaultChecked={kitchen.budget === budget}
+                      aria-describedby={`${ids}-budget-${budget}`}
                       className="size-5 shrink-0 accent-[var(--accent-strong)]"
                     />
                     <span className="flex flex-col">
-                      <span className="font-bold">{o.label}</span>
-                      <span id={`${ids}-budget-${o.id}`} className="text-sm text-muted">
-                        {o.hint}
+                      <span className="font-bold">{t(`kitchen.budgetOptions.${budget}`)}</span>
+                      <span id={`${ids}-budget-${budget}`} className="text-sm text-muted">
+                        {t(`kitchen.budgetHints.${budget}`)}
                       </span>
                     </span>
                   </label>
@@ -131,13 +130,13 @@ export function KitchenDialog({ open, kitchen, firstTime, isGuest, onSave, onSav
             </fieldset>
 
             <fieldset className={SECTION}>
-              <legend className={`${LEGEND} float-left w-full`}>Régime alimentaire</legend>
+              <legend className={`${LEGEND} float-left w-full`}>{t("kitchen.diet")}</legend>
               <div className="clear-left flex flex-wrap gap-2">
-                {DIET_OPTIONS.map((o) => (
-                  <label key={o.id} className={CHECK_CHIP}>
-                    <input type="checkbox" name="diet" value={o.id} defaultChecked={kitchen.diet.includes(o.id)} className="sr-only" />
+                {DIET_IDS.map((diet) => (
+                  <label key={diet} className={CHECK_CHIP}>
+                    <input type="checkbox" name="diet" value={diet} defaultChecked={kitchen.diet.includes(diet)} className="sr-only" />
                     <Check aria-hidden="true" className="size-4" strokeWidth={3} />
-                    {o.label}
+                    {t(`kitchen.dietOptions.${diet}`)}
                   </label>
                 ))}
               </div>
@@ -145,18 +144,18 @@ export function KitchenDialog({ open, kitchen, firstTime, isGuest, onSave, onSav
 
             <div className={`${SECTION} flex items-center justify-between gap-3`}>
               <label htmlFor={`${ids}-servings`} className="text-lg font-extrabold">
-                Nombre de personnes
+                {t("kitchen.servings")}
               </label>
               <ServingsStepper id={`${ids}-servings`} defaultValue={kitchen.servings} />
             </div>
 
-            {isGuest && <p className="text-sm text-muted">Mode invité : réglages gardés sur cet appareil.</p>}
+            {isGuest && <p className="text-sm text-muted">{t("kitchen.guestNote")}</p>}
           </div>
 
           <div className="flex flex-col gap-2 border-t border-border px-6 py-4">
             {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
             <button type="submit" disabled={saving} className={`${button.primary} w-full py-3`}>
-              {saving ? "Enregistrement…" : firstTime ? "Enregistrer et trouver des recettes" : "Enregistrer"}
+              {t(saving ? "common.saving" : firstTime ? "kitchen.saveAndFind" : "common.save")}
             </button>
           </div>
         </form>
@@ -166,13 +165,14 @@ export function KitchenDialog({ open, kitchen, firstTime, isGuest, onSave, onSav
 }
 
 function ServingsStepper({ id, defaultValue }: { id: string; defaultValue: number }) {
+  const t = useTranslations("kitchen");
   const [value, setValue] = useState(defaultValue);
   const step = (delta: number) => setValue((v) => Math.min(8, Math.max(1, v + delta)));
   return (
     <div className="flex items-center gap-1 rounded-full bg-surface-muted p-1">
-      <button type="button" onClick={() => step(-1)} disabled={value <= 1} className={`${button.icon} size-9 bg-surface`}>
+      <button type="button" onClick={() => step(-1)} disabled={value <= 1} className={button.stepper}>
         <Minus aria-hidden="true" className="size-4" />
-        <span className="visually-hidden">Une personne de moins</span>
+        <span className="visually-hidden">{t("fewer")}</span>
       </button>
       <input
         id={id}
@@ -186,9 +186,9 @@ function ServingsStepper({ id, defaultValue }: { id: string; defaultValue: numbe
         onChange={(e) => setValue(Number(e.target.value))}
         className="w-10 bg-transparent text-center text-lg font-extrabold [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
       />
-      <button type="button" onClick={() => step(1)} disabled={value >= 8} className={`${button.icon} size-9 bg-surface`}>
+      <button type="button" onClick={() => step(1)} disabled={value >= 8} className={button.stepper}>
         <Plus aria-hidden="true" className="size-4" />
-        <span className="visually-hidden">Une personne de plus</span>
+        <span className="visually-hidden">{t("more")}</span>
       </button>
     </div>
   );

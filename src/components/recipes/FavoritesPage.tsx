@@ -2,6 +2,7 @@
 
 import { ChefHat, Heart } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import type { Recipe } from "@/lib/ai/schemas";
 import { authClient } from "@/lib/auth/client";
@@ -14,15 +15,14 @@ import { button, choiceChip, PageTitle } from "../ui";
 type SavedRecipe = { id: string; data: Recipe; favorite: boolean; cookedAt: string | null };
 type Filter = "all" | "favorite" | "cooked";
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: "all", label: "Toutes" },
-  { id: "favorite", label: "Favoris" },
-  { id: "cooked", label: "Déjà cuisinées" },
-];
-
-const DATE = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" });
+const FILTERS = [
+  { id: "all", key: "favorites.all" },
+  { id: "favorite", key: "favorites.favorites" },
+  { id: "cooked", key: "favorites.cooked" },
+] as const satisfies readonly { id: Filter; key: string }[];
 
 export function FavoritesPage() {
+  const t = useTranslations();
   const { data: session, isPending } = authClient.useSession();
   const signedIn = !!session?.user;
   const pantry = usePantry();
@@ -65,18 +65,18 @@ export function FavoritesPage() {
         });
         replace(d.recipe);
       },
-      row.favorite ? "Retirée des favoris." : "Ajoutée aux favoris.",
+      t(row.favorite ? "recipes.favoriteRemoved" : "recipes.favoriteAdded"),
     );
 
   const remove = (row: SavedRecipe) => {
-    if (!confirm(`Supprimer « ${row.data.title} » ?`)) return;
+    if (!confirm(t("favorites.deleteConfirm", { title: row.data.title }))) return;
     run(
       row.id,
       async () => {
         await fetchJson(`/api/recipes/${row.id}`, { method: "DELETE" });
         setRows((prev) => prev?.filter((r) => r.id !== row.id) ?? null);
       },
-      "Recette supprimée.",
+      t("favorites.deleted"),
     );
   };
 
@@ -93,7 +93,7 @@ export function FavoritesPage() {
         });
         replace(d.recipe);
       },
-      "Bon appétit !",
+      t("favorites.enjoy"),
     );
   }
 
@@ -102,14 +102,14 @@ export function FavoritesPage() {
 
   return (
     <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
-      <PageTitle title="Mes recettes" subtitle="Tes favoris et ce que tu as déjà cuisiné." />
+      <PageTitle title={t("favorites.title")} subtitle={t("favorites.subtitle")} />
 
       {isPending ? null : !signedIn ? (
-        <EmptyState message="Crée un compte depuis l'onglet Profil pour garder tes recettes favorites et ton historique." />
+        <EmptyState message={t("favorites.guest")} />
       ) : (
         <>
           <fieldset>
-            <legend className="visually-hidden">Afficher</legend>
+            <legend className="visually-hidden">{t("favorites.filter")}</legend>
             <div className="flex flex-wrap gap-2">
               {FILTERS.map((f) => (
                 <label key={f.id} className={choiceChip}>
@@ -120,7 +120,7 @@ export function FavoritesPage() {
                     onChange={() => setFilter(f.id)}
                     className="sr-only"
                   />
-                  {f.label}
+                  {t(f.key)}
                 </label>
               ))}
             </div>
@@ -129,14 +129,14 @@ export function FavoritesPage() {
           {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
 
           {rows === null ? (
-            !error && <p className="text-muted">Chargement…</p>
+            !error && <p className="text-muted">{t("common.loading")}</p>
           ) : shown.length === 0 ? (
             <EmptyState
-              message={rows.length === 0 ? "Aucune recette enregistrée pour l'instant." : "Rien dans cette catégorie."}
+              message={t(rows.length === 0 ? "favorites.emptyAll" : "favorites.emptyFilter")}
               action={
                 <Link href="/recettes" className={button.secondary}>
                   <ChefHat aria-hidden="true" className="size-5" />
-                  Trouver des recettes
+                  {t("favorites.find")}
                 </Link>
               }
             />
@@ -148,7 +148,7 @@ export function FavoritesPage() {
                 saved={{ id: row.id, favorite: row.favorite, cooked: !!row.cookedAt }}
                 busy={busyId === row.id}
                 allowRecook
-                note={row.cookedAt ? `Cuisinée le ${DATE.format(new Date(row.cookedAt))}` : undefined}
+                note={row.cookedAt ? t("favorites.cookedOn", { date: new Date(row.cookedAt) }) : undefined}
                 onFavorite={() => toggleFavorite(row)}
                 onCooked={() => setCooking(row)}
                 onDelete={() => remove(row)}

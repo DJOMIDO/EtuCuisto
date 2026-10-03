@@ -19,19 +19,22 @@ export type AiProvider = {
   generate<T extends z.ZodType>(req: StructuredRequest<T>): Promise<z.infer<T>>;
 };
 
+export type AiErrorCode = "refused" | "incomplete" | "busy" | "unavailable" | "misconfigured";
+
+/** Erreur IA : un code (traduit par lib/api.ts) et le statut HTTP à renvoyer. */
 export class AiError extends Error {
   constructor(
-    message: string,
+    readonly code: AiErrorCode,
     readonly status: number,
   ) {
-    super(message);
+    super(code);
   }
 }
 
 export const AI_ERRORS = {
-  refused: () => new AiError("La demande a été refusée par le modèle.", 422),
-  incomplete: () => new AiError("Réponse incomplète du modèle, réessaie.", 502),
-  busy: () => new AiError("Trop de demandes en ce moment, réessaie dans une minute.", 503),
-  unavailable: () => new AiError("Le service de recettes est indisponible, réessaie.", 502),
-  misconfigured: () => new AiError("Service indisponible.", 500),
+  refused: () => new AiError("refused", 422),
+  incomplete: () => new AiError("incomplete", 502),
+  busy: () => new AiError("busy", 503),
+  unavailable: () => new AiError("unavailable", 502),
+  misconfigured: () => new AiError("misconfigured", 500),
 };

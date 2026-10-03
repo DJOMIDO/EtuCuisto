@@ -1,6 +1,7 @@
 "use client";
 
 import { AlarmClock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { PantryItem } from "@/lib/client/use-pantry";
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import { CategoryIcon } from "../CategoryIcon";
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export function PantryList({ items, ...actions }: Props) {
+  const t = useTranslations();
   const expiring = items.filter((i) => i.expiresSoon);
   const groups = CATEGORIES.map((c) => ({
     ...c,
@@ -26,7 +28,8 @@ export function PantryList({ items, ...actions }: Props) {
       {expiring.length > 0 && (
         <section aria-labelledby="fridge-expiring" className="rounded-3xl bg-sun-soft p-5">
           <h2 id="fridge-expiring" className="mb-2 flex items-center gap-2 text-lg font-extrabold text-sun-ink">
-            <AlarmClock aria-hidden="true" className="size-5" />À utiliser vite
+            <AlarmClock aria-hidden="true" className="size-5" />
+            {t("fridge.expiringTitle")}
           </h2>
           <ItemRows items={expiring} showCategory {...actions} />
         </section>
@@ -37,7 +40,7 @@ export function PantryList({ items, ...actions }: Props) {
             <section key={g.id} aria-labelledby={`fridge-${g.id}`}>
               <h2 id={`fridge-${g.id}`} className="mb-1 flex items-center gap-2.5 font-extrabold">
                 <CategoryIcon category={g.id} size="sm" />
-                {g.label}
+                {t(`categories.${g.id}`)}
               </h2>
               <ItemRows items={g.items} {...actions} />
             </section>

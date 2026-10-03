@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { generateStructured, IMAGE_MEDIA_TYPES, type ImageMediaType } from "@/lib/ai";
 import { mockRecognize } from "@/lib/ai/mock";
-import { RECOGNIZE_SYSTEM } from "@/lib/ai/prompts";
+import { recognizeSystem } from "@/lib/ai/prompts";
 import { ParsedIngredients } from "@/lib/ai/schemas";
 import { handleRouteError, jsonError, quotaExceeded } from "@/lib/api";
 import { getUserId } from "@/lib/auth/server";
 import { consumeAiQuota, withRefund } from "@/lib/quota";
+import { AI_LANGUAGE } from "@/i18n/locales";
+import { getRequestLocale } from "@/i18n/request";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -13,13 +15,14 @@ const MAX_BYTES = 5 * 1024 * 1024;
 export async function POST(request: Request) {
   const form = await request.formData().catch(() => undefined);
   const image = form?.get("image");
-  if (!(image instanceof File)) return jsonError("Photo manquante.", 400);
+  if (!(image instanceof File)) return jsonError("photoMissing", 400);
   if (!IMAGE_MEDIA_TYPES.includes(image.type as ImageMediaType)) {
-    return jsonError("Format accepté : JPEG, PNG, WebP ou GIF.", 400);
+    return jsonError("photoFormat", 400);
   }
-  if (image.size > MAX_BYTES) return jsonError("Photo trop lourde (5 Mo max).", 413);
+  if (image.size > MAX_BYTES) return jsonError("photoTooBig", 413);
 
   try {
+    const language = AI_LANGUAGE[await getRequestLocale()];
     const quota = await consumeAiQuota(request, await getUserId());
     if (!quota.allowed) return quotaExceeded(quota.isGuest);
 
@@ -27,7 +30,7 @@ export async function POST(request: Request) {
     const result = await withRefund(quota, () =>
       generateStructured({
         task: "vision",
-        system: RECOGNIZE_SYSTEM,
+        system: recognizeSystem(language),
         text: "Quels aliments vois-tu ?",
         image: {
           mediaType: image.type as ImageMediaType,

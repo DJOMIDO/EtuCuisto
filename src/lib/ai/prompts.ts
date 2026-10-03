@@ -6,19 +6,23 @@ ${CATEGORIES.map((c) => `- ${c.id} : ${c.examples}`).join("\n")}
 Règles : un aliment en conserve va dans sa propre famille (thon en boîte → poisson, maïs en boîte → legume) ;
 ail, oignon, échalote et herbes fraîches vont dans epice ; les œufs vont dans laitier.`;
 
-export const PARSE_TEXT_SYSTEM = `Tu transformes ce qu'un étudiant dit avoir dans son frigo ou ses placards en une liste d'ingrédients.
-- Un élément par ingrédient, nom en français, au singulier, en minuscules.
+// `language` : langue de sortie (voir AI_LANGUAGE dans src/i18n/locales.ts).
+// Les consignes restent en français ; seul le texte produit change de langue.
+
+export const parseTextSystem = (language: string) => `Tu transformes ce qu'un étudiant dit avoir dans son frigo ou ses placards en une liste d'ingrédients.
+- Un élément par ingrédient, nom écrit en ${language}, au singulier, en minuscules (si la langue a des majuscules).
 - Garde la quantité si elle est donnée, sinon null.
 - expiresSoon = true seulement si l'utilisateur indique que ça va bientôt périmer ou que c'est abîmé.
 - Ignore ce qui n'est pas un aliment. Si le texte est vide ou hors sujet, renvoie une liste vide.
 ${CATEGORIES_HELP}`;
 
-export const RECOGNIZE_SYSTEM = `Tu identifies les aliments visibles sur une photo de frigo, de placard ou de plan de travail d'un étudiant.
+export const recognizeSystem = (language: string) => `Tu identifies les aliments visibles sur une photo de frigo, de placard ou de plan de travail d'un étudiant.
 - Liste seulement ce que tu vois avec une confiance raisonnable ; n'invente pas ce qui est caché.
 - Pour un emballage, nomme l'aliment (« yaourt nature », pas la marque).
 - Estime la quantité si c'est évident (« 3 », « 1/2 bouteille »), sinon null.
 - expiresSoon = true si l'aliment a l'air abîmé, flétri ou entamé depuis longtemps.
 - Si l'image ne montre pas de nourriture, renvoie une liste vide.
+- Écris les noms des aliments en ${language}.
 ${CATEGORIES_HELP}`;
 
 const TOOL_LABELS: Record<string, string> = {
@@ -39,7 +43,7 @@ const BUDGET_LABELS: Record<string, string> = {
   normal: "normal : jusqu'à 8 € d'achats",
 };
 
-export const RECIPES_SYSTEM = `Tu es le cuisinier d'EtuCuisto, une appli qui aide les étudiants à vider leur frigo sans gaspiller.
+export const recipesSystem = (language: string) => `Tu es le cuisinier d'EtuCuisto, une appli qui aide les étudiants à vider leur frigo sans gaspiller.
 Propose exactement 3 recettes réalistes, simples et bonnes, adaptées à une cuisine d'étudiant.
 
 Règles :
@@ -50,7 +54,7 @@ Règles :
 - Pour chaque ingrédient venant du frigo, renseigne son pantryItemId exact ; pour un ingrédient manquant, mets null.
 - Étapes courtes et concrètes (5 à 8 en général), compréhensibles par quelqu'un qui cuisine rarement.
 - Les 3 recettes doivent être vraiment différentes (pas trois variantes de pâtes).
-- Écris en français.`;
+- Écris tout le texte (titre, résumé, ingrédients, étapes) en ${language}.`;
 
 export function recipesUserPrompt(
   pantry: PantryForPrompt,

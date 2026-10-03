@@ -1,6 +1,7 @@
 "use client";
 
 import { AlarmClock, EllipsisVertical, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useId, useRef } from "react";
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import type { PantryItem } from "@/lib/client/use-pantry";
@@ -18,6 +19,7 @@ type Props = {
 export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }: Props) {
   const id = useId();
   const sheet = useRef<HTMLDivElement>(null);
+  const t = useTranslations();
 
   function run(action: (item: PantryItem) => void) {
     sheet.current?.hidePopover();
@@ -28,7 +30,7 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }:
     <>
       <button type="button" popoverTarget={id} className={button.icon}>
         <EllipsisVertical aria-hidden="true" className="size-5" />
-        <span className="visually-hidden">Actions : {item.name}</span>
+        <span className="visually-hidden">{t("itemMenu.actions", { name: item.name })}</span>
       </button>
       <div ref={sheet} id={id} popover="auto" className="sheet" aria-labelledby={`${id}-title`}>
         <div className="m-3 flex flex-col gap-1 rounded-3xl bg-surface p-3 shadow-card">
@@ -42,7 +44,7 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }:
             className="flex items-center gap-3 rounded-2xl px-3 py-3 text-left font-semibold hover:bg-surface-muted"
           >
             <AlarmClock aria-hidden="true" className="size-5 text-sun-ink" />
-            {item.expiresSoon ? "Ce n'est plus urgent" : "Marquer « à utiliser vite »"}
+            {item.expiresSoon ? t("itemMenu.unmarkExpiring") : t("itemMenu.markExpiring")}
           </button>
           <button
             type="button"
@@ -50,11 +52,11 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }:
             className="flex items-center gap-3 rounded-2xl px-3 py-3 text-left font-semibold text-cherry-ink hover:bg-cherry-soft"
           >
             <Trash2 aria-hidden="true" className="size-5" />
-            Retirer du frigo
+            {t("itemMenu.remove")}
           </button>
           <div className="mt-1 border-t border-border px-3 pt-3">
             <p id={`${id}-cat`} className="mb-2 text-sm font-bold text-muted">
-              Catégorie
+              {t("itemMenu.category")}
             </p>
             <div role="group" aria-labelledby={`${id}-cat`} className="grid grid-cols-3 gap-1.5">
               {CATEGORIES.map((c) => (
@@ -66,13 +68,13 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }:
                   className="flex flex-col items-center gap-1 rounded-2xl px-1 py-2 text-center text-xs font-semibold leading-tight hover:bg-surface-muted aria-pressed:bg-accent-soft aria-pressed:text-accent-strong"
                 >
                   <CategoryIcon category={c.id} size="sm" />
-                  {c.label}
+                  {t(`categories.${c.id}`)}
                 </button>
               ))}
             </div>
           </div>
           <button type="button" popoverTarget={id} popoverTargetAction="hide" className={`${button.ghost} mt-1 py-3`}>
-            Annuler
+            {t("common.cancel")}
           </button>
         </div>
       </div>
