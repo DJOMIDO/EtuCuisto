@@ -1,19 +1,19 @@
-import { Apple, Beef, Carrot, Droplet, Egg, Fish, Leaf, Milk, Wheat, type LucideIcon } from "lucide-react";
-import type { CategoryId } from "@/lib/ingredients";
+import { Apple, Beef, Carrot, Cookie, Droplet, Egg, Fish, Leaf, Wheat, type LucideIcon } from "lucide-react";
+import type { CategoryId } from "@/lib/categories";
 import { TONE, type Tone } from "./ui";
 
 // Une couleur du logo par famille d'ingrédients.
 export const CATEGORY_STYLE: Record<CategoryId, { icon: LucideIcon; tone: Tone }> = {
-  viande: { icon: Beef, tone: "cherry" },
-  poisson: { icon: Fish, tone: "lagoon" },
   legume: { icon: Carrot, tone: "herb" },
   fruit: { icon: Apple, tone: "cherry" },
-  laitier: { icon: Milk, tone: "lagoon" },
+  viande: { icon: Beef, tone: "cherry" },
+  poisson: { icon: Fish, tone: "lagoon" },
+  laitier: { icon: Egg, tone: "sun" },
   feculent: { icon: Wheat, tone: "sun" },
-  condiment: { icon: Droplet, tone: "sun" },
+  condiment: { icon: Droplet, tone: "cherry" },
   epice: { icon: Leaf, tone: "herb" },
-  autre: { icon: Egg, tone: "neutral" },
-};
+  autre: { icon: Cookie, tone: "neutral" },
+}
 
 type Props = {
   category: CategoryId;

@@ -1,7 +1,10 @@
+import { CATEGORIES } from "@/lib/categories";
 import type { KitchenProfile, PantryForPrompt } from "./schemas";
 
-const CATEGORIES_HELP =
-  "Catégories : viande, poisson, legume, fruit, laitier, feculent (pâtes, riz, pain, pommes de terre, semoule…), condiment (sauces, conserves de tomate…), epice (épices et herbes), autre (dont œufs).";
+const CATEGORIES_HELP = `Catégories (id : exemples) :
+${CATEGORIES.map((c) => `- ${c.id} : ${c.examples}`).join("\n")}
+Règles : un aliment en conserve va dans sa propre famille (thon en boîte → poisson, maïs en boîte → legume) ;
+ail, oignon, échalote et herbes fraîches vont dans epice ; les œufs vont dans laitier.`;
 
 export const PARSE_TEXT_SYSTEM = `Tu transformes ce qu'un étudiant dit avoir dans son frigo ou ses placards en une liste d'ingrédients.
 - Un élément par ingrédient, nom en français, au singulier, en minuscules.

@@ -5,7 +5,6 @@ import { useId, useState } from "react";
 import type { ParsedIngredients, PantryItemInput } from "@/lib/ai/schemas";
 import { downscaleImage } from "@/lib/client/image";
 import { fetchJson } from "@/lib/client/fetch-json";
-import { findIngredient, INGREDIENTS } from "@/lib/ingredients";
 import { CategoryIcon } from "../CategoryIcon";
 import { button, card, field } from "../ui";
 
@@ -19,7 +18,6 @@ type Props = {
 export function AddIngredients({ onAdd, announce }: Props) {
   const ids = useId();
   const [text, setText] = useState("");
-  const [quick, setQuick] = useState("");
   const [busy, setBusy] = useState<null | "text" | "photo" | "save">(null);
   const [error, setError] = useState<string | null>(null);
   const [candidates, setCandidates] = useState<Candidate[] | null>(null);
@@ -65,21 +63,6 @@ export function AddIngredients({ onAdd, announce }: Props) {
       setError((err as Error).message);
     } finally {
       setBusy(null);
-    }
-  }
-
-  async function quickAdd(e: React.FormEvent) {
-    e.preventDefault();
-    const name = quick.trim().toLowerCase();
-    if (!name) return;
-    const known = findIngredient(name);
-    setError(null);
-    try {
-      await onAdd([{ name, quantity: null, category: known?.category ?? "autre", expiresSoon: false }]);
-      setQuick("");
-      announce(`${name} ajouté au frigo.`);
-    } catch (err) {
-      setError((err as Error).message);
     }
   }
 
@@ -188,33 +171,6 @@ export function AddIngredients({ onAdd, announce }: Props) {
             <input type="file" accept="image/*" onChange={analyzePhoto} disabled={busy !== null} className="sr-only" />
           </label>
         </div>
-      </form>
-
-      <form onSubmit={quickAdd} className="flex flex-col gap-2 border-t border-border pt-4">
-        <label htmlFor={`${ids}-quick`} className="text-sm font-bold text-muted">
-          Ajout rapide
-        </label>
-        <div className="flex gap-2">
-          <input
-            id={`${ids}-quick`}
-            list={`${ids}-ingredients`}
-            value={quick}
-            onChange={(e) => setQuick(e.target.value)}
-            placeholder="tomate, pâtes…"
-            autoComplete="off"
-            maxLength={80}
-            className={`${field} min-w-0 flex-1 py-2.5`}
-          />
-          <button type="submit" disabled={!quick.trim()} className={`${button.secondary} px-4`}>
-            <Plus aria-hidden="true" className="size-5" />
-            <span className="visually-hidden">Ajouter</span>
-          </button>
-        </div>
-        <datalist id={`${ids}-ingredients`}>
-          {INGREDIENTS.map((i) => (
-            <option key={i.id} value={i.label} />
-          ))}
-        </datalist>
       </form>
 
       {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}

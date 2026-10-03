@@ -20,6 +20,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Nécessaire pour que env(safe-area-inset-*) renvoie la place de la barre d'accueil iOS.
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#faf8f4" },
     { media: "(prefers-color-scheme: dark)", color: "#141312" },
@@ -29,7 +31,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${nunito.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col pb-28">
+      <body className="flex min-h-full flex-col pb-[calc(env(safe-area-inset-bottom)+7rem)]">
         <PopoverPolyfill />
         <AppHeader />
         {children}

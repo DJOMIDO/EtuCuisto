@@ -2,7 +2,7 @@
 
 import { AlarmClock } from "lucide-react";
 import type { PantryItem } from "@/lib/client/use-pantry";
-import { CATEGORIES } from "@/lib/ingredients";
+import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import { CategoryIcon } from "../CategoryIcon";
 import { card } from "../ui";
 import { ItemMenu } from "./ItemMenu";
@@ -11,9 +11,10 @@ type Props = {
   items: PantryItem[];
   onToggleExpiring: (item: PantryItem) => void;
   onRemove: (item: PantryItem) => void;
+  onChangeCategory: (item: PantryItem, category: CategoryId) => void;
 };
 
-export function PantryList({ items, onToggleExpiring, onRemove }: Props) {
+export function PantryList({ items, ...actions }: Props) {
   const expiring = items.filter((i) => i.expiresSoon);
   const groups = CATEGORIES.map((c) => ({
     ...c,
@@ -27,7 +28,7 @@ export function PantryList({ items, onToggleExpiring, onRemove }: Props) {
           <h2 id="fridge-expiring" className="mb-2 flex items-center gap-2 text-lg font-extrabold text-sun-ink">
             <AlarmClock aria-hidden="true" className="size-5" />À utiliser vite
           </h2>
-          <ItemRows items={expiring} showCategory onToggleExpiring={onToggleExpiring} onRemove={onRemove} />
+          <ItemRows items={expiring} showCategory {...actions} />
         </section>
       )}
       {groups.length > 0 && (
@@ -38,7 +39,7 @@ export function PantryList({ items, onToggleExpiring, onRemove }: Props) {
                 <CategoryIcon category={g.id} size="sm" />
                 {g.label}
               </h2>
-              <ItemRows items={g.items} onToggleExpiring={onToggleExpiring} onRemove={onRemove} />
+              <ItemRows items={g.items} {...actions} />
             </section>
           ))}
         </div>

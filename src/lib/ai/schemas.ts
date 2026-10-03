@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { CategoryId } from "@/lib/categories";
 
 export const CATEGORY_IDS = [
   "viande",
@@ -10,7 +11,7 @@ export const CATEGORY_IDS = [
   "condiment",
   "epice",
   "autre",
-] as const;
+] as const satisfies readonly CategoryId[];
 
 export const TOOL_IDS = [
   "micro-ondes",

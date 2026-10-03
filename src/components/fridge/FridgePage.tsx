@@ -1,8 +1,8 @@
 "use client";
 
-import { LogIn, Refrigerator } from "lucide-react";
-import Link from "next/link";
+import { Refrigerator } from "lucide-react";
 import { useState } from "react";
+import { CATEGORY_LABEL, type CategoryId } from "@/lib/categories";
 import { usePantry, type PantryItem } from "@/lib/client/use-pantry";
 import { AddIngredients } from "./AddIngredients";
 import { PantryList } from "./PantryList";
@@ -29,23 +29,12 @@ export function FridgePage() {
       item.expiresSoon ? `${item.name} n'est plus à utiliser vite.` : `${item.name} est à utiliser vite.`,
     );
   const remove = (item: PantryItem) => run(() => pantry.remove(item.id), `${item.name} retiré du frigo.`);
+  const changeCategory = (item: PantryItem, category: CategoryId) =>
+    run(() => pantry.update(item.id, { category }), `${item.name} : ${CATEGORY_LABEL[category]}.`);
 
   return (
     <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
       <PageTitle title="Mon frigo" subtitle="Ce que tu as sous la main. Les recettes partiront de là." />
-
-      {pantry.isGuest && pantry.loaded && (
-        <p className="flex items-start gap-3 rounded-2xl bg-accent-soft px-4 py-3 text-sm">
-          <LogIn aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent-strong" />
-          <span>
-            Mode invité : ton frigo reste sur cet appareil.{" "}
-            <Link href="/connexion" className="font-bold text-accent-strong underline">
-              Connecte-toi
-            </Link>{" "}
-            pour le retrouver partout.
-          </span>
-        </p>
-      )}
 
       <AddIngredients onAdd={pantry.add} announce={setStatus} />
 
@@ -67,7 +56,7 @@ export function FridgePage() {
               {pantry.items.length} ingrédient{pantry.items.length > 1 ? "s" : ""}
             </span>
           </h2>
-          <PantryList items={pantry.items} onToggleExpiring={toggle} onRemove={remove} />
+          <PantryList items={pantry.items} onToggleExpiring={toggle} onRemove={remove} onChangeCategory={changeCategory} />
         </>
       )}
 

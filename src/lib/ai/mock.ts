@@ -1,4 +1,4 @@
-import { findIngredient } from "@/lib/ingredients";
+import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import type { ParsedIngredients, PantryForPrompt, Recommendations } from "./schemas";
 
 // Données factices pour développer sans clé d'API (AI_PROVIDER=mock).
@@ -18,11 +18,11 @@ export function mockParse(text: string): ParsedIngredients {
         .trim()
         .toLowerCase()
         .replace(/^(?:(?:une|un|du|des|les|le|la|de la)\s+|de l'|l'|d')/, "");
-      const known = findIngredient(name) ?? findIngredient(name.split(" ").at(-1) ?? "");
+      const category = guessCategory(name);
       return {
         name,
         quantity: qty ? qty[1].trim() : null,
-        category: known?.category ?? ("autre" as const),
+        category,
         expiresSoon,
       };
     })
@@ -30,10 +30,20 @@ export function mockParse(text: string): ParsedIngredients {
   return { items };
 }
 
+// Devine la famille à partir des exemples de chaque catégorie (« œufs » → « œuf »).
+function guessCategory(name: string): CategoryId {
+  const words = name.toLowerCase().replace(/œ/g, "oe").split(/\s+/).map((w) => w.replace(/[sx]$/, ""));
+  for (const c of CATEGORIES) {
+    const examples = c.examples.toLowerCase().replace(/œ/g, "oe").split(", ");
+    if (examples.some((e) => words.includes(e.replace(/[sx]$/, "")) || e === name)) return c.id;
+  }
+  return "autre";
+}
+
 export function mockRecognize(): ParsedIngredients {
   return {
     items: [
-      { name: "œuf", quantity: "4", category: "autre", expiresSoon: false },
+      { name: "œuf", quantity: "4", category: "laitier", expiresSoon: false },
       { name: "courgette", quantity: "1", category: "legume", expiresSoon: true },
       { name: "fromage râpé", quantity: "1/2 sachet", category: "laitier", expiresSoon: false },
       { name: "tomate", quantity: "2", category: "legume", expiresSoon: false },

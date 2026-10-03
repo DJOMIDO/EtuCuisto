@@ -70,7 +70,7 @@ export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked, allowRec
           <ul role="list" className="flex flex-col gap-1">
             {fromFridge.map((i) => (
               <li key={`${i.pantryItemId}-${i.name}`} className="flex items-start gap-2">
-                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-lagoon-ink" strokeWidth={3} />
+                <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent-strong" strokeWidth={3} />
                 <span>
                   <span className="font-semibold">{i.name}</span> <span className="text-muted">· {i.amount}</span>
                   {recipe.rescuesPantryItemIds.includes(i.pantryItemId!) && (

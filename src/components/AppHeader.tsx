@@ -25,7 +25,7 @@ export function AppHeader() {
       >
         Aller au contenu
       </a>
-      <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 pb-2 pt-4">
+      <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 pb-2 pt-[calc(env(safe-area-inset-top)+1rem)]">
         <Link href="/" className="flex items-center gap-2 rounded-full">
           <Image src="/logo.svg" alt="" width={40} height={40} priority />
           <Image src="/logo-text.svg" alt="EtuCuisto" width={118} height={22} className="dark:invert" />

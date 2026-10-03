@@ -6,7 +6,7 @@ const BUTTON_BASE =
   "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition disabled:pointer-events-none disabled:opacity-50";
 
 export const button = {
-  primary: `${BUTTON_BASE} bg-accent-strong px-5 py-2.5 text-on-accent shadow-sm hover:brightness-110`,
+  primary: `${BUTTON_BASE} bg-accent px-5 py-2.5 text-on-accent shadow-sm hover:brightness-95`,
   secondary: `${BUTTON_BASE} bg-accent-soft px-5 py-2.5 text-accent-strong hover:brightness-95`,
   ghost: `${BUTTON_BASE} px-3 py-2 text-muted hover:bg-surface-muted hover:text-foreground`,
   icon: `${BUTTON_BASE} size-10 shrink-0 text-muted hover:bg-surface-muted hover:text-foreground`,
@@ -19,7 +19,7 @@ export const field =
 
 /** Pastille radio/case stylée en bouton (input sr-only à l'intérieur). */
 export const choiceChip =
-  "inline-flex cursor-pointer items-center gap-2 rounded-full bg-surface-muted px-4 py-2 font-semibold text-foreground has-[:checked]:bg-accent-strong has-[:checked]:text-on-accent";
+  "inline-flex cursor-pointer items-center gap-2 rounded-full bg-surface-muted px-4 py-2 font-semibold text-foreground has-[:checked]:bg-accent has-[:checked]:text-on-accent";
 
 export type Tone = "cherry" | "lagoon" | "sun" | "herb" | "neutral" | "accent";
 

@@ -13,10 +13,11 @@
   --border: #e8e2d8;
   --field: #8f877b;
 
-  --accent: #00b6cd;
-  --accent-strong: #00707e;
-  --on-accent: #ffffff;
-  --accent-soft: #dff4f7;
+  /* Couleur principale : le vert « herbe » du logo, avec le jaune « soleil » en appui. */
+  --accent: #a1d067;
+  --accent-strong: #3f6b14;
+  --on-accent: #1d2a0c;
+  --accent-soft: #edf6e0;
 
   --cherry: #ef3f32;
   --cherry-ink: #b3261e;
@@ -45,9 +46,9 @@
     --border: #37332f;
     --field: #7f786e;
 
-    --accent-strong: #4fd3e4;
-    --on-accent: #0b1a1d;
-    --accent-soft: rgb(0 182 205 / 0.16);
+    --accent-strong: #b9e08a;
+    --on-accent: #1d2a0c;
+    --accent-soft: rgb(161 208 103 / 0.16);
 
     --cherry-ink: #ff8f85;
     --cherry-soft: rgb(239 63 50 / 0.18);
@@ -125,6 +126,7 @@ label:has(> input.sr-only:focus-visible) {
   position: fixed;
   inset: auto 0 0 0;
   margin: 0 auto;
+  padding-bottom: env(safe-area-inset-bottom);
   width: min(100%, 28rem);
   border: 0;
   padding: 0;
