@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { Theme } from "@/i18n/locales";
 import { authClient } from "@/lib/auth/client";
 import { button, card, PageTitle } from "../ui";
-import { AuthForm, type PendingVerification } from "./AuthForm";
+import { AuthForm, type AuthStep } from "./AuthForm";
 import { DeleteAccountDialog } from "./DeleteAccountDialog";
 import { PreferencesSection } from "./PreferencesSection";
 
@@ -16,8 +16,8 @@ export function ProfilePage({ initialTheme }: { initialTheme: Theme }) {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
   // Gardé ici et non dans AuthForm : hors connexion, chaque rafraîchissement de session
-  // repasse isPending à true et démonte le formulaire ; l'étape « code » doit survivre.
-  const [verifying, setVerifying] = useState<PendingVerification | null>(null);
+  // repasse isPending à true et démonte le formulaire ; l'étape en cours doit survivre.
+  const [authStep, setAuthStep] = useState<AuthStep>({ kind: "signup" });
   const user = session?.user;
   const [deleting, setDeleting] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -38,7 +38,7 @@ export function ProfilePage({ initialTheme }: { initialTheme: Theme }) {
 
       {isPending ? null : !user ? (
         <>
-          <AuthForm verifying={verifying} onVerifyingChange={setVerifying} />
+          <AuthForm step={authStep} onStepChange={setAuthStep} />
           <PreferencesSection initialTheme={initialTheme} signedIn={false} />
         </>
       ) : (

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { button, card, field } from "../ui";
 import { authClient } from "@/lib/auth/client";
 import { migrateLocalKitchen, readLocalKitchen } from "@/lib/client/use-kitchen";
@@ -50,25 +50,64 @@ function isEmailNotVerified(err: unknown) {
 
 const RESEND_COOLDOWN_S = 30;
 
-export type PendingVerification = { email: string; password: string };
+/**
+ * Étape affichée. « verify » : code de vérification de l'e-mail ; « forgot » : demande du code
+ * de réinitialisation (e-mail prérempli) ; « reset » : code + nouveau mot de passe.
+ */
+export type AuthStep =
+  | { kind: "signup" }
+  | { kind: "signin" }
+  | { kind: "verify"; email: string; password: string }
+  | { kind: "forgot"; email: string }
+  | { kind: "reset"; email: string };
 
 type Props = {
-  /** E-mail en attente de vérification (état tenu par le parent, voir ProfilePage). */
-  verifying: PendingVerification | null;
-  onVerifyingChange: (value: PendingVerification | null) => void;
+  /** Étape tenue par le parent (voir ProfilePage). */
+  step: AuthStep;
+  onStepChange: (step: AuthStep) => void;
 };
 
-export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) {
-  const router = useRouter();
-  const ids = useId();
+function useAuthError() {
   const t = useTranslations("auth");
-  const [mode, setMode] = useState<"signin" | "signup">("signup");
   const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
   function showError(err: unknown) {
     const key = authErrorKey(err);
     setError(key ? t(`errors.${key}`) : t("failed"));
   }
+  return [error, showError, () => setError(null)] as const;
+}
+
+/** Délai avant de pouvoir redemander un code. */
+function useCooldown() {
+  const [left, setLeft] = useState(RESEND_COOLDOWN_S);
+  useEffect(() => {
+    if (left <= 0) return;
+    const timer = setTimeout(() => setLeft((s) => s - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [left]);
+  return [left, () => setLeft(RESEND_COOLDOWN_S)] as const;
+}
+
+/** Connexion après vérification ou réinitialisation ; demande la vérification si l'e-mail ne l'est pas. */
+async function signInOrVerify(email: string, password: string, onStepChange: Props["onStepChange"]) {
+  let error: unknown;
+  try {
+    ({ error } = await authClient.signIn.email({ email, password }));
+  } catch (thrown) {
+    error = thrown;
+  }
+  if (isEmailNotVerified(error)) {
+    // Neon Auth exige la vérification avant la connexion : nouveau code, puis l'étape « code ».
+    await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" }).catch(() => {});
+    onStepChange({ kind: "verify", email, password });
+    return false;
+  }
+  if (error) throw error;
+  return true;
+}
+
+export function AuthForm({ step, onStepChange }: Props) {
+  const router = useRouter();
 
   /** Connecté : envoie tout de suite le frigo et les réglages de l'invité, puis l'accueil. */
   async function finish() {
@@ -77,13 +116,53 @@ export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) 
     router.refresh();
   }
 
+  const toSignin = () => onStepChange({ kind: "signin" });
+
+  switch (step.kind) {
+    case "verify":
+      return <VerifyEmail {...step} onVerified={finish} onBack={() => onStepChange({ kind: "signup" })} />;
+    case "forgot":
+      return <ForgotPassword email={step.email} onSent={(email) => onStepChange({ kind: "reset", email })} onBack={toSignin} />;
+    case "reset":
+      return <ResetPassword email={step.email} onStepChange={onStepChange} onDone={finish} onBack={toSignin} />;
+    default:
+      return <Credentials key={step.kind} mode={step.kind} onStepChange={onStepChange} onDone={finish} />;
+  }
+}
+
+function Heading({ title, intro }: { title: string; intro: string }) {
+  return (
+    <div className="text-center">
+      <h1 className="text-3xl font-extrabold tracking-tight">{title}</h1>
+      <p className="mt-1 text-muted">{intro}</p>
+    </div>
+  );
+}
+
+function ErrorText({ error }: { error: string | null }) {
+  return error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>;
+}
+
+type CredentialsProps = {
+  mode: "signin" | "signup";
+  onStepChange: Props["onStepChange"];
+  onDone: () => Promise<void>;
+};
+
+function Credentials({ mode, onStepChange, onDone }: CredentialsProps) {
+  const ids = useId();
+  const t = useTranslations("auth");
+  const emailRef = useRef<HTMLInputElement>(null);
+  const [error, showError, clearError] = useAuthError();
+  const [pending, setPending] = useState(false);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email")).trim();
     const password = String(form.get("password"));
     setPending(true);
-    setError(null);
+    clearError();
 
     if (mode === "signup") {
       let data: { token?: string | null } | null = null;
@@ -96,46 +175,24 @@ export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) 
       setPending(false);
       if (error) return showError(error);
       // Pas de session tant que l'e-mail n'est pas vérifié : on demande le code reçu.
-      if (!data?.token) return setVerifying({ email, password });
-      return finish();
+      if (!data?.token) return onStepChange({ kind: "verify", email, password });
+      return onDone();
     }
 
-    let error: unknown;
     try {
-      ({ error } = await authClient.signIn.email({ email, password }));
-    } catch (thrown) {
-      error = thrown;
-    }
-    if (isEmailNotVerified(error)) {
-      // Neon Auth exige la vérification avant la connexion : nouveau code, puis l'étape « code ».
-      await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" }).catch(() => {});
+      if (await signInOrVerify(email, password, onStepChange)) return onDone();
+    } catch (err) {
       setPending(false);
-      return setVerifying({ email, password });
+      showError(err);
     }
-    setPending(false);
-    if (error) return showError(error);
-    return finish();
-  }
-
-  if (verifying) {
-    return (
-      <VerifyEmail
-        {...verifying}
-        onVerified={finish}
-        onBack={() => {
-          setVerifying(null);
-          setError(null);
-        }}
-      />
-    );
   }
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="text-center">
-        <h1 className="text-3xl font-extrabold tracking-tight">{t(mode === "signin" ? "signinTitle" : "signupTitle")}</h1>
-        <p className="mt-1 text-muted">{t(mode === "signin" ? "signinIntro" : "signupIntro")}</p>
-      </div>
+      <Heading
+        title={t(mode === "signin" ? "signinTitle" : "signupTitle")}
+        intro={t(mode === "signin" ? "signinIntro" : "signupIntro")}
+      />
 
       <div className={`${card} flex flex-col gap-4`}>
         <button
@@ -163,7 +220,15 @@ export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) 
             <label htmlFor={`${ids}-email`} className="text-sm font-bold">
               {t("email")}
             </label>
-            <input id={`${ids}-email`} name="email" type="email" required autoComplete="email" className={field} />
+            <input
+              ref={emailRef}
+              id={`${ids}-email`}
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className={field}
+            />
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor={`${ids}-password`} className="text-sm font-bold">
@@ -184,8 +249,17 @@ export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) 
               autoComplete={mode === "signin" ? "current-password" : "new-password"}
               className={field}
             />
+            {mode === "signin" && (
+              <button
+                type="button"
+                onClick={() => onStepChange({ kind: "forgot", email: emailRef.current?.value.trim() ?? "" })}
+                className="self-end rounded-lg px-1 py-1 text-sm font-bold text-accent-strong underline-offset-2 hover:underline"
+              >
+                {t("forgotPassword")}
+              </button>
+            )}
           </div>
-          {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
+          <ErrorText error={error} />
           <button type="submit" disabled={pending} className={`${button.primary} mt-1 w-full py-3`}>
             {pending ? "…" : t(mode === "signin" ? "signin" : "signup")}
           </button>
@@ -194,10 +268,7 @@ export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) 
 
       <button
         type="button"
-        onClick={() => {
-          setMode(mode === "signin" ? "signup" : "signin");
-          setError(null);
-        }}
+        onClick={() => onStepChange({ kind: mode === "signin" ? "signup" : "signin" })}
         className={`${button.ghost} self-center`}
       >
         {t(mode === "signin" ? "toSignup" : "toSignin")}
@@ -206,33 +277,64 @@ export function AuthForm({ verifying, onVerifyingChange: setVerifying }: Props) 
   );
 }
 
-type VerifyProps = PendingVerification & { onVerified: () => Promise<void>; onBack: () => void };
+/** Champ du code à 6 chiffres envoyé par e-mail. */
+function CodeField({ code, onChange }: { code: string; onChange: (code: string) => void }) {
+  const id = useId();
+  const t = useTranslations("auth");
+  return (
+    <>
+      <label htmlFor={id} className="text-sm font-bold">
+        {t("codeLabel")}
+      </label>
+      <input
+        id={id}
+        value={code}
+        onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, 6))}
+        inputMode="numeric"
+        autoComplete="one-time-code"
+        pattern="[0-9]{6}"
+        required
+        className={`${field} text-center text-2xl font-extrabold tracking-[0.5em]`}
+      />
+    </>
+  );
+}
+
+/** Bouton « renvoyer le code », bloqué pendant le délai, avec annonce pour les lecteurs d'écran. */
+function ResendButton({ onResend }: { onResend: () => Promise<boolean> }) {
+  const t = useTranslations("auth");
+  const [cooldown, restart] = useCooldown();
+  const [status, setStatus] = useState("");
+  async function resend() {
+    if (!(await onResend())) return;
+    setStatus(t("resent"));
+    restart();
+  }
+  return (
+    <>
+      <button type="button" onClick={resend} disabled={cooldown > 0} className={`${button.ghost} w-full`}>
+        {cooldown > 0 ? t("resendIn", { seconds: cooldown }) : t("resend")}
+      </button>
+      <p role="status" className="visually-hidden">
+        {status}
+      </p>
+    </>
+  );
+}
+
+type VerifyProps = { email: string; password: string; onVerified: () => Promise<void>; onBack: () => void };
 
 // Saisie du code à 6 chiffres envoyé par Neon Auth, puis connexion automatique.
 function VerifyEmail({ email, password, onVerified, onBack }: VerifyProps) {
-  const ids = useId();
   const t = useTranslations("auth");
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState("");
-  const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_S);
-
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const timer = setTimeout(() => setCooldown((s) => s - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [cooldown]);
-
-  function showError(err: unknown) {
-    const key = authErrorKey(err);
-    setError(key ? t(`errors.${key}`) : t("failed"));
-  }
+  const [error, showError, clearError] = useAuthError();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    setError(null);
+    clearError();
     try {
       const verified = await authClient.emailOtp.verifyEmail({ email, otp: code.trim() });
       if (verified.error) throw verified.error;
@@ -250,53 +352,175 @@ function VerifyEmail({ email, password, onVerified, onBack }: VerifyProps) {
   }
 
   async function resend() {
-    setError(null);
+    clearError();
     try {
       const { error } = await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
       if (error) throw error;
-      setStatus(t("resent"));
-      setCooldown(RESEND_COOLDOWN_S);
+      return true;
     } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-5">
+      <Heading title={t("verifyTitle")} intro={t("verifyIntro", { email })} />
+
+      <form onSubmit={onSubmit} className={`${card} flex flex-col gap-3`}>
+        <CodeField code={code} onChange={setCode} />
+        <ErrorText error={error} />
+        <button type="submit" disabled={busy || code.length !== 6} className={`${button.primary} mt-1 w-full py-3`}>
+          {busy ? t("verifying") : t("verify")}
+        </button>
+        <ResendButton onResend={resend} />
+      </form>
+
+      <button type="button" onClick={onBack} className={`${button.ghost} self-center`}>
+        {t("back")}
+      </button>
+    </div>
+  );
+}
+
+/** Envoie le code de réinitialisation. La réponse est la même que le compte existe ou non. */
+async function sendResetCode(email: string) {
+  const { error } = await authClient.emailOtp.sendVerificationOtp({ email, type: "forget-password" });
+  if (error) throw error;
+}
+
+type ForgotProps = { email: string; onSent: (email: string) => void; onBack: () => void };
+
+// Mot de passe oublié, 1/2 : l'e-mail auquel envoyer le code.
+function ForgotPassword({ email: initialEmail, onSent, onBack }: ForgotProps) {
+  const ids = useId();
+  const t = useTranslations("auth");
+  const [busy, setBusy] = useState(false);
+  const [error, showError, clearError] = useAuthError();
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const email = String(new FormData(e.currentTarget).get("email")).trim();
+    setBusy(true);
+    clearError();
+    try {
+      await sendResetCode(email);
+      onSent(email);
+    } catch (err) {
+      setBusy(false);
       showError(err);
     }
   }
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="text-center">
-        <h1 className="text-3xl font-extrabold tracking-tight">{t("verifyTitle")}</h1>
-        <p className="mt-1 text-muted">{t("verifyIntro", { email })}</p>
-      </div>
+      <Heading title={t("resetTitle")} intro={t("resetIntro")} />
 
       <form onSubmit={onSubmit} className={`${card} flex flex-col gap-3`}>
-        <label htmlFor={`${ids}-code`} className="text-sm font-bold">
-          {t("codeLabel")}
-        </label>
-        <input
-          id={`${ids}-code`}
-          value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          pattern="[0-9]{6}"
-          required
-          className={`${field} text-center text-2xl font-extrabold tracking-[0.5em]`}
-        />
-        {error && <p role="alert" className="text-sm font-semibold text-cherry-ink">{error}</p>}
-        <button type="submit" disabled={busy || code.length !== 6} className={`${button.primary} mt-1 w-full py-3`}>
-          {busy ? t("verifying") : t("verify")}
-        </button>
-        <button type="button" onClick={resend} disabled={cooldown > 0} className={`${button.ghost} w-full`}>
-          {cooldown > 0 ? t("resendIn", { seconds: cooldown }) : t("resend")}
+        <div className="flex flex-col gap-1">
+          <label htmlFor={`${ids}-email`} className="text-sm font-bold">
+            {t("email")}
+          </label>
+          <input
+            id={`${ids}-email`}
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            defaultValue={initialEmail}
+            className={field}
+          />
+        </div>
+        <ErrorText error={error} />
+        <button type="submit" disabled={busy} className={`${button.primary} mt-1 w-full py-3`}>
+          {busy ? t("sending") : t("sendCode")}
         </button>
       </form>
 
       <button type="button" onClick={onBack} className={`${button.ghost} self-center`}>
-        {t("back")}
+        {t("backToSignin")}
       </button>
-      <p role="status" className="visually-hidden">
-        {status}
-      </p>
+    </div>
+  );
+}
+
+type ResetProps = {
+  email: string;
+  onStepChange: Props["onStepChange"];
+  onDone: () => Promise<void>;
+  onBack: () => void;
+};
+
+// Mot de passe oublié, 2/2 : code reçu + nouveau mot de passe, puis connexion automatique.
+function ResetPassword({ email, onStepChange, onDone, onBack }: ResetProps) {
+  const ids = useId();
+  const t = useTranslations("auth");
+  const [code, setCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, showError, clearError] = useAuthError();
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const password = String(new FormData(e.currentTarget).get("password"));
+    setBusy(true);
+    clearError();
+    try {
+      const reset = await authClient.emailOtp.resetPassword({ email, otp: code, password });
+      if (reset.error) throw reset.error;
+      if (await signInOrVerify(email, password, onStepChange)) await onDone();
+    } catch (err) {
+      setBusy(false);
+      showError(err);
+    }
+  }
+
+  async function resend() {
+    clearError();
+    try {
+      await sendResetCode(email);
+      return true;
+    } catch (err) {
+      showError(err);
+      return false;
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-5">
+      <Heading title={t("resetCodeTitle")} intro={t("resetCodeIntro", { email })} />
+
+      <form onSubmit={onSubmit} className={`${card} flex flex-col gap-3`}>
+        {/* Aide les gestionnaires de mots de passe à associer le nouveau mot de passe au compte. */}
+        <input type="email" name="username" value={email} autoComplete="username" readOnly hidden />
+        <CodeField code={code} onChange={setCode} />
+        <div className="flex flex-col gap-1">
+          <label htmlFor={`${ids}-password`} className="text-sm font-bold">
+            {t("newPassword")}
+          </label>
+          <p id={`${ids}-password-hint`} className="text-sm text-muted">
+            {t("passwordHint")}
+          </p>
+          <input
+            id={`${ids}-password`}
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            aria-describedby={`${ids}-password-hint`}
+            autoComplete="new-password"
+            className={field}
+          />
+        </div>
+        <ErrorText error={error} />
+        <button type="submit" disabled={busy || code.length !== 6} className={`${button.primary} mt-1 w-full py-3`}>
+          {busy ? t("resetting") : t("resetSubmit")}
+        </button>
+        <ResendButton onResend={resend} />
+      </form>
+
+      <button type="button" onClick={onBack} className={`${button.ghost} self-center`}>
+        {t("backToSignin")}
+      </button>
     </div>
   );
 }
