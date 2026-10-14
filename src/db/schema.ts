@@ -33,7 +33,10 @@ export const kitchenProfiles = pgTable("kitchen_profiles", {
   userId: text("user_id").primaryKey(),
   tools: text("tools").array().notNull().default([]),
   budget: text("budget").notNull().default("serre"),
-  diet: text("diet").array().notNull().default([]),
+  allergies: text("allergies").array().notNull().default([]),
+  habits: text("habits").array().notNull().default([]),
+  avoided: text("avoided").array().notNull().default([]),
+  cuisines: text("cuisines").array().notNull().default([]),
   servings: integer("servings").notNull().default(1),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

@@ -25,6 +25,11 @@ export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked, allowRec
   const t = useTranslations();
   const format = useFormatter();
   const eur = (value: number) => format.number(value, { style: "currency", currency: "EUR" });
+  // Ustensiles : les presets ont un libellé traduit, une saisie libre s'affiche telle quelle.
+  const toolLabel = (tool: string) => {
+    const key = `kitchen.toolOptions.${tool}` as unknown as Parameters<typeof t>[0];
+    return t.has(key) ? t(key) : tool;
+  };
   const fromFridge = recipe.ingredients.filter((i) => i.pantryItemId);
   const toBuy = recipe.missing;
   const cost = toBuy.reduce((sum, m) => sum + m.estimatedPriceEur, 0);
@@ -104,7 +109,7 @@ export function RecipeCard({ recipe, saved, busy, onFavorite, onCooked, allowRec
 
       <p className="flex items-center gap-2 text-sm text-muted">
         <UtensilsCrossed aria-hidden="true" className="size-4" />
-        {format.list(recipe.tools.map((tool) => t(`kitchen.toolOptions.${tool}`)), { type: "conjunction" })}
+        {format.list(recipe.tools.map(toolLabel), { type: "conjunction" })}
       </p>
 
       <details className="group rounded-2xl bg-surface-muted">

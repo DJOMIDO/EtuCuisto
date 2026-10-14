@@ -7,12 +7,31 @@ import { fetchJson } from "./fetch-json";
 
 const STORAGE_KEY = "etucuisto:kitchen";
 
+// Anciens réglages invités : le champ unique « diet » éclate en catégories plus fines.
+// On reclasse les valeurs pour ne pas perdre les réglages déjà stockés sur l'appareil.
+function normalizeLegacyKitchen(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const kitchen = { ...(raw as Record<string, unknown>) };
+  if (!Array.isArray(kitchen.diet)) return kitchen;
+  const diet = (kitchen.diet as unknown[]).filter((d): d is string => typeof d === "string");
+  delete kitchen.diet;
+  kitchen.habits = diet
+    .filter((d) => ["vegetarien", "vegan", "halal", "sans-porc"].includes(d))
+    .map((d) => (d === "vegan" ? "vegetalien" : d));
+  kitchen.allergies = diet
+    .filter((d) => ["sans-gluten", "sans-lactose"].includes(d))
+    .map((d) => (d === "sans-gluten" ? "gluten" : "lait"));
+  if (!Array.isArray(kitchen.avoided)) kitchen.avoided = [];
+  if (!Array.isArray(kitchen.cuisines)) kitchen.cuisines = [];
+  return kitchen;
+}
+
 // Invité : réglages dans localStorage. Connecté : en base, via l'API.
 // À la connexion, les réglages locaux remplacent seulement les réglages par défaut.
 
 export function readLocalKitchen(): KitchenProfile | null {
   try {
-    const parsed = KitchenProfile.safeParse(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null"));
+    const parsed = KitchenProfile.safeParse(normalizeLegacyKitchen(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null")));
     return parsed.success ? parsed.data : null;
   } catch {
     return null;

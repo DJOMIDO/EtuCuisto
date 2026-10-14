@@ -27,13 +27,62 @@ export const TOOL_IDS = [
 
 export const BUDGET_IDS = ["tres-serre", "serre", "normal"] as const;
 
-export const DIET_IDS = [
+// Allergènes : les 14 familles obligatoires dans l'UE, cochables dans les réglages.
+export const ALLERGEN_IDS = [
+  "gluten",
+  "crustaces",
+  "oeufs",
+  "poisson",
+  "arachides",
+  "soja",
+  "lait",
+  "fruits-a-coque",
+  "celeri",
+  "moutarde",
+  "sesame",
+  "sulfites",
+  "lupin",
+  "mollusques",
+] as const;
+
+// Habitudes alimentaires et interdits culturels/religieux.
+export const HABIT_IDS = [
   "vegetarien",
-  "vegan",
+  "vegetalien",
+  "pescatarien",
+  "lacto-vegetarien",
+  "flexitarien",
   "halal",
+  "casher",
+  "sans-alcool",
   "sans-porc",
-  "sans-gluten",
-  "sans-lactose",
+  "sans-boeuf",
+] as const;
+
+// Cuisines appréciées (servent de préférence, jamais d'exclusion stricte).
+export const CUISINE_IDS = [
+  "asiatique",
+  "europeenne",
+  "moyentorient",
+  "indienne",
+  "chinoise",
+  "japonaise",
+  "coreenne",
+  "vietnamienne",
+  "thailandaise",
+  "asiedusudest",
+  "italienne",
+  "francaise",
+  "maghrebine",
+  "ouestafricaine",
+  "estafricaine",
+  "nordamericaine",
+  "soulfood",
+  "ameriquelatine",
+  "mexicaine",
+  "caraibeenne",
+  "pacifique",
+  "fusion",
 ] as const;
 
 // --- Entrées utilisateur -------------------------------------------------
@@ -46,10 +95,16 @@ export const PantryItemInput = z.object({
 });
 export type PantryItemInput = z.infer<typeof PantryItemInput>;
 
+// Un réglage multi-sélection : pastilles prédéfinies (les *_IDS) ou saisie libre.
+const freeChoice = z.string().trim().min(1).max(40);
+
 export const KitchenProfile = z.object({
-  tools: z.array(z.enum(TOOL_IDS)).max(TOOL_IDS.length),
+  tools: z.array(freeChoice).max(20),
   budget: z.enum(BUDGET_IDS),
-  diet: z.array(z.enum(DIET_IDS)).max(DIET_IDS.length),
+  allergies: z.array(freeChoice).max(30),
+  habits: z.array(freeChoice).max(15),
+  avoided: z.array(freeChoice).max(30),
+  cuisines: z.array(freeChoice).max(25),
   servings: z.number().int().min(1).max(8),
 });
 export type KitchenProfile = z.infer<typeof KitchenProfile>;
@@ -57,7 +112,10 @@ export type KitchenProfile = z.infer<typeof KitchenProfile>;
 export const DEFAULT_KITCHEN: KitchenProfile = {
   tools: ["plaque", "casserole", "poele"],
   budget: "serre",
-  diet: [],
+  allergies: [],
+  habits: [],
+  avoided: [],
+  cuisines: [],
   servings: 1,
 };
 
@@ -80,7 +138,7 @@ export const Recipe = z.object({
   summary: z.string().describe("Une phrase qui donne envie, ton étudiant et simple"),
   minutes: z.number().int().describe("Temps total, préparation + cuisson"),
   servings: z.number().int(),
-  tools: z.array(z.enum(TOOL_IDS)).describe("Uniquement des ustensiles que l'utilisateur possède"),
+  tools: z.array(z.string()).describe("Uniquement des ustensiles que l'utilisateur possède"),
   ingredients: z.array(
     z.object({
       name: z.string(),
