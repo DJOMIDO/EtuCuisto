@@ -4,16 +4,18 @@ import { ChefHat, Refrigerator, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
-import type { KitchenProfile, Recipe, Recommendations } from "@/lib/ai/schemas";
+import { BUDGET_IDS, type KitchenProfile, type Recipe, type Recommendations } from "@/lib/ai/schemas";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { useKitchen } from "@/lib/client/use-kitchen";
 import { usePantry } from "@/lib/client/use-pantry";
-import { KitchenDialog } from "../kitchen/KitchenDialog";
+import { KitchenDialog, ServingsStepper } from "../kitchen/KitchenDialog";
 import { CookedDialog } from "./CookedDialog";
 import { RecipeCard, type SavedState } from "./RecipeCard";
 import { button, card, choiceChip, PageTitle } from "../ui";
 
-const TIMES = [10, 20, 30, 45];
+const TIMES = [10, 20, 30, 45, 60, 120];
+// 120 : sentinelle « plus d'une heure » (le temps max accepté côté API).
+const LONG_KEY = 120;
 const SESSION_KEY = "etucuisto:last-recipes";
 
 type Session = { recipes: Recipe[]; saved: SavedState[]; maxMinutes: number };
@@ -144,10 +146,11 @@ export function RecipesPage() {
   }
 
   // Séparateur selon la langue : « , » en français, « 、 » en chinois.
-  const tools = format.list(
-    kitchen.tools.map((tool) => t(`kitchen.toolOptions.${tool}`)),
-    { type: "conjunction" },
-  );
+  const toolLabel = (tool: string) => {
+    const key = `kitchen.toolOptions.${tool}` as unknown as Parameters<typeof t>[0];
+    return t.has(key) ? t(key) : tool;
+  };
+  const tools = format.list(kitchen.tools.map(toolLabel), { type: "conjunction" });
   const budget = t(`kitchen.budgetShort.${kitchen.budget}`);
   const empty = pantry.loaded && pantry.items.length === 0;
 
@@ -172,29 +175,58 @@ export function RecipesPage() {
                   onChange={() => setMaxMinutes(minutes)}
                   className="sr-only"
                 />
-                {t("recipes.minutes", { count: minutes })}
+                {minutes === LONG_KEY ? t("recipes.moreThanHour") : t("recipes.minutes", { count: minutes })}
               </label>
             ))}
           </div>
         </fieldset>
 
-        <p className="flex items-start gap-2 text-sm text-muted">
-          <Settings2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-          <span>
-            {configured
-              ? t("recipes.kitchenSummary", { tools: tools || t("recipes.noTools"), budget })
-              : t("recipes.notConfigured")}
-            <button
-              type="button"
-              onClick={() => setKitchenDialog("edit")}
-              disabled={!kitchenLoaded}
-              className="font-bold text-accent-strong underline"
-            >
-              {t(configured ? "recipes.edit" : "recipes.configure")}
-              <span className="visually-hidden">{t("recipes.kitchenHidden")}</span>
-            </button>
-          </span>
-        </p>
+        <div className="border-t border-border pt-4">
+          <fieldset>
+            <legend className="mb-2 text-sm font-bold text-muted">{t("kitchen.budget")}</legend>
+            <div className="flex flex-wrap gap-2">
+              {BUDGET_IDS.map((option) => (
+                <label key={option} className={choiceChip}>
+                  <input
+                    type="radio"
+                    name="budget"
+                    value={option}
+                    checked={kitchen.budget === option}
+                    onChange={() => void saveKitchen({ ...kitchen, budget: option })}
+                    className="sr-only"
+                  />
+                  {t(`kitchen.budgetOptions.${option}`)}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
+          <span className="text-sm font-bold text-muted">{t("kitchen.servings")}</span>
+          <ServingsStepper value={kitchen.servings} onChange={(n) => void saveKitchen({ ...kitchen, servings: n })} />
+        </div>
+
+        <div className="border-t border-border pt-4">
+          <h3 className="mb-2 text-sm font-bold text-muted">{t("kitchen.title")}</h3>
+          <p className="flex items-start gap-2 text-sm text-muted">
+            <Settings2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+            <span>
+              {configured
+                ? t("recipes.kitchenSummary", { tools: tools || t("recipes.noTools"), budget })
+                : t("recipes.notConfigured")}
+              <button
+                type="button"
+                onClick={() => setKitchenDialog("edit")}
+                disabled={!kitchenLoaded}
+                className="font-bold text-accent-strong underline"
+              >
+                {t(configured ? "recipes.edit" : "recipes.configure")}
+                <span className="visually-hidden">{t("recipes.kitchenHidden")}</span>
+              </button>
+            </span>
+          </p>
+        </div>
 
         {empty ? (
           <p className="flex items-center gap-2 rounded-2xl bg-surface-muted px-4 py-3">

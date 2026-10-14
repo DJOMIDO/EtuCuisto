@@ -145,6 +145,12 @@ label:has(> input.sr-only:focus-visible) {
   outline-offset: 2px;
 }
 
+/* Le lien « aller au contenu » déplace le focus sur <main id="content" tabindex="-1">.
+   Conteneur non interactif : on garde le focus clavier mais sans anneau visible. */
+:where([tabindex="-1"]):is(:focus, :focus-visible) {
+  outline: none;
+}
+
 /* Visible seulement pour les lecteurs d'écran (sauf si l'élément prend le focus). */
 .visually-hidden:where(:not(:focus-within, :active)) {
   position: absolute !important;
