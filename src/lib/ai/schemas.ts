@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { CategoryId } from "@/lib/categories";
 import type { StorageId } from "@/lib/storage";
+import { UNIT_IDS } from "@/lib/units";
 
 export const CATEGORY_IDS = [
   "viande",
@@ -96,7 +97,9 @@ export const CUISINE_IDS = [
 
 export const PantryItemInput = z.object({
   name: z.string().trim().min(1).max(80),
-  quantity: z.string().trim().max(40).nullable(),
+  // Quantité scindée : un nombre + une unité parmi UNIT_IDS, les deux nullables.
+  quantity: z.number().positive().max(99999).nullable(),
+  unit: z.enum(UNIT_IDS).nullable(),
   category: z.enum(CATEGORY_IDS),
   // null = pas d'avis, l'UI retombe sur le défaut de la famille (voir storage.ts).
   storage: z.enum(STORAGE_IDS).nullable(),
@@ -134,7 +137,16 @@ export const ParsedIngredients = z.object({
   items: z.array(
     z.object({
       name: z.string().describe("Nom de l'ingrédient dans la langue demandée, au singulier"),
-      quantity: z.string().nullable().describe("Quantité telle que comprise, ex. « 2 », « 1/2 paquet », ou null"),
+      quantity: z
+        .number()
+        .positive()
+        .max(99999)
+        .nullable()
+        .describe("Quantité comprise, en nombre seul (ex. 2, 0.5, 100), ou null si non précisée"),
+      unit: z
+        .enum(UNIT_IDS)
+        .nullable()
+        .describe("Unité de mesure parmi la liste fournie, ou null si aucune ne convient"),
       category: z.enum(CATEGORY_IDS),
       storage: z
         .enum(STORAGE_IDS)

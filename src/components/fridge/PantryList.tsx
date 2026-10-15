@@ -58,6 +58,7 @@ export function PantryList({ items, zone, ...actions }: Props) {
 }
 
 function ItemRows({ items, showCategory, ...actions }: Omit<Props, "zone"> & { showCategory?: boolean }) {
+  const t = useTranslations();
   return (
     <ul role="list" className="flex flex-col">
       {items.map((item) => (
@@ -65,7 +66,13 @@ function ItemRows({ items, showCategory, ...actions }: Omit<Props, "zone"> & { s
           {showCategory && <CategoryIcon category={item.category} size="sm" onColor />}
           <span className={`flex-1 font-semibold ${showCategory ? "" : "pl-[2.625rem]"}`}>
             {item.name}
-            {item.quantity && <span className="font-normal text-muted"> · {item.quantity}</span>}
+            {item.quantity != null && (
+              <span className="font-normal text-muted">
+                {" "}
+                · {item.quantity}
+                {item.unit ? ` ${t(`units.${item.unit}`)}` : ""}
+              </span>
+            )}
           </span>
           <ItemMenu item={item} {...actions} />
         </li>

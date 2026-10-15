@@ -4,10 +4,13 @@ import { useCallback, useEffect, useState } from "react";
 import type { PantryItemInput } from "@/lib/ai/schemas";
 import { normalizeCategory } from "@/lib/categories";
 import { normalizeStorage } from "@/lib/storage";
+import { normalizeUnit } from "@/lib/units";
 import { authClient } from "@/lib/auth/client";
 import { fetchJson } from "./fetch-json";
 
 export type PantryItem = PantryItemInput & { id: string };
+// « J'ai cuisiné ça » : combien d'unités de chaque ingrédient ont été utilisées.
+export type Consumption = { id: string; used: number };
 
 const STORAGE_KEY = "etucuisto:pantry";
 
@@ -18,12 +21,28 @@ function readLocal(): PantryItem[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const items = raw ? (JSON.parse(raw) as PantryItem[]) : [];
-    // Les invités peuvent avoir gardé une ancienne famille ou aucune zone (donnée d'avant
-    // les rangements) : on ramène famille et zone à des valeurs connues.
-    return items.map((i) => ({ ...i, category: normalizeCategory(i.category), storage: normalizeStorage(i.storage) }));
+    // Les invités peuvent avoir gardé d'anciennes valeurs (quantité en texte, famille ou
+    // zone absente) : on ramène quantité, unité, famille et zone à des valeurs connues.
+    return items.map((i) => ({
+      ...i,
+      quantity: normalizeQuantity(i.quantity),
+      unit: normalizeUnit(i.unit),
+      category: normalizeCategory(i.category),
+      storage: normalizeStorage(i.storage),
+    }));
   } catch {
     return [];
   }
+}
+
+// Quantité stockée (nombre, ancien texte libre type « 2 » / « 100 g », absent) → nombre ou null.
+function normalizeQuantity(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) return value;
+  if (typeof value === "string") {
+    const n = parseFloat(value.replace(",", "."));
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return null;
 }
 
 function writeLocal(items: PantryItem[]) {
@@ -35,14 +54,22 @@ function writeLocal(items: PantryItem[]) {
   }
 }
 
-function toInput({ name, quantity, category, storage, expiresSoon }: PantryItem): PantryItemInput {
-  return { name, quantity, category, storage, expiresSoon };
+function toInput({ name, quantity, unit, category, storage, expiresSoon }: PantryItem): PantryItemInput {
+  return { name, quantity, unit, category, storage, expiresSoon };
 }
 
 function toItem(row: PantryItem): PantryItem {
-  const { id, name, quantity, category, storage, expiresSoon } = row;
+  const { id, name, quantity, unit, category, storage, expiresSoon } = row;
   // Normalise aussi les valeurs de la base au cas où la migration n'a pas encore tourné.
-  return { id, name, quantity, category: normalizeCategory(category), storage: normalizeStorage(storage), expiresSoon };
+  return {
+    id,
+    name,
+    quantity: normalizeQuantity(quantity),
+    unit: normalizeUnit(unit),
+    category: normalizeCategory(category),
+    storage: normalizeStorage(storage),
+    expiresSoon,
+  };
 }
 
 // Envoi en cours du frigo invité. Partagé : si l'effet se relance pendant l'envoi
@@ -150,15 +177,27 @@ export function usePantry() {
     [userId],
   );
 
-  // « J'ai cuisiné ça » : retire d'un coup les ingrédients utilisés.
+  // « J'ai cuisiné ça » : retire les quantités utilisées, garde le reste en stock.
   const consume = useCallback(
-    async (ids: string[]) => {
+    async (consumptions: Consumption[]) => {
+      if (consumptions.length === 0) return;
       if (userId) {
-        await fetchJson("/api/pantry/consume", { method: "POST", body: JSON.stringify({ ids }) });
+        await fetchJson("/api/pantry/consume", { method: "POST", body: JSON.stringify({ items: consumptions }) });
       }
-      const gone = new Set(ids);
+      const used = new Map(consumptions.map((c) => [c.id, c.used]));
       setItems((prev) => {
-        const next = prev.filter((i) => !gone.has(i.id));
+        const next: PantryItem[] = [];
+        for (const i of prev) {
+          const amount = used.get(i.id);
+          if (amount === undefined) {
+            next.push(i);
+            continue;
+          }
+          // Quantité inconnue ou entièrement consommée → l'aliment disparaît ; sinon on décrémente.
+          const remaining = (i.quantity ?? 0) - amount;
+          if (i.quantity == null || remaining <= 0) continue;
+          next.push({ ...i, quantity: remaining });
+        }
         if (!userId) writeLocal(next);
         return next;
       });

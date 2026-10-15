@@ -43,6 +43,23 @@
     "congelateur": "Freezer",
     "placard": "Cupboard"
   },
+  "units": {
+    "piece": "piece",
+    "tranche": "slice",
+    "gousse": "clove",
+    "pincee": "pinch",
+    "cuillere": "tbsp",
+    "cuillere-cafe": "tsp",
+    "tasse": "cup",
+    "gramme": "g",
+    "kilogramme": "kg",
+    "millilitre": "ml",
+    "litre": "l",
+    "boite": "can",
+    "bouteille": "bottle",
+    "sachet": "sachet",
+    "paquet": "pack"
+  },
   "fridge": {
     "title": "My kitchen",
     "subtitle": "What you have on hand. Recipes start from here.",
@@ -73,6 +90,9 @@
     "reviewTitle": "Check before adding",
     "reviewHint": "Untick anything wrong, flag what's about to go off.",
     "expiringToggle": "Use soon: {name}",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "noUnit": "None",
     "addCount": "Add {count, plural, one {# ingredient} other {# ingredients}}",
     "adding": "Adding…",
     "added": "{count, plural, one {# ingredient added} other {# ingredients added}}."
@@ -130,7 +150,8 @@
   "cookedDialog": {
     "title": "Well done! What should we take out?",
     "gone": "These ingredients are no longer in your kitchen.",
-    "hint": "Untick what you still have left."
+    "hint": "Untick what you didn't use, or lower the amount to keep the rest.",
+    "usedLabel": "Amount used: {name}"
   },
   "favorites": {
     "title": "My recipes",

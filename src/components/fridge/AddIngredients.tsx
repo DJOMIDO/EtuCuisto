@@ -4,6 +4,7 @@ import { AlarmClock, Camera, Plus, WandSparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 import type { ParsedIngredients, PantryItemInput } from "@/lib/ai/schemas";
+import { UNIT_IDS, type UnitId } from "@/lib/units";
 import { downscaleImage } from "@/lib/client/image";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { CategoryIcon } from "../CategoryIcon";
@@ -75,7 +76,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
     setError(null);
     try {
       // L'IA a aussi rangé chaque aliment (storage) : on suit son jugement, corrigeable ensuite via ItemMenu.
-      await onAdd(chosen.map(({ name, quantity, category, storage, expiresSoon }) => ({ name, quantity, category, storage, expiresSoon })));
+      await onAdd(chosen.map(({ name, quantity, unit, category, storage, expiresSoon }) => ({ name, quantity, unit, category, storage, expiresSoon })));
       setCandidates(null);
       setText("");
       announce(t("add.added", { count: chosen.length }));
@@ -102,28 +103,61 @@ export function AddIngredients({ onAdd, announce }: Props) {
         </div>
         <ul role="list" className="flex flex-col gap-1">
           {candidates.map((c) => (
-            <li key={c.key} className="flex items-center gap-3">
-              <input
-                id={`${ids}-${c.key}`}
-                type="checkbox"
-                checked={c.selected}
-                onChange={(e) => patchCandidate(c.key, { selected: e.target.checked })}
-                className="size-5 shrink-0 accent-[var(--accent-strong)]"
-              />
-              <CategoryIcon category={c.category} size="sm" />
-              <label htmlFor={`${ids}-${c.key}`} className="flex-1 py-2 font-semibold">
-                {c.name}
-                {c.quantity && <span className="font-normal text-muted"> · {c.quantity}</span>}
-              </label>
-              <button
-                type="button"
-                aria-pressed={c.expiresSoon}
-                onClick={() => patchCandidate(c.key, { expiresSoon: !c.expiresSoon })}
-                className={c.expiresSoon ? button.iconSun : button.icon}
-              >
-                <AlarmClock aria-hidden="true" className="size-5" />
-                <span className="visually-hidden">{t("add.expiringToggle", { name: c.name })}</span>
-              </button>
+            <li key={c.key} className="flex flex-col gap-1.5 rounded-2xl px-1 py-1.5">
+              <div className="flex items-center gap-3">
+                <input
+                  id={`${ids}-${c.key}`}
+                  type="checkbox"
+                  checked={c.selected}
+                  onChange={(e) => patchCandidate(c.key, { selected: e.target.checked })}
+                  className="size-5 shrink-0 accent-[var(--accent-strong)]"
+                />
+                <CategoryIcon category={c.category} size="sm" />
+                <label htmlFor={`${ids}-${c.key}`} className="flex-1 font-semibold">
+                  {c.name}
+                </label>
+                <button
+                  type="button"
+                  aria-pressed={c.expiresSoon}
+                  onClick={() => patchCandidate(c.key, { expiresSoon: !c.expiresSoon })}
+                  className={c.expiresSoon ? button.iconSun : button.icon}
+                >
+                  <AlarmClock aria-hidden="true" className="size-5" />
+                  <span className="visually-hidden">{t("add.expiringToggle", { name: c.name })}</span>
+                </button>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 pl-11 text-sm">
+                <label className="flex items-center gap-1.5">
+                  <span className="text-muted">{t("add.quantity")}</span>
+                  <input
+                    type="number"
+                    value={c.quantity ?? ""}
+                    onChange={(e) => {
+                      const n = Number(e.target.value);
+                      patchCandidate(c.key, { quantity: e.target.value && Number.isFinite(n) && n > 0 ? n : null });
+                    }}
+                    min={0}
+                    step="any"
+                    inputMode="decimal"
+                    className={`${field} w-20`}
+                  />
+                </label>
+                <label className="flex items-center gap-1.5">
+                  <span className="text-muted">{t("add.unit")}</span>
+                  <select
+                    value={c.unit ?? ""}
+                    onChange={(e) => patchCandidate(c.key, { unit: (e.target.value || null) as UnitId | null })}
+                    className={`${field} w-auto`}
+                  >
+                    <option value="">{t("add.noUnit")}</option>
+                    {UNIT_IDS.map((u) => (
+                      <option key={u} value={u}>
+                        {t(`units.${u}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </li>
           ))}
         </ul>

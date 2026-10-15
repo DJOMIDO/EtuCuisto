@@ -1,6 +1,7 @@
 import {
   boolean,
   date,
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -21,7 +22,11 @@ export const pantryItems = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     userId: text("user_id").notNull(),
     name: text("name").notNull(),
-    quantity: text("quantity"),
+    // Quantité = nombre + unité (voir src/lib/units.ts). Les deux nullables : un aliment
+    // peut très bien ne pas avoir de quantité précisée. doublePrecision (float8) : relu
+    // directement en number côté JS, contrairement à numeric qui revient en chaîne.
+    quantity: doublePrecision("quantity"),
+    unit: text("unit"),
     category: text("category").notNull().default("autre"),
     // Zone de rangement (voir src/lib/storage.ts). Nullable : null = repli sur le
     // défaut de la famille, jamais écrasé. Pas plus de contrainte que pour category.

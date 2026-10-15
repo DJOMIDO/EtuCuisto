@@ -1,11 +1,20 @@
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
 import type { StorageId } from "@/lib/storage";
+import type { UnitId } from "@/lib/units";
 import type { ParsedIngredients, PantryForPrompt, Recommendations } from "./schemas";
 
 // Données factices pour développer sans clé d'API (AI_PROVIDER=mock).
 
 const EXPIRING = /p[ée]rim|ab[iî]m|bient[ôo]t|vite/i;
 const FROZEN = /surgel[ée]|congel[ée]/i;
+
+// Unité à partir de l'abréviation reconnue, sinon « piece » dès qu'il y a un nombre.
+const MOCK_UNIT: Record<string, UnitId> = {
+  g: "gramme",
+  kg: "kilogramme",
+  ml: "millilitre",
+  l: "litre",
+};
 
 export function mockParse(text: string): ParsedIngredients {
   const items = text
@@ -14,7 +23,7 @@ export function mockParse(text: string): ParsedIngredients {
     .filter(Boolean)
     .map((part) => {
       const expiresSoon = EXPIRING.test(part);
-      const qty = part.match(/^(\d+(?:[.,/]\d+)?\s*(?:g|kg|ml|l|cl)?)\s+(?:de |d')?/i);
+      const qty = part.match(/^(\d+(?:[.,]\d+)?)\s*(g|kg|ml|l)?\s+(?:de |d')?/i);
       const name = (qty ? part.slice(qty[0].length) : part)
         .replace(/\(.*?\)|qui (va|vont).*|bientôt.*|presque.*/gi, "")
         .trim()
@@ -23,9 +32,11 @@ export function mockParse(text: string): ParsedIngredients {
       const category = guessCategory(name);
       // Sans avis du mock : l'UI retombe sur le défaut de la famille (storage.ts).
       const storage: StorageId | null = FROZEN.test(part) ? "congelateur" : null;
+      const unit: UnitId | null = qty ? (MOCK_UNIT[qty[2]?.toLowerCase() ?? ""] ?? "piece") : null;
       return {
         name,
-        quantity: qty ? qty[1].trim() : null,
+        quantity: qty ? Number(qty[1].replace(",", ".")) : null,
+        unit,
         category,
         storage,
         expiresSoon,
@@ -48,10 +59,10 @@ function guessCategory(name: string): CategoryId {
 export function mockRecognize(): ParsedIngredients {
   return {
     items: [
-      { name: "œuf", quantity: "4", category: "laitier", storage: "frigo", expiresSoon: false },
-      { name: "courgette", quantity: "1", category: "legume", storage: "frigo", expiresSoon: true },
-      { name: "fromage râpé", quantity: "1/2 sachet", category: "laitier", storage: "frigo", expiresSoon: false },
-      { name: "tomate", quantity: "2", category: "legume", storage: null, expiresSoon: false },
+      { name: "œuf", quantity: 4, unit: "piece", category: "laitier", storage: "frigo", expiresSoon: false },
+      { name: "courgette", quantity: 1, unit: "piece", category: "legume", storage: "frigo", expiresSoon: true },
+      { name: "fromage râpé", quantity: 0.5, unit: "sachet", category: "laitier", storage: "frigo", expiresSoon: false },
+      { name: "tomate", quantity: 2, unit: "piece", category: "legume", storage: null, expiresSoon: false },
     ],
   };
 }
@@ -65,7 +76,7 @@ export function mockRecipes(pantry: PantryForPrompt): Recommendations {
     servings: 1,
     tools: ["poele"],
     ingredients: [
-      ...items.map((p) => ({ name: p.name, amount: p.quantity ?? "selon l'envie", pantryItemId: p.id })),
+      ...items.map((p) => ({ name: p.name, amount: p.quantity != null ? String(p.quantity) : "selon l'envie", pantryItemId: p.id })),
       { name: "oignon", amount: "1", pantryItemId: null },
     ],
     missing: [{ name: "oignon", estimatedPriceEur: 0.3 }],
