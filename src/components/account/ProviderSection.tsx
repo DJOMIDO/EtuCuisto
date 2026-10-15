@@ -15,6 +15,7 @@ import {
 } from "@/lib/ai/config";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { button, card, field } from "../ui";
+import { ModelCombobox } from "./ModelCombobox";
 
 // Noms de marque : identiques dans toutes les langues, donc hors fichiers i18n.
 const PROVIDER_LABELS: Record<AiProviderId, string> = {
@@ -211,21 +212,15 @@ export function ProviderSection() {
           {t("model")}
         </label>
         <div className="flex items-center gap-2">
-          <input
+          <ModelCombobox
             id={`${ids}-model`}
-            list={`${ids}-models`}
-            autoComplete="off"
-            spellCheck={false}
             value={model}
-            onChange={(e) => reset({ model: e.target.value })}
+            onChange={(v) => reset({ model: v })}
+            options={models}
             placeholder={PLACEHOLDER_MODEL[provider]}
             className={field}
+            listLabel={t("modelList")}
           />
-          <datalist id={`${ids}-models`}>
-            {models.map((m) => (
-              <option key={m} value={m} />
-            ))}
-          </datalist>
           <button type="button" onClick={loadModels} disabled={loading} className={`${button.secondary} shrink-0 !px-4`}>
             <KeyRound aria-hidden="true" className="size-5" />
             {loading ? t("loadingModels") : t("loadModels")}

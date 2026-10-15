@@ -344,6 +344,7 @@
       "customHint": "兼容 OpenAI 的接口地址。",
       "clear": "移除密钥",
       "model": "模型",
+      "modelList": "可用模型",
       "loadModels": "加载模型",
       "loadingModels": "加载中…",
       "modelHint": "从你的账户加载列表；同时会检验密钥。",

@@ -344,6 +344,7 @@
       "customHint": "OpenAI-compatible endpoint.",
       "clear": "Remove key",
       "model": "Model",
+      "modelList": "Available models",
       "loadModels": "Load models",
       "loadingModels": "Loading…",
       "modelHint": "Loads the list from your account; the key is validated along the way.",
