@@ -44,21 +44,21 @@
     "placard": "Placard"
   },
   "units": {
-    "piece": "pièce",
-    "tranche": "tranche",
-    "gousse": "gousse",
-    "pincee": "pincée",
+    "piece": "{count, plural, one {pièce} other {pièces}}",
+    "tranche": "{count, plural, one {tranche} other {tranches}}",
+    "gousse": "{count, plural, one {gousse} other {gousses}}",
+    "pincee": "{count, plural, one {pincée} other {pincées}}",
     "cuillere": "c. à soupe",
     "cuillere-cafe": "c. à café",
-    "tasse": "tasse",
+    "tasse": "{count, plural, one {tasse} other {tasses}}",
     "gramme": "g",
     "kilogramme": "kg",
     "millilitre": "ml",
     "litre": "l",
-    "boite": "boîte",
-    "bouteille": "bouteille",
-    "sachet": "sachet",
-    "paquet": "paquet"
+    "boite": "{count, plural, one {boîte} other {boîtes}}",
+    "bouteille": "{count, plural, one {bouteille} other {bouteilles}}",
+    "sachet": "{count, plural, one {sachet} other {sachets}}",
+    "paquet": "{count, plural, one {paquet} other {paquets}}"
   },
   "fridge": {
     "title": "Ma cuisine",

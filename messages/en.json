@@ -44,21 +44,21 @@
     "placard": "Cupboard"
   },
   "units": {
-    "piece": "piece",
-    "tranche": "slice",
-    "gousse": "clove",
-    "pincee": "pinch",
+    "piece": "{count, plural, one {piece} other {pieces}}",
+    "tranche": "{count, plural, one {slice} other {slices}}",
+    "gousse": "{count, plural, one {clove} other {cloves}}",
+    "pincee": "{count, plural, one {pinch} other {pinches}}",
     "cuillere": "tbsp",
     "cuillere-cafe": "tsp",
-    "tasse": "cup",
+    "tasse": "{count, plural, one {cup} other {cups}}",
     "gramme": "g",
     "kilogramme": "kg",
     "millilitre": "ml",
     "litre": "l",
-    "boite": "can",
-    "bouteille": "bottle",
-    "sachet": "sachet",
-    "paquet": "pack"
+    "boite": "{count, plural, one {can} other {cans}}",
+    "bouteille": "{count, plural, one {bottle} other {bottles}}",
+    "sachet": "{count, plural, one {sachet} other {sachets}}",
+    "paquet": "{count, plural, one {pack} other {packs}}"
   },
   "fridge": {
     "title": "My kitchen",

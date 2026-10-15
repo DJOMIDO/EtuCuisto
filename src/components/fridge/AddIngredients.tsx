@@ -152,7 +152,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
                     <option value="">{t("add.noUnit")}</option>
                     {UNIT_IDS.map((u) => (
                       <option key={u} value={u}>
-                        {t(`units.${u}`)}
+                        {t(`units.${u}`, { count: 1 })}
                       </option>
                     ))}
                   </select>

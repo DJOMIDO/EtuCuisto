@@ -75,7 +75,7 @@ export function CookedDialog({ recipe, pantry, onConfirm, onClose }: Props) {
             <fieldset className="flex flex-col gap-1">
               <legend className="mb-2 text-sm text-muted">{t("cookedDialog.hint")}</legend>
               {used.map((p) => {
-                const unit = p.unit ? t(`units.${p.unit}`) : null;
+                const unit = p.unit ? t(`units.${p.unit}`, { count: p.quantity ?? 1 }) : null;
                 return (
                   <div key={p.id} className="flex items-center gap-3 rounded-2xl px-2 py-2 hover:bg-surface-muted">
                     <input

@@ -70,7 +70,7 @@ function ItemRows({ items, showCategory, ...actions }: Omit<Props, "zone"> & { s
               <span className="font-normal text-muted">
                 {" "}
                 · {item.quantity}
-                {item.unit ? ` ${t(`units.${item.unit}`)}` : ""}
+                {item.unit ? ` ${t(`units.${item.unit}`, { count: item.quantity })}` : ""}
               </span>
             )}
           </span>

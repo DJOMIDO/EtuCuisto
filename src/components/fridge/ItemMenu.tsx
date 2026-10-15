@@ -43,7 +43,7 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory, o
               <span className="font-semibold text-muted">
                 {" "}
                 · {item.quantity}
-                {item.unit ? ` ${t(`units.${item.unit}`)}` : ""}
+                {item.unit ? ` ${t(`units.${item.unit}`, { count: item.quantity })}` : ""}
               </span>
             )}
           </p>
