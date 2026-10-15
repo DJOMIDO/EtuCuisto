@@ -1,12 +1,12 @@
 "use client";
 
-import { ChefHat, CircleUser, Heart, Refrigerator } from "lucide-react";
+import { ChefHat, CircleUser, Heart, House } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 const LINKS = [
-  { href: "/", key: "fridge", icon: Refrigerator },
+  { href: "/", key: "fridge", icon: House },
   { href: "/recettes", key: "recipes", icon: ChefHat },
   { href: "/favoris", key: "favorites", icon: Heart },
   { href: "/profil", key: "profile", icon: CircleUser },

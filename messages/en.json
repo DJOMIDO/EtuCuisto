@@ -10,15 +10,15 @@
     "forItem": ": {name}"
   },
   "meta": {
-    "description": "Empty your fridge: quick recipes with what you already have, made for student kitchens.",
-    "fridge": "My fridge",
+    "description": "See what's in your kitchen: quick recipes with what you already have, made for student life.",
+    "fridge": "My kitchen",
     "recipes": "Recipes",
     "favorites": "My recipes",
     "profile": "Profile"
   },
   "nav": {
     "label": "Main",
-    "fridge": "Fridge",
+    "fridge": "Kitchen",
     "recipes": "Recipes",
     "favorites": "Favorites",
     "profile": "Profile"
@@ -38,23 +38,31 @@
     "restes": "Leftovers & ready meals",
     "autre": "Other"
   },
+  "storageZones": {
+    "frigo": "Fridge",
+    "congelateur": "Freezer",
+    "placard": "Cupboard"
+  },
   "fridge": {
-    "title": "My fridge",
+    "title": "My kitchen",
     "subtitle": "What you have on hand. Recipes start from here.",
-    "loading": "Loading your fridge…",
-    "listTitle": "In your fridge",
+    "loading": "Loading your kitchen…",
+    "listTitle": "{zone, select, frigo {In your fridge} congelateur {In your freezer} placard {In your cupboard} other {In your kitchen}}",
     "count": "{count, plural, one {# ingredient} other {# ingredients}}",
     "expiringTitle": "Use soon",
-    "emptyTitle": "Your fridge is empty",
+    "zonesLabel": "Storage zone",
+    "emptyZone": "Nothing in this zone yet. You can move an ingredient here from its menu.",
+    "emptyTitle": "Your kitchen is empty",
     "emptyText": "Type what you have or take a photo: we'll sort it out.",
-    "statusRemoved": "{name} removed from the fridge.",
+    "statusRemoved": "{name} removed from your kitchen.",
     "statusExpiringOn": "{name} marked to use soon.",
     "statusExpiringOff": "{name} is no longer urgent.",
-    "statusCategory": "{name}: {category}."
+    "statusCategory": "{name}: {category}.",
+    "statusStorage": "{name} moved: {zone}."
   },
   "add": {
     "title": "What do you have?",
-    "hint": "Write it the way you'd say it, or take a photo of your fridge.",
+    "hint": "Write it the way you'd say it, or take a photo of your groceries.",
     "placeholder": "3 eggs, some leftover rice, a zucchini that's about to go off…",
     "analyze": "Analyze",
     "analyzing": "Analyzing…",
@@ -67,13 +75,14 @@
     "expiringToggle": "Use soon: {name}",
     "addCount": "Add {count, plural, one {# ingredient} other {# ingredients}}",
     "adding": "Adding…",
-    "added": "{count, plural, one {# ingredient added} other {# ingredients added}} to the fridge."
+    "added": "{count, plural, one {# ingredient added} other {# ingredients added}}."
   },
   "itemMenu": {
     "actions": "Actions: {name}",
     "markExpiring": "Mark as “use soon”",
     "unmarkExpiring": "No longer urgent",
-    "remove": "Remove from fridge",
+    "remove": "Remove",
+    "storage": "Storage",
     "category": "Category"
   },
   "recipes": {
@@ -88,8 +97,8 @@
     "notConfigured": "Your kitchen isn't set up yet · ",
     "edit": "edit",
     "configure": "set up",
-    "kitchenHidden": " my kitchen",
-    "emptyFridge": "Your fridge is empty. <link>Add ingredients</link> first.",
+    "kitchenHidden": " my kitchen settings",
+    "emptyFridge": "Your kitchen is empty. <link>Add ingredients</link> first.",
     "find": "Find recipes",
     "more": "More ideas",
     "thinking": "The chef is thinking…",
@@ -99,7 +108,7 @@
     "favoriteRemoved": "Removed from favorites.",
     "guestFavorite": "Create an account from the Profile tab to keep your favorite recipes.",
     "enjoy": "Enjoy your meal!",
-    "enjoyRemoved": "Enjoy your meal! {count, plural, one {# ingredient removed} other {# ingredients removed}} from the fridge.",
+    "enjoyRemoved": "Enjoy your meal! {count, plural, one {# ingredient removed} other {# ingredients removed}} from your kitchen.",
     "kitchenSaved": "Kitchen settings saved."
   },
   "recipeCard": {
@@ -108,7 +117,7 @@
     "toBuy": "{amount} to buy",
     "nothingToBuy": "Nothing to buy",
     "rescues": "Saves {count, plural, one {# ingredient} other {# ingredients}}",
-    "fromFridge": "From your fridge",
+    "fromFridge": "From your kitchen",
     "useSoon": "use soon",
     "buy": "To buy",
     "steps": "Show the steps ({count})",
@@ -119,8 +128,8 @@
     "delete": "Delete"
   },
   "cookedDialog": {
-    "title": "Well done! What should we take out of the fridge?",
-    "gone": "These ingredients are no longer in your fridge.",
+    "title": "Well done! What should we take out?",
+    "gone": "These ingredients are no longer in your kitchen.",
     "hint": "Untick what you still have left."
   },
   "favorites": {
@@ -140,8 +149,8 @@
     "enjoy": "Enjoy your meal!"
   },
   "kitchen": {
-    "titleFirst": "First, your kitchen",
-    "title": "My kitchen",
+    "titleFirst": "First, your equipment",
+    "title": "My equipment & preferences",
     "introFirst": "Tell me what you have, so you only get recipes you can actually make. You can change this later.",
     "intro": "So you only get recipes you can actually make.",
     "tools": "Equipment",
@@ -157,7 +166,7 @@
     "avoidedAdd": "Add",
     "avoidedRemove": "Remove {item}",
     "cuisines": "Cuisines you like",
-    "cuisinesHint": "Optional: we'll lean towards these cuisines when they fit your fridge.",
+    "cuisinesHint": "Optional: we'll lean towards these cuisines when they fit what you have.",
     "addOption": "Add",
     "removeOption": "Remove {item}",
     "customPlaceholder": "Other…",
@@ -250,8 +259,8 @@
   "auth": {
     "signinTitle": "Welcome back",
     "signupTitle": "Welcome!",
-    "signinIntro": "Sign in to get your fridge, settings and recipes back.",
-    "signupIntro": "Create your account to keep your fridge and recipes on all your devices.",
+    "signinIntro": "Sign in to get your kitchen, settings and recipes back.",
+    "signupIntro": "Create your account to keep your kitchen and recipes on all your devices.",
     "google": "Continue with Google",
     "or": "or",
     "firstName": "First name",
@@ -295,7 +304,7 @@
   },
   "profile": {
     "title": "Profile",
-    "subtitle": "Your fridge, settings and recipes follow you on all your devices.",
+    "subtitle": "Your kitchen, settings and recipes follow you on all your devices.",
     "noName": "No name",
     "signOut": "Sign out",
     "preferences": "Preferences",
@@ -314,7 +323,7 @@
     "intro": "Everything will be erased permanently, with no way back:",
     "items": {
       "account": "your account and sign-in",
-      "fridge": "your fridge",
+      "fridge": "what's in your kitchen",
       "recipes": "your favorite recipes and history",
       "settings": "your kitchen settings and preferences"
     },
@@ -331,7 +340,7 @@
     "photoMissing": "No photo received.",
     "photoFormat": "Accepted formats: JPEG, PNG, WebP or GIF.",
     "photoTooBig": "Photo too large (5 MB max).",
-    "emptyFridge": "Your fridge is empty: add some ingredients.",
+    "emptyFridge": "Your kitchen is empty: add some ingredients.",
     "quotaGuest": "You've reached today's trial limit. Create an account from the Profile tab to continue.",
     "quotaUser": "You've reached today's limit. Come back tomorrow!",
     "refused": "The model declined this request.",

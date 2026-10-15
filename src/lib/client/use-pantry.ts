@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { PantryItemInput } from "@/lib/ai/schemas";
 import { normalizeCategory } from "@/lib/categories";
+import { normalizeStorage } from "@/lib/storage";
 import { authClient } from "@/lib/auth/client";
 import { fetchJson } from "./fetch-json";
 
@@ -17,8 +18,9 @@ function readLocal(): PantryItem[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const items = raw ? (JSON.parse(raw) as PantryItem[]) : [];
-    // Les invités peuvent avoir gardé une ancienne famille : on la ramène à une valeur connue.
-    return items.map((i) => ({ ...i, category: normalizeCategory(i.category) }));
+    // Les invités peuvent avoir gardé une ancienne famille ou aucune zone (donnée d'avant
+    // les rangements) : on ramène famille et zone à des valeurs connues.
+    return items.map((i) => ({ ...i, category: normalizeCategory(i.category), storage: normalizeStorage(i.storage) }));
   } catch {
     return [];
   }
@@ -33,14 +35,14 @@ function writeLocal(items: PantryItem[]) {
   }
 }
 
-function toInput({ name, quantity, category, expiresSoon }: PantryItem): PantryItemInput {
-  return { name, quantity, category, expiresSoon };
+function toInput({ name, quantity, category, storage, expiresSoon }: PantryItem): PantryItemInput {
+  return { name, quantity, category, storage, expiresSoon };
 }
 
 function toItem(row: PantryItem): PantryItem {
-  const { id, name, quantity, category, expiresSoon } = row;
+  const { id, name, quantity, category, storage, expiresSoon } = row;
   // Normalise aussi les valeurs de la base au cas où la migration n'a pas encore tourné.
-  return { id, name, quantity, category: normalizeCategory(category), expiresSoon };
+  return { id, name, quantity, category: normalizeCategory(category), storage: normalizeStorage(storage), expiresSoon };
 }
 
 // Envoi en cours du frigo invité. Partagé : si l'effet se relance pendant l'envoi

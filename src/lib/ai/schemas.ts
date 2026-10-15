@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { CategoryId } from "@/lib/categories";
+import type { StorageId } from "@/lib/storage";
 
 export const CATEGORY_IDS = [
   "viande",
@@ -16,6 +17,8 @@ export const CATEGORY_IDS = [
   "restes",
   "autre",
 ] as const satisfies readonly CategoryId[];
+
+export const STORAGE_IDS = ["frigo", "congelateur", "placard"] as const satisfies readonly StorageId[];
 
 export const TOOL_IDS = [
   "micro-ondes",
@@ -95,6 +98,8 @@ export const PantryItemInput = z.object({
   name: z.string().trim().min(1).max(80),
   quantity: z.string().trim().max(40).nullable(),
   category: z.enum(CATEGORY_IDS),
+  // null = pas d'avis, l'UI retombe sur le défaut de la famille (voir storage.ts).
+  storage: z.enum(STORAGE_IDS).nullable(),
   expiresSoon: z.boolean(),
 });
 export type PantryItemInput = z.infer<typeof PantryItemInput>;
@@ -131,6 +136,10 @@ export const ParsedIngredients = z.object({
       name: z.string().describe("Nom de l'ingrédient dans la langue demandée, au singulier"),
       quantity: z.string().nullable().describe("Quantité telle que comprise, ex. « 2 », « 1/2 paquet », ou null"),
       category: z.enum(CATEGORY_IDS),
+      storage: z
+        .enum(STORAGE_IDS)
+        .nullable()
+        .describe("Lieu de rangement : frigo (frais), congelateur (surgelé) ou placard (température ambiante) ; null si incertain"),
       expiresSoon: z.boolean().describe("Vrai si l'utilisateur dit que ça va bientôt périmer, ou si c'est visiblement abîmé"),
     }),
   ),

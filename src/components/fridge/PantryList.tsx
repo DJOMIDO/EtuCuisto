@@ -4,23 +4,27 @@ import { AlarmClock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { PantryItem } from "@/lib/client/use-pantry";
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
+import { storageOf, type StorageId } from "@/lib/storage";
 import { CategoryIcon } from "../CategoryIcon";
 import { card } from "../ui";
 import { ItemMenu } from "./ItemMenu";
 
 type Props = {
   items: PantryItem[];
+  zone: StorageId;
   onToggleExpiring: (item: PantryItem) => void;
   onRemove: (item: PantryItem) => void;
   onChangeCategory: (item: PantryItem, category: CategoryId) => void;
+  onChangeStorage: (item: PantryItem, storage: StorageId) => void;
 };
 
-export function PantryList({ items, ...actions }: Props) {
+export function PantryList({ items, zone, ...actions }: Props) {
   const t = useTranslations();
+  // L'urgence reste visible quelle que soit la zone affichée : elle précède les rangements.
   const expiring = items.filter((i) => i.expiresSoon);
   const groups = CATEGORIES.map((c) => ({
     ...c,
-    items: items.filter((i) => !i.expiresSoon && i.category === c.id),
+    items: items.filter((i) => !i.expiresSoon && i.category === c.id && storageOf(i) === zone),
   })).filter((g) => g.items.length > 0);
 
   return (
@@ -34,7 +38,7 @@ export function PantryList({ items, ...actions }: Props) {
           <ItemRows items={expiring} showCategory {...actions} />
         </section>
       )}
-      {groups.length > 0 && (
+      {groups.length > 0 ? (
         <div className={`${card} flex flex-col gap-5`}>
           {groups.map((g) => (
             <section key={g.id} aria-labelledby={`fridge-${g.id}`}>
@@ -46,12 +50,14 @@ export function PantryList({ items, ...actions }: Props) {
             </section>
           ))}
         </div>
+      ) : (
+        expiring.length === 0 && <p className="px-1 text-sm text-muted">{t("fridge.emptyZone")}</p>
       )}
     </div>
   );
 }
 
-function ItemRows({ items, showCategory, ...actions }: Props & { showCategory?: boolean }) {
+function ItemRows({ items, showCategory, ...actions }: Omit<Props, "zone"> & { showCategory?: boolean }) {
   return (
     <ul role="list" className="flex flex-col">
       {items.map((item) => (

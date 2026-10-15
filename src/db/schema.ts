@@ -23,6 +23,9 @@ export const pantryItems = pgTable(
     name: text("name").notNull(),
     quantity: text("quantity"),
     category: text("category").notNull().default("autre"),
+    // Zone de rangement (voir src/lib/storage.ts). Nullable : null = repli sur le
+    // défaut de la famille, jamais écrasé. Pas plus de contrainte que pour category.
+    storage: text("storage"),
     expiresSoon: boolean("expires_soon").notNull().default(false),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },

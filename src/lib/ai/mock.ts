@@ -1,9 +1,11 @@
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
+import type { StorageId } from "@/lib/storage";
 import type { ParsedIngredients, PantryForPrompt, Recommendations } from "./schemas";
 
 // Données factices pour développer sans clé d'API (AI_PROVIDER=mock).
 
 const EXPIRING = /p[ée]rim|ab[iî]m|bient[ôo]t|vite/i;
+const FROZEN = /surgel[ée]|congel[ée]/i;
 
 export function mockParse(text: string): ParsedIngredients {
   const items = text
@@ -19,10 +21,13 @@ export function mockParse(text: string): ParsedIngredients {
         .toLowerCase()
         .replace(/^(?:(?:une|un|du|des|les|le|la|de la)\s+|de l'|l'|d')/, "");
       const category = guessCategory(name);
+      // Sans avis du mock : l'UI retombe sur le défaut de la famille (storage.ts).
+      const storage: StorageId | null = FROZEN.test(part) ? "congelateur" : null;
       return {
         name,
         quantity: qty ? qty[1].trim() : null,
         category,
+        storage,
         expiresSoon,
       };
     })
@@ -43,10 +48,10 @@ function guessCategory(name: string): CategoryId {
 export function mockRecognize(): ParsedIngredients {
   return {
     items: [
-      { name: "œuf", quantity: "4", category: "laitier", expiresSoon: false },
-      { name: "courgette", quantity: "1", category: "legume", expiresSoon: true },
-      { name: "fromage râpé", quantity: "1/2 sachet", category: "laitier", expiresSoon: false },
-      { name: "tomate", quantity: "2", category: "legume", expiresSoon: false },
+      { name: "œuf", quantity: "4", category: "laitier", storage: "frigo", expiresSoon: false },
+      { name: "courgette", quantity: "1", category: "legume", storage: "frigo", expiresSoon: true },
+      { name: "fromage râpé", quantity: "1/2 sachet", category: "laitier", storage: "frigo", expiresSoon: false },
+      { name: "tomate", quantity: "2", category: "legume", storage: null, expiresSoon: false },
     ],
   };
 }
