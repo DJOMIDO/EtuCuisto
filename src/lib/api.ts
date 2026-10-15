@@ -34,8 +34,18 @@ export async function requireUser(): Promise<{ userId: string } | { response: Ne
   return { userId };
 }
 
-export function handleRouteError(error: unknown) {
-  if (error instanceof AiError) return jsonError(error.code, error.status);
+/**
+ * Traduit une erreur en réponse JSON. `byok` précise que l'appel partait sur la clé
+ * perso de l'utilisateur : « misconfigured » y signifie clé refusée (seul l'utilisateur
+ * peut réparer), alors que sans clé perso c'est une variable d'environnement absente
+ * côté serveur — même code d'erreur, deux causes et deux messages très différents.
+ */
+export function handleRouteError(error: unknown, options?: { byok?: boolean }) {
+  if (error instanceof AiError) {
+    const key: ErrorKey =
+      error.code === "misconfigured" && options?.byok ? "invalidApiKey" : error.code;
+    return jsonError(key, error.status);
+  }
   console.error(error);
   return jsonError("internal", 500);
 }

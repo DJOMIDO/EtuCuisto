@@ -387,6 +387,7 @@
     "busy": "Too many requests right now, try again in a minute.",
     "unavailable": "The recipe service is unavailable, please try again.",
     "misconfigured": "Service unavailable.",
+    "invalidApiKey": "Your API key was rejected. Check it in Profile › AI model provider, or remove it to stay on the trial.",
     "deleteFailed": "Deleting the account failed, please try again."
   }
 }

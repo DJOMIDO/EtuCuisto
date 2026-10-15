@@ -32,6 +32,9 @@ export async function POST(request: Request) {
   const body = await readJson(request, Body);
   if ("response" in body) return body.response;
 
+  // Le catch doit savoir si l'appel partait sur une clé BYOK pour traduire « misconfigured ».
+  let byok = false;
+
   try {
     const userId = await getUserId();
     let pantry = body.data.pantry ?? [];
@@ -61,6 +64,7 @@ export async function POST(request: Request) {
     const language = AI_LANGUAGE[await getRequestLocale()];
     // Clé perso réservée aux comptes connectés : un invité reste sur l'essai quota.
     const ai = userId ? body.data.ai : undefined;
+    byok = Boolean(ai?.apiKey);
     // Clé perso = l'utilisateur paie : on ne consomme pas le quota d'essai.
     const quota = ai?.apiKey ? null : await consumeAiQuota(request, userId);
     if (quota && !quota.allowed) return quotaExceeded(quota.isGuest);
@@ -88,6 +92,6 @@ export async function POST(request: Request) {
     }
     return NextResponse.json(result);
   } catch (error) {
-    return handleRouteError(error);
+    return handleRouteError(error, { byok });
   }
 }
