@@ -92,8 +92,8 @@
     "maxTime": "最长时间",
     "minutes": "{count} 分钟",
     "moreThanHour": "超过 1 小时",
-    "kitchenSummary": "{tools} · 预算{budget} · ",
-    "noTools": "没有厨具",
+    "kitchenSummary": "{summary} · ",
+    "kitchenCount": "{label}：{count}",
     "notConfigured": "还没设置你的厨具和偏好 · ",
     "edit": "修改",
     "configure": "去设置",
@@ -189,11 +189,6 @@
       "mixeur": "搅拌机"
     },
     "budgetOptions": {
-      "tres-serre": "非常紧",
-      "serre": "比较紧",
-      "normal": "正常"
-    },
-    "budgetShort": {
       "tres-serre": "非常紧",
       "serre": "比较紧",
       "normal": "正常"

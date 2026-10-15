@@ -92,8 +92,8 @@
     "maxTime": "Temps maximum",
     "minutes": "{count} min",
     "moreThanHour": "Plus d'1 h",
-    "kitchenSummary": "{tools} · budget {budget} · ",
-    "noTools": "aucun ustensile",
+    "kitchenSummary": "{summary} · ",
+    "kitchenCount": "{label} ({count})",
     "notConfigured": "Ta cuisine n'est pas encore configurée · ",
     "edit": "modifier",
     "configure": "configurer",
@@ -192,11 +192,6 @@
       "tres-serre": "Très serré",
       "serre": "Serré",
       "normal": "Normal"
-    },
-    "budgetShort": {
-      "tres-serre": "très serré",
-      "serre": "serré",
-      "normal": "normal"
     },
     "budgetHints": {
       "tres-serre": "Rien à acheter si possible, sinon moins de 2 €",
