@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
 import { BUDGET_IDS, type KitchenProfile, type Recipe, type Recommendations } from "@/lib/ai/schemas";
+import { withAiConfig } from "@/lib/client/ai-config";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { useKitchen } from "@/lib/client/use-kitchen";
 import { usePantry, type Consumption } from "@/lib/client/use-pantry";
@@ -78,7 +79,7 @@ export function RecipesPage() {
       const body = isGuest ? { maxMinutes, pantry: pantry.items, kitchen: savedKitchen ?? kitchen } : { maxMinutes };
       const data = await fetchJson<Recommendations>("/api/ai/recipes", {
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify(withAiConfig(body)),
       });
       setRecipes(data.recipes);
       setSaved(data.recipes.map(() => ({ favorite: false, cooked: false })));

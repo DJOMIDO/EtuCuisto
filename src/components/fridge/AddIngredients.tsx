@@ -6,6 +6,7 @@ import { useId, useState } from "react";
 import type { ParsedIngredients, PantryItemInput } from "@/lib/ai/schemas";
 import { UNIT_IDS, type UnitId } from "@/lib/units";
 import { downscaleImage } from "@/lib/client/image";
+import { appendAiConfig, withAiConfig } from "@/lib/client/ai-config";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { CategoryIcon } from "../CategoryIcon";
 import { button, card, field } from "../ui";
@@ -26,6 +27,11 @@ export function AddIngredients({ onAdd, announce }: Props) {
   const [candidates, setCandidates] = useState<Candidate[] | null>(null);
 
   function showCandidates(result: ParsedIngredients) {
+    // Demande hors du périmètre cuisine : l'IA a refusé, on affiche le message dédié.
+    if (result.outOfScope) {
+      setError(t("add.outOfScope"));
+      return;
+    }
     if (result.items.length === 0) {
       setError(t("add.noneFound"));
       return;
@@ -42,7 +48,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
       showCandidates(
         await fetchJson<ParsedIngredients>("/api/ai/parse", {
           method: "POST",
-          body: JSON.stringify({ text }),
+          body: JSON.stringify(withAiConfig({ text })),
         }),
       );
     } catch (err) {
@@ -61,6 +67,7 @@ export function AddIngredients({ onAdd, announce }: Props) {
     try {
       const form = new FormData();
       form.append("image", await downscaleImage(file), "frigo.jpg");
+      appendAiConfig(form);
       showCandidates(await fetchJson<ParsedIngredients>("/api/ai/recognize", { method: "POST", body: form }));
     } catch (err) {
       setError((err as Error).message);

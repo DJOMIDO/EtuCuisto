@@ -86,6 +86,7 @@
     "photo": "Photo",
     "analyzingPhoto": "Analyse de la photo…",
     "noneFound": "Je n'ai trouvé aucun aliment. Essaie de reformuler ou une autre photo.",
+    "outOfScope": "Je suis uniquement un assistant cuisine : je ne peux pas répondre à ça. Demande-moi plutôt de reconnaître tes ingrédients ou de proposer des recettes.",
     "found": "{count, plural, one {# ingrédient trouvé} other {# ingrédients trouvés}}, vérifie la liste avant d'ajouter.",
     "reviewTitle": "Vérifie avant d'ajouter",
     "reviewHint": "Décoche ce qui est faux, signale ce qui va périmer.",
@@ -332,7 +333,28 @@
       "dark": "Sombre"
     },
     "deleteAccount": "Supprimer mon compte",
-    "accountDeleted": "Ton compte et toutes tes données ont été supprimés."
+    "accountDeleted": "Ton compte et toutes tes données ont été supprimés.",
+    "provider": {
+      "title": "Fournisseur de modèle IA",
+      "intro": "Sans clé, tu utilises l'essai quotidien limité. Ajoute ta propre clé pour continuer sans limite : les requêtes sont envoyées directement au fournisseur choisi.",
+      "service": "Fournisseur",
+      "baseUrl": "URL de l'API",
+      "apiKey": "Clé API",
+      "getKey": "Créer une clé",
+      "customHint": "Point de terminaison compatible OpenAI.",
+      "clear": "Retirer la clé",
+      "model": "Modèle",
+      "loadModels": "Charger les modèles",
+      "loadingModels": "Chargement…",
+      "modelHint": "Charge la liste depuis ton compte ; la clé est vérifiée au passage.",
+      "modelsLoaded": "{count, plural, one {# modèle disponible} other {# modèles disponibles}}",
+      "noModels": "Aucun modèle trouvé. Vérifie la clé et l'URL.",
+      "save": "Enregistrer",
+      "saved": "Enregistré sur cet appareil",
+      "needKey": "Entre d'abord ta clé API.",
+      "needModel": "Choisis ou saisis un modèle.",
+      "needUrl": "Renseigne l'URL de l'API."
+    }
   },
   "deleteAccount": {
     "title": "Supprimer ton compte ?",
@@ -358,7 +380,7 @@
     "photoTooBig": "Photo trop lourde (5 Mo max).",
     "emptyFridge": "Ta cuisine est vide : ajoute des ingrédients.",
     "quotaGuest": "Limite d'essai atteinte pour aujourd'hui. Crée un compte depuis l'onglet Profil pour continuer.",
-    "quotaUser": "Tu as atteint la limite du jour. Reviens demain !",
+    "quotaUser": "Essai quotidien atteint. Ajoute ta propre clé dans Profil › Fournisseur de modèle IA pour continuer.",
     "refused": "La demande a été refusée par le modèle.",
     "incomplete": "Réponse incomplète du modèle, réessaie.",
     "busy": "Trop de demandes en ce moment, réessaie dans une minute.",

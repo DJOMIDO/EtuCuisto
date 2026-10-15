@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { z } from "zod";
+import type { AiConfig } from "../config";
 import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredRequest } from "../types";
 
 // Sonnet pour la photo et les recettes, Haiku pour une liste tapée au clavier.
@@ -12,15 +13,16 @@ const MODELS: Record<AiTask, string> = {
 };
 const EFFORT = { vision: "low", recipes: "medium" } as const;
 
-let client: Anthropic | undefined;
-
 export const anthropicProvider: AiProvider = {
-  async generate<T extends z.ZodType>(req: StructuredRequest<T>) {
-    client ??= new Anthropic(); // lit ANTHROPIC_API_KEY
+  async generate<T extends z.ZodType>(req: StructuredRequest<T>, cfg?: AiConfig) {
+    const apiKey = cfg?.apiKey || process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) throw AI_ERRORS.misconfigured();
+    const client = new Anthropic({ apiKey }); // instancié par appel (BYOK : la clé varie)
+    const model = (task: AiTask) => cfg?.model || MODELS[task];
     try {
       if (req.task === "textParse") {
         const response = await client.messages.parse({
-          model: MODELS.textParse,
+          model: model("textParse"),
           max_tokens: 4000,
           system: req.system,
           messages: [{ role: "user", content: req.text }],
@@ -39,7 +41,7 @@ export const anthropicProvider: AiProvider = {
       content.push({ type: "text", text: req.text });
 
       const response = await client.beta.messages.parse({
-        model: MODELS[req.task],
+        model: model(req.task),
         max_tokens: 16000,
         system: req.system,
         messages: [{ role: "user", content }],

@@ -43,7 +43,7 @@ export function mockParse(text: string): ParsedIngredients {
       };
     })
     .filter((i) => i.name);
-  return { items };
+  return { items, outOfScope: false };
 }
 
 // Devine la famille à partir des exemples de chaque catégorie (« œufs » → « œuf »).
@@ -58,6 +58,7 @@ function guessCategory(name: string): CategoryId {
 
 export function mockRecognize(): ParsedIngredients {
   return {
+    outOfScope: false,
     items: [
       { name: "œuf", quantity: 4, unit: "piece", category: "laitier", storage: "frigo", expiresSoon: false },
       { name: "courgette", quantity: 1, unit: "piece", category: "legume", storage: "frigo", expiresSoon: true },

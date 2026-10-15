@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getDb, kitchenProfiles, pantryItems } from "@/db";
 import { generateStructured } from "@/lib/ai";
+import { AiConfigSchema } from "@/lib/ai/config";
 import { mockRecipes } from "@/lib/ai/mock";
 import { recipesSystem, recipesUserPrompt } from "@/lib/ai/prompts";
 import {
@@ -24,6 +25,7 @@ const Body = z.object({
   maxMinutes: z.number().int().min(5).max(120).default(20),
   pantry: PantryForPrompt.max(100).optional(),
   kitchen: KitchenProfile.optional(),
+  ai: AiConfigSchema.optional(),
 });
 
 export async function POST(request: Request) {
@@ -57,18 +59,24 @@ export async function POST(request: Request) {
     if (pantry.length === 0) return jsonError("emptyFridge", 400);
 
     const language = AI_LANGUAGE[await getRequestLocale()];
-    const quota = await consumeAiQuota(request, userId);
-    if (!quota.allowed) return quotaExceeded(quota.isGuest);
+    // Clé perso réservée aux comptes connectés : un invité reste sur l'essai quota.
+    const ai = userId ? body.data.ai : undefined;
+    // Clé perso = l'utilisateur paie : on ne consomme pas le quota d'essai.
+    const quota = ai?.apiKey ? null : await consumeAiQuota(request, userId);
+    if (quota && !quota.allowed) return quotaExceeded(quota.isGuest);
 
-    const result = await withRefund(quota, () =>
-      generateStructured({
-        task: "recipes",
-        system: recipesSystem(language),
-        text: recipesUserPrompt(pantry, kitchen, body.data.maxMinutes),
-        schema: Recommendations,
-        mock: () => mockRecipes(pantry),
-      }),
-    );
+    const call = () =>
+      generateStructured(
+        {
+          task: "recipes",
+          system: recipesSystem(language),
+          text: recipesUserPrompt(pantry, kitchen, body.data.maxMinutes),
+          schema: Recommendations,
+          mock: () => mockRecipes(pantry),
+        },
+        ai,
+      );
+    const result = quota ? await withRefund(quota, call) : await call();
 
     // Ne garder que des ids qui existent vraiment dans le frigo.
     const ids = new Set(pantry.map((p) => p.id));
