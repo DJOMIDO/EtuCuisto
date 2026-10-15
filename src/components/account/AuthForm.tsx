@@ -88,6 +88,17 @@ function useCooldown() {
   return [left, () => setLeft(RESEND_COOLDOWN_S)] as const;
 }
 
+/**
+ * Demande le code de vérification à Neon Auth. Les projets réglés sur
+ * « send_verification_email_on_sign_up: false » (le cas en local) n'envoient rien
+ * à l'inscription ni à la connexion : on déclenche l'envoi nous-mêmes avant
+ * d'afficher l'étape « code ». L'échec d'envoi n'est pas bloquant — le bouton
+ * « renvoyer le code » de l'étape suivante permet de réessayer.
+ */
+async function requestVerificationCode(email: string) {
+  await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" }).catch(() => {});
+}
+
 /** Connexion après vérification ou réinitialisation ; demande la vérification si l'e-mail ne l'est pas. */
 async function signInOrVerify(email: string, password: string, onStepChange: Props["onStepChange"]) {
   let error: unknown;
@@ -98,7 +109,7 @@ async function signInOrVerify(email: string, password: string, onStepChange: Pro
   }
   if (isEmailNotVerified(error)) {
     // Neon Auth exige la vérification avant la connexion : nouveau code, puis l'étape « code ».
-    await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" }).catch(() => {});
+    await requestVerificationCode(email);
     onStepChange({ kind: "verify", email, password });
     return false;
   }
@@ -174,8 +185,11 @@ function Credentials({ mode, onStepChange, onDone }: CredentialsProps) {
       }
       setPending(false);
       if (error) return showError(error);
-      // Pas de session tant que l'e-mail n'est pas vérifié : on demande le code reçu.
-      if (!data?.token) return onStepChange({ kind: "verify", email, password });
+      // Pas de session tant que l'e-mail n'est pas vérifié : on envoie le code puis on le demande.
+      if (!data?.token) {
+        await requestVerificationCode(email);
+        return onStepChange({ kind: "verify", email, password });
+      }
       return onDone();
     }
 
