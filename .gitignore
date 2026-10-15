@@ -46,3 +46,7 @@ next-env.d.ts
 
 # netlify
 .netlify
+
+# certificats de dev (auto-signés, régénérés par scripts/dev-cert.sh)
+certificates
+.cert
