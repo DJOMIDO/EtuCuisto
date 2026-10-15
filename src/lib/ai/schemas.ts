@@ -151,7 +151,9 @@ export const Recipe = z.object({
   summary: z.string().describe("Une phrase qui donne envie, ton étudiant et simple"),
   minutes: z.number().int().describe("Temps total, préparation + cuisson"),
   servings: z.number().int(),
-  tools: z.array(z.string()).describe("Uniquement des ustensiles que l'utilisateur possède"),
+  tools: z
+    .array(z.string())
+    .describe("Identifiants des ustensiles recopiés tels quels depuis la liste des ustensiles disponibles (entre crochets), jamais traduits"),
   ingredients: z.array(
     z.object({
       name: z.string(),

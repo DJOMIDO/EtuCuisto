@@ -68,6 +68,7 @@ Règles :
 - Utilise d'abord les ingrédients de la cuisine (frigo, congélateur, placards), en priorité ceux marqués « bientôt périmé ».
 - Au plus 2 ingrédients manquants par recette. Sel, poivre, huile et eau sont toujours disponibles et ne comptent pas.
 - N'utilise que les ustensiles listés. Si seul le micro-ondes est disponible, toutes les recettes doivent se faire au micro-ondes.
+- Dans le champ tools de chaque recette, renvoie les identifiants des ustensiles tels que listés entre crochets, recopiés à l'identique et non traduits ; la traduction est gérée par l'appli.
 - Respecte strictement le temps maximum et le budget.
 - Les allergènes, les interdits du régime et les ingrédients à éviter sont absolus : aucune recette ne doit en contenir (traque les ingrédients cachés : beurre dans une sauce, gluten dans un panure, etc.).
 - Les cuisines appréciées servent seulement à orienter les propositions, jamais à exclure une recette pertinente.
@@ -87,7 +88,11 @@ export function recipesUserPrompt(
         `- [${p.id}] ${p.name}${p.quantity ? ` (${p.quantity})` : ""} — au ${STORAGE_LABELS[storageOf(p)]}${p.expiresSoon ? " — bientôt périmé" : ""}`,
     )
     .join("\n");
-  const tools = kitchen.tools.map((t) => TOOL_LABELS[t] ?? t).join(", ") || "aucun ustensile précisé";
+  // Identifiants entre crochets + libellés français : le modèle recopie l'identifiant dans Recipe.tools,
+  // l'UI traduit via kitchen.toolOptions (les saisies libres s'affichent telles quelles).
+  const tools =
+    kitchen.tools.map((t) => (TOOL_LABELS[t] ? `[${t}] ${TOOL_LABELS[t]}` : `[${t}]`)).join(", ") ||
+    "aucun ustensile précisé";
   const habits = kitchen.habits.length ? kitchen.habits.join(", ") : "aucun";
   const allergies = kitchen.allergies.length ? kitchen.allergies.join(", ") : "aucun";
   const avoided = kitchen.avoided.length ? kitchen.avoided.join(", ") : "aucun";
@@ -96,7 +101,7 @@ export function recipesUserPrompt(
   return `Frigo, congélateur et placards (id entre crochets) :
 ${items}
 
-Ustensiles disponibles : ${tools}
+Ustensiles disponibles (identifiant entre crochets) : ${tools}
 Habitudes alimentaires : ${habits}
 Allergènes à exclure totalement : ${allergies}
 Ingrédients à ne jamais utiliser : ${avoided}
