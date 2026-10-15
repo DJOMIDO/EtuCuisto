@@ -92,8 +92,8 @@
     "maxTime": "最長時間",
     "minutes": "{count} 分鐘",
     "moreThanHour": "超過 1 小時",
-    "kitchenSummary": "{tools} · 預算{budget} · ",
-    "noTools": "沒有廚具",
+    "kitchenSummary": "{summary} · ",
+    "kitchenCount": "{label}：{count}",
     "notConfigured": "還沒設定你的廚具和偏好 · ",
     "edit": "修改",
     "configure": "去設定",
@@ -189,11 +189,6 @@
       "mixeur": "果汁機"
     },
     "budgetOptions": {
-      "tres-serre": "非常緊",
-      "serre": "有點緊",
-      "normal": "正常"
-    },
-    "budgetShort": {
       "tres-serre": "非常緊",
       "serre": "有點緊",
       "normal": "正常"

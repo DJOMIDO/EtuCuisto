@@ -2,7 +2,7 @@
 
 import { ChefHat, Refrigerator, Settings2 } from "lucide-react";
 import Link from "next/link";
-import { useFormatter, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
 import { BUDGET_IDS, type KitchenProfile, type Recipe, type Recommendations } from "@/lib/ai/schemas";
 import { fetchJson } from "@/lib/client/fetch-json";
@@ -40,7 +40,6 @@ export function RecipesPage() {
   const ids = useId();
   const pantry = usePantry();
   const t = useTranslations();
-  const format = useFormatter();
   const { kitchen, configured, loaded: kitchenLoaded, isGuest, save: saveKitchen } = useKitchen();
   // "first" : réglages demandés avant la toute première recherche.
   const [kitchenDialog, setKitchenDialog] = useState<null | "edit" | "first">(null);
@@ -145,13 +144,17 @@ export function RecipesPage() {
     }
   }
 
-  // Séparateur selon la langue : « , » en français, « 、 » en chinois.
-  const toolLabel = (tool: string) => {
-    const key = `kitchen.toolOptions.${tool}` as unknown as Parameters<typeof t>[0];
-    return t.has(key) ? t(key) : tool;
-  };
-  const tools = format.list(kitchen.tools.map(toolLabel), { type: "conjunction" });
-  const budget = t(`kitchen.budgetShort.${kitchen.budget}`);
+  // Résumé dynamique : uniquement les réglages renseignés, chacun avec son nombre.
+  const summary = [
+    { label: t("kitchen.tools"), count: kitchen.tools.length },
+    { label: t("kitchen.allergens"), count: kitchen.allergies.length },
+    { label: t("kitchen.habits"), count: kitchen.habits.length },
+    { label: t("kitchen.avoided"), count: kitchen.avoided.length },
+    { label: t("kitchen.cuisines"), count: kitchen.cuisines.length },
+  ]
+    .filter((group) => group.count > 0)
+    .map((group) => t("recipes.kitchenCount", group))
+    .join(" · ");
   const empty = pantry.loaded && pantry.items.length === 0;
 
   return (
@@ -213,7 +216,7 @@ export function RecipesPage() {
             <Settings2 aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
             <span>
               {configured
-                ? t("recipes.kitchenSummary", { tools: tools || t("recipes.noTools"), budget })
+                ? t("recipes.kitchenSummary", { summary })
                 : t("recipes.notConfigured")}
               <button
                 type="button"
