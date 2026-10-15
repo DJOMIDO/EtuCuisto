@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import type { Recipe } from "@/lib/ai/schemas";
 import { authClient } from "@/lib/auth/client";
 import { fetchJson } from "@/lib/client/fetch-json";
-import { usePantry } from "@/lib/client/use-pantry";
+import { usePantry, type Consumption } from "@/lib/client/use-pantry";
 import { CookedDialog } from "./CookedDialog";
 import { RecipeCard } from "./RecipeCard";
 import { button, choiceChip, PageTitle } from "../ui";
@@ -80,13 +80,13 @@ export function FavoritesPage() {
     );
   };
 
-  function confirmCooked(usedIds: string[]) {
+  function confirmCooked(consumptions: Consumption[]) {
     const row = cooking!;
     setCooking(null);
     run(
       row.id,
       async () => {
-        if (usedIds.length) await pantry.consume(usedIds);
+        if (consumptions.length) await pantry.consume(consumptions);
         const d = await fetchJson<{ recipe: SavedRecipe }>(`/api/recipes/${row.id}`, {
           method: "PATCH",
           body: JSON.stringify({ cooked: true }),

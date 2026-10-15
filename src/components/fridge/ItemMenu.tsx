@@ -39,7 +39,13 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory, o
         <div className="m-3 flex flex-col gap-1 rounded-3xl bg-surface p-3 shadow-card">
           <p id={`${id}-title`} className="px-3 pb-1 pt-2 text-lg font-extrabold">
             {item.name}
-            {item.quantity && <span className="font-semibold text-muted"> · {item.quantity}</span>}
+            {item.quantity != null && (
+              <span className="font-semibold text-muted">
+                {" "}
+                · {item.quantity}
+                {item.unit ? ` ${t(`units.${item.unit}`, { count: item.quantity })}` : ""}
+              </span>
+            )}
           </p>
           <button
             type="button"

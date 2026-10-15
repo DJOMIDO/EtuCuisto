@@ -43,6 +43,23 @@
     "congelateur": "冷冻",
     "placard": "常温"
   },
+  "units": {
+    "piece": "个",
+    "tranche": "片",
+    "gousse": "瓣",
+    "pincee": "撮",
+    "cuillere": "汤匙",
+    "cuillere-cafe": "茶匙",
+    "tasse": "杯",
+    "gramme": "克",
+    "kilogramme": "千克",
+    "millilitre": "毫升",
+    "litre": "升",
+    "boite": "罐",
+    "bouteille": "瓶",
+    "sachet": "袋",
+    "paquet": "包"
+  },
   "fridge": {
     "title": "我的厨房",
     "subtitle": "美味，从手边的食材开始。",
@@ -73,6 +90,9 @@
     "reviewTitle": "添加前检查一下",
     "reviewHint": "取消勾选识别错的，标出快过期的。",
     "expiringToggle": "尽快用掉：{name}",
+    "quantity": "数量",
+    "unit": "单位",
+    "noUnit": "无",
     "addCount": "添加 {count, plural, other {# 种食材}}",
     "adding": "添加中…",
     "added": "已添加 {count, plural, other {# 种食材}}。"
@@ -130,7 +150,8 @@
   "cookedDialog": {
     "title": "做得好！要拿掉哪些食材？",
     "gone": "这些食材已经从厨房移除了。",
-    "hint": "还有剩的就取消勾选。"
+    "hint": "没用到就取消勾选，或调低数量以保留剩下的。",
+    "usedLabel": "用掉数量：{name}"
   },
   "favorites": {
     "title": "我的菜谱",

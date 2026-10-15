@@ -7,7 +7,7 @@ import { useEffect, useId, useState } from "react";
 import { BUDGET_IDS, type KitchenProfile, type Recipe, type Recommendations } from "@/lib/ai/schemas";
 import { fetchJson } from "@/lib/client/fetch-json";
 import { useKitchen } from "@/lib/client/use-kitchen";
-import { usePantry } from "@/lib/client/use-pantry";
+import { usePantry, type Consumption } from "@/lib/client/use-pantry";
 import { KitchenDialog, ServingsStepper } from "../kitchen/KitchenDialog";
 import { CookedDialog } from "./CookedDialog";
 import { RecipeCard, type SavedState } from "./RecipeCard";
@@ -127,16 +127,16 @@ export function RecipesPage() {
     }
   }
 
-  async function confirmCooked(usedIds: string[]) {
+  async function confirmCooked(consumptions: Consumption[]) {
     const index = cookingIndex!;
     setCookingIndex(null);
     setBusyIndex(index);
     setError(null);
     try {
-      if (usedIds.length) await pantry.consume(usedIds);
+      if (consumptions.length) await pantry.consume(consumptions);
       const id = isGuest ? undefined : await persist(index, { cooked: true });
       patchSaved(index, { id, cooked: true });
-      setStatus(usedIds.length ? t("recipes.enjoyRemoved", { count: usedIds.length }) : t("recipes.enjoy"));
+      setStatus(consumptions.length ? t("recipes.enjoyRemoved", { count: consumptions.length }) : t("recipes.enjoy"));
     } catch (e) {
       setError((e as Error).message);
     } finally {

@@ -3,7 +3,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { aiUsage, getDb } from "@/db";
 
 // Appels IA autorisés par jour (parse + photo + recettes confondus).
-const DAILY_LIMIT = { user: 30, guest: 3 };
+const DAILY_LIMIT = { user: 30, guest: 10 };
 
 /** Incrémente le compteur du jour et indique si l'appel est autorisé. */
 export async function consumeAiQuota(request: Request, userId: string | null) {

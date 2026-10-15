@@ -13,6 +13,7 @@ import {
 } from "@/lib/ai/schemas";
 import { handleRouteError, jsonError, quotaExceeded, readJson } from "@/lib/api";
 import { normalizeStorage } from "@/lib/storage";
+import { normalizeUnit } from "@/lib/units";
 import { getUserId } from "@/lib/auth/server";
 import { consumeAiQuota, withRefund } from "@/lib/quota";
 import { AI_LANGUAGE } from "@/i18n/locales";
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
         id: i.id,
         name: i.name,
         quantity: i.quantity,
+        unit: normalizeUnit(i.unit),
         category: i.category as PantryForPrompt[number]["category"],
         // Valeur brute normalisée : les lignes d'avant la migration 0005 n'ont pas de zone.
         storage: normalizeStorage(i.storage),

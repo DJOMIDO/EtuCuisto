@@ -43,6 +43,23 @@
     "congelateur": "Congélateur",
     "placard": "Placard"
   },
+  "units": {
+    "piece": "{count, plural, one {pièce} other {pièces}}",
+    "tranche": "{count, plural, one {tranche} other {tranches}}",
+    "gousse": "{count, plural, one {gousse} other {gousses}}",
+    "pincee": "{count, plural, one {pincée} other {pincées}}",
+    "cuillere": "c. à soupe",
+    "cuillere-cafe": "c. à café",
+    "tasse": "{count, plural, one {tasse} other {tasses}}",
+    "gramme": "g",
+    "kilogramme": "kg",
+    "millilitre": "ml",
+    "litre": "l",
+    "boite": "{count, plural, one {boîte} other {boîtes}}",
+    "bouteille": "{count, plural, one {bouteille} other {bouteilles}}",
+    "sachet": "{count, plural, one {sachet} other {sachets}}",
+    "paquet": "{count, plural, one {paquet} other {paquets}}"
+  },
   "fridge": {
     "title": "Ma cuisine",
     "subtitle": "Ce que tu as sous la main. Les recettes partiront de là.",
@@ -73,6 +90,9 @@
     "reviewTitle": "Vérifie avant d'ajouter",
     "reviewHint": "Décoche ce qui est faux, signale ce qui va périmer.",
     "expiringToggle": "À utiliser vite : {name}",
+    "quantity": "Quantité",
+    "unit": "Unité",
+    "noUnit": "Aucune",
     "addCount": "Ajouter {count, plural, one {# ingrédient} other {# ingrédients}}",
     "adding": "Ajout…",
     "added": "{count, plural, one {# ingrédient ajouté} other {# ingrédients ajoutés}}."
@@ -130,7 +150,8 @@
   "cookedDialog": {
     "title": "Bravo ! Qu'est-ce qu'on retire ?",
     "gone": "Ces ingrédients ne sont plus dans ta cuisine.",
-    "hint": "Décoche ce qu'il te reste encore."
+    "hint": "Décoche ce qui n'a pas servi, ou baisse la quantité pour garder le reste.",
+    "usedLabel": "Quantité utilisée : {name}"
   },
   "favorites": {
     "title": "Mes recettes",

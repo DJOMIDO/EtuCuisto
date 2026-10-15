@@ -1,4 +1,5 @@
 import { CATEGORIES } from "@/lib/categories";
+import { UNIT_IDS, UNIT_LABELS_FR } from "@/lib/units";
 import { storageOf, type StorageId } from "@/lib/storage";
 import type { KitchenProfile, PantryForPrompt } from "./schemas";
 
@@ -16,6 +17,11 @@ const STORAGE_HELP = `Zones de rangement (storage) :
 - frigo : produits frais et périssables (viande et poisson frais, produits laitiers, légumes frais, restes, condiments entamés).
 - En cas de doute, renvoie null. Un aliment peut très bien ne jamais aller au frigo.`;
 
+// Quantité scindée : un nombre (quantity) + une unité (unit) parmi ces identifiants.
+const QUANTITY_HELP = `Quantité : renvoie « quantity » en nombre seul (ex. 2, 0.5, 100 — sans unité ni texte) et « unit » parmi ces identifiants, sinon null :
+${UNIT_IDS.map((u) => `- ${u} (${UNIT_LABELS_FR[u]})`).join("\n")}
+Exemple : « 3 œufs » → quantity 3, unit piece ; « 200 g de pâtes » → quantity 200, unit gramme ; « un reste de riz » → quantity null, unit null.`;
+
 // `language` : langue de sortie (voir AI_LANGUAGE dans src/i18n/locales.ts).
 // Les consignes restent en français ; seul le texte produit change de langue.
 
@@ -24,16 +30,18 @@ export const parseTextSystem = (language: string) => `Tu transformes ce qu'un é
 - Garde la quantité si elle est donnée, sinon null.
 - expiresSoon = true seulement si l'utilisateur indique que ça va bientôt périmer ou que c'est abîmé.
 - Ignore ce qui n'est pas un aliment. Si le texte est vide ou hors sujet, renvoie une liste vide.
+${QUANTITY_HELP}
 ${CATEGORIES_HELP}
 ${STORAGE_HELP}`;
 
 export const recognizeSystem = (language: string) => `Tu identifies les aliments visibles sur une photo de frigo, de placard ou de plan de travail d'un étudiant.
 - Liste seulement ce que tu vois avec une confiance raisonnable ; n'invente pas ce qui est caché.
 - Pour un emballage, nomme l'aliment (« yaourt nature », pas la marque).
-- Estime la quantité si c'est évident (« 3 », « 1/2 bouteille »), sinon null.
+- Estime la quantité si c'est évident, sinon null.
 - expiresSoon = true si l'aliment a l'air abîmé, flétri ou entamé depuis longtemps.
 - Si l'image ne montre pas de nourriture, renvoie une liste vide.
 - Écris les noms des aliments en ${language}.
+${QUANTITY_HELP}
 ${CATEGORIES_HELP}
 ${STORAGE_HELP}`;
 
@@ -85,7 +93,7 @@ export function recipesUserPrompt(
   const items = pantry
     .map(
       (p) =>
-        `- [${p.id}] ${p.name}${p.quantity ? ` (${p.quantity})` : ""} — au ${STORAGE_LABELS[storageOf(p)]}${p.expiresSoon ? " — bientôt périmé" : ""}`,
+        `- [${p.id}] ${p.name}${p.quantity ? ` (${p.quantity}${p.unit ? ` ${UNIT_LABELS_FR[p.unit]}` : ""})` : ""} — au ${STORAGE_LABELS[storageOf(p)]}${p.expiresSoon ? " — bientôt périmé" : ""}`,
     )
     .join("\n");
   // Identifiants entre crochets + libellés français : le modèle recopie l'identifiant dans Recipe.tools,
