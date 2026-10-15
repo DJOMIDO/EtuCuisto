@@ -344,6 +344,7 @@
       "customHint": "Point de terminaison compatible OpenAI.",
       "clear": "Retirer la clé",
       "model": "Modèle",
+      "modelList": "Modèles disponibles",
       "loadModels": "Charger les modèles",
       "loadingModels": "Chargement…",
       "modelHint": "Charge la liste depuis ton compte ; la clé est vérifiée au passage.",

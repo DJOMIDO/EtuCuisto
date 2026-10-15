@@ -344,6 +344,7 @@
       "customHint": "相容 OpenAI 的介面網址。",
       "clear": "移除金鑰",
       "model": "模型",
+      "modelList": "可用模型",
       "loadModels": "載入模型",
       "loadingModels": "載入中…",
       "modelHint": "從你的帳號載入清單；同時會檢驗金鑰。",
