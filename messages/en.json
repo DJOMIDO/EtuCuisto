@@ -29,9 +29,13 @@
     "viande": "Meat",
     "poisson": "Fish & seafood",
     "laitier": "Eggs & dairy",
-    "feculent": "Starches & bread",
+    "cereal": "Grains & starches",
+    "legumineuse": "Legumes",
     "condiment": "Sauces & condiments",
     "epice": "Spices & aromatics",
+    "boisson": "Drinks",
+    "sucrerie": "Sweets & snacks",
+    "restes": "Leftovers & ready meals",
     "autre": "Other"
   },
   "fridge": {
