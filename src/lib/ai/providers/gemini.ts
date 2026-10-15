@@ -7,8 +7,8 @@ import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredReques
 // Modèles du niveau gratuit (voir ai.google.dev/gemini-api/docs/pricing).
 // Les « flash-lite » répondent en 2-4 s et saturent moins que les « flash » en gratuit.
 // En cas de surcharge (503), de quota (429) ou de lenteur sur le premier, on bascule sur le second.
-const DEFAULT_MODEL = "gemini-3.5-flash-lite";
-const FALLBACK_MODEL = "gemini-3.1-flash-lite";
+const DEFAULT_MODEL = "gemini-3.1-flash-lite";
+const FALLBACK_MODEL = "gemini-3.5-flash-lite";
 const THINKING: Record<AiTask, "minimal" | "low"> = {
   textParse: "minimal",
   vision: "low",
