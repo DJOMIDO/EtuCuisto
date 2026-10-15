@@ -22,11 +22,15 @@ export async function POST(request: Request) {
   }
   if (image.size > MAX_BYTES) return jsonError("photoTooBig", 413);
 
+  // Le catch doit savoir si l'appel partait sur une clé BYOK pour traduire « misconfigured ».
+  let byok = false;
+
   try {
     const language = AI_LANGUAGE[await getRequestLocale()];
     const userId = await getUserId();
     // Config BYOK (champ JSON « ai ») réservée aux comptes connectés ; un invité reste sur l'essai.
     const ai = userId ? parseAiField(form?.get("ai")) : undefined;
+    byok = Boolean(ai);
     const quota = ai ? null : await consumeAiQuota(request, userId);
     if (quota && !quota.allowed) return quotaExceeded(quota.isGuest);
 
@@ -49,7 +53,7 @@ export async function POST(request: Request) {
     const result = quota ? await withRefund(quota, call) : await call();
     return NextResponse.json(result);
   } catch (error) {
-    return handleRouteError(error);
+    return handleRouteError(error, { byok });
   }
 }
 

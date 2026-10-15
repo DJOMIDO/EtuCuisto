@@ -387,6 +387,7 @@
     "busy": "Trop de demandes en ce moment, réessaie dans une minute.",
     "unavailable": "Le service de recettes est indisponible, réessaie.",
     "misconfigured": "Service indisponible.",
+    "invalidApiKey": "Ta clé d'API a été refusée. Vérifie-la dans Profil › Fournisseur de modèle IA, ou retire-la pour rester sur l'essai.",
     "deleteFailed": "La suppression du compte a échoué, réessaie."
   }
 }

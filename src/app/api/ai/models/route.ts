@@ -30,7 +30,9 @@ export async function POST(request: Request) {
 
     if (!res) return jsonError("unavailable", 502);
     if (!res.ok) {
-      if (res.status === 401 || res.status === 403) return jsonError("misconfigured", 400);
+      // Ce endpoint ne teste que des clés BYOK : 401/403 = la clé de l'utilisateur est
+      // refusée, jamais un souci d'environnement serveur. Le message s'affiche tel quel.
+      if (res.status === 401 || res.status === 403) return jsonError("invalidApiKey", 400);
       return jsonError("unavailable", 502);
     }
     const models = parseModelIds(await res.json().catch(() => undefined));
