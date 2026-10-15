@@ -86,6 +86,7 @@
     "photo": "Photo",
     "analyzingPhoto": "Analyzing the photo…",
     "noneFound": "I couldn't find any food. Try rephrasing or another photo.",
+    "outOfScope": "I'm only a kitchen assistant — I can't answer that. Ask me to recognise your ingredients or suggest recipes instead.",
     "found": "{count, plural, one {# ingredient found} other {# ingredients found}}, check the list before adding.",
     "reviewTitle": "Check before adding",
     "reviewHint": "Untick anything wrong, flag what's about to go off.",
@@ -332,7 +333,28 @@
       "dark": "Dark"
     },
     "deleteAccount": "Delete my account",
-    "accountDeleted": "Your account and all your data have been deleted."
+    "accountDeleted": "Your account and all your data have been deleted.",
+    "provider": {
+      "title": "AI model provider",
+      "intro": "Without a key you use the limited daily trial. Add your own key to keep going without limits: requests go straight to the provider you choose.",
+      "service": "Provider",
+      "baseUrl": "API URL",
+      "apiKey": "API key",
+      "getKey": "Create a key",
+      "customHint": "OpenAI-compatible endpoint.",
+      "clear": "Remove key",
+      "model": "Model",
+      "loadModels": "Load models",
+      "loadingModels": "Loading…",
+      "modelHint": "Loads the list from your account; the key is validated along the way.",
+      "modelsLoaded": "{count, plural, one {# model available} other {# models available}}",
+      "noModels": "No models found. Check the key and URL.",
+      "save": "Save",
+      "saved": "Saved on this device",
+      "needKey": "Enter your API key first.",
+      "needModel": "Pick or type a model.",
+      "needUrl": "Fill in the API URL."
+    }
   },
   "deleteAccount": {
     "title": "Delete your account?",
@@ -358,7 +380,7 @@
     "photoTooBig": "Photo too large (5 MB max).",
     "emptyFridge": "Your kitchen is empty: add some ingredients.",
     "quotaGuest": "You've reached today's trial limit. Create an account from the Profile tab to continue.",
-    "quotaUser": "You've reached today's limit. Come back tomorrow!",
+    "quotaUser": "You've reached today's trial limit. Add your own key in Profile › AI model provider to continue.",
     "refused": "The model declined this request.",
     "incomplete": "Incomplete answer from the model, please try again.",
     "busy": "Too many requests right now, try again in a minute.",

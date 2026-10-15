@@ -1,5 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
+import type { AiConfig } from "../config";
+import { safeJson, toJsonSchema } from "../json-schema";
 import { AI_ERRORS, AiError, type AiProvider, type AiTask, type StructuredRequest } from "../types";
 
 // Modèles du niveau gratuit (voir ai.google.dev/gemini-api/docs/pricing).
@@ -20,18 +22,21 @@ const TOTAL_BUDGET_MS = 24_000;
 const FIRST_ATTEMPT_MS: Record<AiTask, number> = { textParse: 10_000, vision: 10_000, recipes: 16_000 };
 const MIN_ATTEMPT_MS = 4_000;
 
-let client: GoogleGenAI | undefined;
-
 export const geminiProvider: AiProvider = {
-  async generate<T extends z.ZodType>(req: StructuredRequest<T>) {
-    const models = [...new Set([process.env.GEMINI_MODEL || DEFAULT_MODEL, FALLBACK_MODEL])];
+  async generate<T extends z.ZodType>(req: StructuredRequest<T>, cfg?: AiConfig) {
+    const apiKey = cfg?.apiKey || process.env.GEMINI_API_KEY;
+    if (!apiKey) throw AI_ERRORS.misconfigured();
+    // Clé perso : on tient le modèle choisi. Sinon bascule flash-lite → repli.
+    const models = cfg?.model
+      ? [cfg.model]
+      : [...new Set([process.env.GEMINI_MODEL || DEFAULT_MODEL, FALLBACK_MODEL])];
     const deadline = Date.now() + TOTAL_BUDGET_MS;
     for (const [index, model] of models.entries()) {
       const remaining = deadline - Date.now();
       const last = index === models.length - 1 || remaining - FIRST_ATTEMPT_MS[req.task] < MIN_ATTEMPT_MS;
       const timeout = last ? remaining : FIRST_ATTEMPT_MS[req.task];
       try {
-        return await generateOnce(model, req, timeout);
+        return await generateOnce(apiKey, model, req, timeout);
       } catch (error) {
         if (last || !isTransient(error)) throw toAiError(error);
         console.warn(`Gemini ${model} indisponible, bascule sur ${models[index + 1]}:`, (error as Error).message);
@@ -42,11 +47,13 @@ export const geminiProvider: AiProvider = {
 };
 
 async function generateOnce<T extends z.ZodType>(
+  apiKey: string,
   model: string,
   req: StructuredRequest<T>,
   timeoutMs: number,
 ): Promise<z.infer<T>> {
-  client ??= new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  // Instancié par appel : la clé peut changer d'une requête à l'autre (BYOK).
+  const client = new GoogleGenAI({ apiKey });
   const interaction = await client.interactions.create(
     {
       model,
@@ -61,7 +68,7 @@ async function generateOnce<T extends z.ZodType>(
       response_format: {
         type: "text",
         mime_type: "application/json",
-        schema: toGeminiSchema(req.schema),
+        schema: toJsonSchema(req.schema),
       },
     },
     // Pas de nouvelle tentative dans le SDK : sous Next.js, elle réutilise un corps de
@@ -86,43 +93,6 @@ function isTransient(error: unknown): boolean {
   if (error instanceof AiError) return false;
   const status = httpStatus(error);
   return status === undefined || status === 429 || status >= 500;
-}
-
-/**
- * JSON Schema compatible Gemini : sans `$schema`, `["x","null"]` → `anyOf`,
- * et sans les bornes ±MAX_SAFE_INTEGER que Zod ajoute à `z.int()`.
- */
-export function toGeminiSchema(schema: z.ZodType): unknown {
-  const json = z.toJSONSchema(schema) as Record<string, unknown>;
-  delete json.$schema;
-  return clean(json);
-}
-
-function clean(node: unknown): unknown {
-  if (Array.isArray(node)) return node.map(clean);
-  if (!node || typeof node !== "object") return node;
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(node)) {
-    if ((k === "minimum" || k === "maximum") && Math.abs(Number(v)) === Number.MAX_SAFE_INTEGER) continue;
-    out[k] = clean(v);
-  }
-  if (Array.isArray(out.type) && out.type.includes("null")) {
-    const { type, description, ...rest } = out;
-    const types = (type as string[]).filter((t) => t !== "null");
-    return {
-      ...(description ? { description } : {}),
-      anyOf: [...types.map((t) => ({ ...rest, type: t })), { type: "null" }],
-    };
-  }
-  return out;
-}
-
-function safeJson(text: string): unknown {
-  try {
-    return JSON.parse(text);
-  } catch {
-    return undefined;
-  }
 }
 
 function toAiError(error: unknown): Error {

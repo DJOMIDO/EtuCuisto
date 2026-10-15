@@ -86,6 +86,7 @@
     "photo": "拍照",
     "analyzingPhoto": "正在辨識照片…",
     "noneFound": "沒有找到食材。換個說法，或換一張照片試試。",
+    "outOfScope": "我只是廚房助手，無法回答這個問題。我可以幫你辨識食材或推薦食譜。",
     "found": "找到 {count, plural, other {# 種食材}}，加入前請確認一下。",
     "reviewTitle": "加入前確認一下",
     "reviewHint": "取消勾選辨識錯的，標出快過期的。",
@@ -332,7 +333,28 @@
       "dark": "深色"
     },
     "deleteAccount": "刪除我的帳號",
-    "accountDeleted": "你的帳號和所有資料已刪除。"
+    "accountDeleted": "你的帳號和所有資料已刪除。",
+    "provider": {
+      "title": "AI 模型供應商",
+      "intro": "未填寫金鑰時使用每日限量的試用。新增你自己的金鑰即可不受限地繼續使用：請求會直接發給你選擇的供應商。",
+      "service": "供應商",
+      "baseUrl": "API 網址",
+      "apiKey": "API 金鑰",
+      "getKey": "取得金鑰",
+      "customHint": "相容 OpenAI 的介面網址。",
+      "clear": "移除金鑰",
+      "model": "模型",
+      "loadModels": "載入模型",
+      "loadingModels": "載入中…",
+      "modelHint": "從你的帳號載入清單；同時會檢驗金鑰。",
+      "modelsLoaded": "{count} 個可用模型",
+      "noModels": "找不到模型。請檢查金鑰和網址。",
+      "save": "儲存",
+      "saved": "已儲存到此裝置",
+      "needKey": "請先輸入 API 金鑰。",
+      "needModel": "請選擇或輸入模型。",
+      "needUrl": "請填寫 API 網址。"
+    }
   },
   "deleteAccount": {
     "title": "刪除你的帳號？",
@@ -358,7 +380,7 @@
     "photoTooBig": "照片太大（最大 5 MB）。",
     "emptyFridge": "廚房是空的：請先加入食材。",
     "quotaGuest": "今天的試用次數已用完。在「我的」頁面建立帳號即可繼續使用。",
-    "quotaUser": "今天的次數已用完，明天再來吧！",
+    "quotaUser": "今天的試用次數已用完。在「我的 › AI 模型供應商」新增你自己的金鑰即可繼續使用。",
     "refused": "模型拒絕了這個請求。",
     "incomplete": "模型的回答不完整，請再試一次。",
     "busy": "現在請求太多了，請一分鐘後再試。",

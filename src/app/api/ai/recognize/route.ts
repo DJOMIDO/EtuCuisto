@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateStructured, IMAGE_MEDIA_TYPES, type ImageMediaType } from "@/lib/ai";
+import { AiConfigSchema } from "@/lib/ai/config";
 import { mockRecognize } from "@/lib/ai/mock";
 import { recognizeSystem } from "@/lib/ai/prompts";
 import { ParsedIngredients } from "@/lib/ai/schemas";
@@ -23,25 +24,41 @@ export async function POST(request: Request) {
 
   try {
     const language = AI_LANGUAGE[await getRequestLocale()];
-    const quota = await consumeAiQuota(request, await getUserId());
-    if (!quota.allowed) return quotaExceeded(quota.isGuest);
+    const userId = await getUserId();
+    // Config BYOK (champ JSON « ai ») réservée aux comptes connectés ; un invité reste sur l'essai.
+    const ai = userId ? parseAiField(form?.get("ai")) : undefined;
+    const quota = ai ? null : await consumeAiQuota(request, userId);
+    if (quota && !quota.allowed) return quotaExceeded(quota.isGuest);
 
     const base64 = Buffer.from(await image.arrayBuffer()).toString("base64");
-    const result = await withRefund(quota, () =>
-      generateStructured({
-        task: "vision",
-        system: recognizeSystem(language),
-        text: "Quels aliments vois-tu ?",
-        image: {
-          mediaType: image.type as ImageMediaType,
-          base64,
+    const call = () =>
+      generateStructured(
+        {
+          task: "vision",
+          system: recognizeSystem(language),
+          text: "Quels aliments vois-tu ?",
+          image: {
+            mediaType: image.type as ImageMediaType,
+            base64,
+          },
+          schema: ParsedIngredients,
+          mock: mockRecognize,
         },
-        schema: ParsedIngredients,
-        mock: mockRecognize,
-      }),
-    );
+        ai,
+      );
+    const result = quota ? await withRefund(quota, call) : await call();
     return NextResponse.json(result);
   } catch (error) {
     return handleRouteError(error);
+  }
+}
+
+/** Champ JSON « ai » du formulaire : config valide ou `undefined` (repli sur l'essai). */
+function parseAiField(value: FormDataEntryValue | null | undefined) {
+  if (typeof value !== "string" || !value) return undefined;
+  try {
+    return AiConfigSchema.safeParse(JSON.parse(value)).data ?? undefined;
+  } catch {
+    return undefined;
   }
 }

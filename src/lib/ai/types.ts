@@ -1,4 +1,5 @@
 import type { z } from "zod";
+import type { AiConfig } from "./config";
 
 export type AiTask = "textParse" | "vision" | "recipes";
 
@@ -16,7 +17,8 @@ export type StructuredRequest<T extends z.ZodType> = {
 };
 
 export type AiProvider = {
-  generate<T extends z.ZodType>(req: StructuredRequest<T>): Promise<z.infer<T>>;
+  /** `cfg` absent : repli sur la clé d'essai du serveur (variables d'environnement). */
+  generate<T extends z.ZodType>(req: StructuredRequest<T>, cfg?: AiConfig): Promise<z.infer<T>>;
 };
 
 export type AiErrorCode = "refused" | "incomplete" | "busy" | "unavailable" | "misconfigured";

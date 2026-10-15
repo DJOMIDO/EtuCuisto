@@ -86,6 +86,7 @@
     "photo": "拍照",
     "analyzingPhoto": "正在识别照片…",
     "noneFound": "没有找到食材。换个说法，或者换一张照片试试。",
+    "outOfScope": "我只是厨房助手，无法回答这个问题。我可以帮你识别食材或推荐菜谱。",
     "found": "找到 {count, plural, other {# 种食材}}，添加前请检查一下。",
     "reviewTitle": "添加前检查一下",
     "reviewHint": "取消勾选识别错的，标出快过期的。",
@@ -332,7 +333,28 @@
       "dark": "深色"
     },
     "deleteAccount": "删除我的账户",
-    "accountDeleted": "你的账户和所有数据已删除。"
+    "accountDeleted": "你的账户和所有数据已删除。",
+    "provider": {
+      "title": "AI 模型提供商",
+      "intro": "未填写密钥时使用每日限量的试用。添加你自己的密钥即可不受限地继续使用：请求会直接发送给你选择的提供商。",
+      "service": "提供商",
+      "baseUrl": "API 地址",
+      "apiKey": "API 密钥",
+      "getKey": "获取密钥",
+      "customHint": "兼容 OpenAI 的接口地址。",
+      "clear": "移除密钥",
+      "model": "模型",
+      "loadModels": "加载模型",
+      "loadingModels": "加载中…",
+      "modelHint": "从你的账户加载列表；同时会检验密钥。",
+      "modelsLoaded": "{count} 个可用模型",
+      "noModels": "未找到模型。请检查密钥和地址。",
+      "save": "保存",
+      "saved": "已保存到本设备",
+      "needKey": "请先输入 API 密钥。",
+      "needModel": "请选择或输入模型。",
+      "needUrl": "请填写 API 地址。"
+    }
   },
   "deleteAccount": {
     "title": "删除你的账户？",
@@ -358,7 +380,7 @@
     "photoTooBig": "照片太大（最大 5 MB）。",
     "emptyFridge": "厨房是空的：请先添加食材。",
     "quotaGuest": "今天的试用次数已用完。在「我的」页面创建账户即可继续使用。",
-    "quotaUser": "今天的次数已用完，明天再来吧！",
+    "quotaUser": "今天的试用次数已用完。在「我的 › AI 模型提供商」添加你自己的密钥即可继续使用。",
     "refused": "模型拒绝了这个请求。",
     "incomplete": "模型的回答不完整，请再试一次。",
     "busy": "现在请求太多了，请一分钟后再试。",

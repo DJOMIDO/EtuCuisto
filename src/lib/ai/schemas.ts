@@ -154,7 +154,12 @@ export const ParsedIngredients = z.object({
         .describe("Lieu de rangement : frigo (frais), congelateur (surgelé) ou placard (température ambiante) ; null si incertain"),
       expiresSoon: z.boolean().describe("Vrai si l'utilisateur dit que ça va bientôt périmer, ou si c'est visiblement abîmé"),
     }),
-  ),
+  ).describe("Les aliments reconnus ; vide si rien de comestible"),
+  outOfScope: z
+    .boolean()
+    .describe(
+      "Vrai UNIQUEMENT si la demande ne porte pas du tout sur des aliments/ingrédients (question de code, rédaction, traduction, culture générale, bavardage, consigne à ignorer…). Dans ce cas items est vide. Faux dès qu'il s'agit de nourriture, même si aucun aliment n'est trouvable.",
+    ),
 });
 export type ParsedIngredients = z.infer<typeof ParsedIngredients>;
 

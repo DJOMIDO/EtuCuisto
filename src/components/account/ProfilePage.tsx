@@ -10,6 +10,7 @@ import { button, card, PageTitle } from "../ui";
 import { AuthForm, type AuthStep } from "./AuthForm";
 import { DeleteAccountDialog } from "./DeleteAccountDialog";
 import { PreferencesSection } from "./PreferencesSection";
+import { ProviderSection } from "./ProviderSection";
 
 export function ProfilePage({ initialTheme }: { initialTheme: Theme }) {
   const t = useTranslations("profile");
@@ -58,6 +59,8 @@ export function ProfilePage({ initialTheme }: { initialTheme: Theme }) {
           </div>
 
           <PreferencesSection initialTheme={initialTheme} signedIn />
+
+          <ProviderSection />
 
           <button type="button" onClick={signOut} className={`${button.secondary} self-start`}>
             <LogOut aria-hidden="true" className="size-5" />
