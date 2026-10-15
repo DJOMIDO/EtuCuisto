@@ -29,9 +29,13 @@
     "viande": "肉類",
     "poisson": "魚類和海鮮",
     "laitier": "蛋類和乳製品",
-    "feculent": "主食和麵包",
+    "cereal": "糧食穀物",
+    "legumineuse": "豆類",
     "condiment": "醬料和調味料",
     "epice": "香料和香草",
+    "boisson": "酒水飲料",
+    "sucrerie": "零食甜點",
+    "restes": "剩菜剩飯",
     "autre": "其他"
   },
   "fridge": {

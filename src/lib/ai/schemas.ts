@@ -7,9 +7,13 @@ export const CATEGORY_IDS = [
   "legume",
   "fruit",
   "laitier",
-  "feculent",
+  "cereal",
+  "legumineuse",
   "condiment",
   "epice",
+  "boisson",
+  "sucrerie",
+  "restes",
   "autre",
 ] as const satisfies readonly CategoryId[];
 

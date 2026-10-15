@@ -1,4 +1,4 @@
-import { Apple, Beef, Carrot, Cookie, Droplet, Egg, Fish, Leaf, Wheat, type LucideIcon } from "lucide-react";
+import { Apple, Beef, Candy, Carrot, Cookie, CookingPot, CupSoda, Droplet, Egg, Fish, Leaf, Sprout, Wheat, type LucideIcon } from "lucide-react";
 import type { CategoryId } from "@/lib/categories";
 import { TONE, type Tone } from "./ui";
 
@@ -9,9 +9,13 @@ export const CATEGORY_STYLE: Record<CategoryId, { icon: LucideIcon; tone: Tone }
   viande: { icon: Beef, tone: "cherry" },
   poisson: { icon: Fish, tone: "lagoon" },
   laitier: { icon: Egg, tone: "sun" },
-  feculent: { icon: Wheat, tone: "sun" },
+  cereal: { icon: Wheat, tone: "sun" },
+  legumineuse: { icon: Sprout, tone: "herb" },
   condiment: { icon: Droplet, tone: "cherry" },
   epice: { icon: Leaf, tone: "herb" },
+  boisson: { icon: CupSoda, tone: "lagoon" },
+  sucrerie: { icon: Candy, tone: "cherry" },
+  restes: { icon: CookingPot, tone: "accent" },
   autre: { icon: Cookie, tone: "neutral" },
 }
 
@@ -23,7 +27,7 @@ type Props = {
 };
 
 export function CategoryIcon({ category, size = "md", onColor }: Props) {
-  const { icon: Icon, tone } = CATEGORY_STYLE[category];
+  const { icon: Icon, tone } = CATEGORY_STYLE[category] ?? CATEGORY_STYLE.autre;
   const colors = onColor ? `bg-surface ${TONE[tone].split(" ")[1]}` : TONE[tone];
   return (
     <span

@@ -4,7 +4,10 @@ import type { KitchenProfile, PantryForPrompt } from "./schemas";
 const CATEGORIES_HELP = `Catégories (id : exemples) :
 ${CATEGORIES.map((c) => `- ${c.id} : ${c.examples}`).join("\n")}
 Règles : un aliment en conserve va dans sa propre famille (thon en boîte → poisson, maïs en boîte → legume) ;
-ail, oignon, échalote et herbes fraîches vont dans epice ; les œufs vont dans laitier.`;
+ail, oignon, échalote et herbes fraîches vont dans epice ; les œufs vont dans laitier ;
+les légumineuses (lentilles, pois chiches, haricots, tofu) vont dans legumineuse, pas cereal ;
+boissons, jus, sodas, alcool et laits végétaux vont dans boisson ;
+un plat déjà cuisiné ou un reste (pizza, soupe, riz cuit, poulet rôti) va dans restes.`;
 
 // `language` : langue de sortie (voir AI_LANGUAGE dans src/i18n/locales.ts).
 // Les consignes restent en français ; seul le texte produit change de langue.

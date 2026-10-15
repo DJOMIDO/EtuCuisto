@@ -29,9 +29,13 @@
     "viande": "Viandes",
     "poisson": "Poissons & fruits de mer",
     "laitier": "Œufs & produits laitiers",
-    "feculent": "Féculents & pain",
+    "cereal": "Céréales & féculents",
+    "legumineuse": "Légumineuses",
     "condiment": "Sauces & condiments",
     "epice": "Épices & aromates",
+    "boisson": "Boissons",
+    "sucrerie": "Sucreries & snacks",
+    "restes": "Restes & plats cuisinés",
     "autre": "Autres"
   },
   "fridge": {
