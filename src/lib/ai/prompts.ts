@@ -1,4 +1,5 @@
 import { CATEGORIES } from "@/lib/categories";
+import { storageOf, type StorageId } from "@/lib/storage";
 import type { KitchenProfile, PantryForPrompt } from "./schemas";
 
 const CATEGORIES_HELP = `Catégories (id : exemples) :
@@ -9,6 +10,12 @@ les légumineuses (lentilles, pois chiches, haricots, tofu) vont dans legumineus
 boissons, jus, sodas, alcool et laits végétaux vont dans boisson ;
 un plat déjà cuisiné ou un reste (pizza, soupe, riz cuit, poulet rôti) va dans restes.`;
 
+const STORAGE_HELP = `Zones de rangement (storage) :
+- congelateur : tout ce qui est surgelé (pois, poissons, viandes, pain en tranches) ou que l'utilisateur dit mettre au congélateur.
+- placard : riz, pâtes, farine, conserves, huile, vinaigre, sauces non entamées, épices, boissons, snacks, fruits non coupés.
+- frigo : produits frais et périssables (viande et poisson frais, produits laitiers, légumes frais, restes, condiments entamés).
+- En cas de doute, renvoie null. Un aliment peut très bien ne jamais aller au frigo.`;
+
 // `language` : langue de sortie (voir AI_LANGUAGE dans src/i18n/locales.ts).
 // Les consignes restent en français ; seul le texte produit change de langue.
 
@@ -17,7 +24,8 @@ export const parseTextSystem = (language: string) => `Tu transformes ce qu'un é
 - Garde la quantité si elle est donnée, sinon null.
 - expiresSoon = true seulement si l'utilisateur indique que ça va bientôt périmer ou que c'est abîmé.
 - Ignore ce qui n'est pas un aliment. Si le texte est vide ou hors sujet, renvoie une liste vide.
-${CATEGORIES_HELP}`;
+${CATEGORIES_HELP}
+${STORAGE_HELP}`;
 
 export const recognizeSystem = (language: string) => `Tu identifies les aliments visibles sur une photo de frigo, de placard ou de plan de travail d'un étudiant.
 - Liste seulement ce que tu vois avec une confiance raisonnable ; n'invente pas ce qui est caché.
@@ -26,7 +34,8 @@ export const recognizeSystem = (language: string) => `Tu identifies les aliments
 - expiresSoon = true si l'aliment a l'air abîmé, flétri ou entamé depuis longtemps.
 - Si l'image ne montre pas de nourriture, renvoie une liste vide.
 - Écris les noms des aliments en ${language}.
-${CATEGORIES_HELP}`;
+${CATEGORIES_HELP}
+${STORAGE_HELP}`;
 
 const TOOL_LABELS: Record<string, string> = {
   "micro-ondes": "micro-ondes",
@@ -46,17 +55,23 @@ const BUDGET_LABELS: Record<string, string> = {
   normal: "normal : jusqu'à 8 € d'achats",
 };
 
+const STORAGE_LABELS: Record<StorageId, string> = {
+  frigo: "frigo",
+  congelateur: "congélateur",
+  placard: "placard",
+};
+
 export const recipesSystem = (language: string) => `Tu es le cuisinier d'EtuCuisto, une appli qui aide les étudiants à vider leur frigo sans gaspiller.
 Propose exactement 3 recettes réalistes, simples et bonnes, adaptées à une cuisine d'étudiant.
 
 Règles :
-- Utilise d'abord les ingrédients du frigo, en priorité ceux marqués « bientôt périmé ».
+- Utilise d'abord les ingrédients de la cuisine (frigo, congélateur, placards), en priorité ceux marqués « bientôt périmé ».
 - Au plus 2 ingrédients manquants par recette. Sel, poivre, huile et eau sont toujours disponibles et ne comptent pas.
 - N'utilise que les ustensiles listés. Si seul le micro-ondes est disponible, toutes les recettes doivent se faire au micro-ondes.
 - Respecte strictement le temps maximum et le budget.
 - Les allergènes, les interdits du régime et les ingrédients à éviter sont absolus : aucune recette ne doit en contenir (traque les ingrédients cachés : beurre dans une sauce, gluten dans un panure, etc.).
 - Les cuisines appréciées servent seulement à orienter les propositions, jamais à exclure une recette pertinente.
-- Pour chaque ingrédient venant du frigo, renseigne son pantryItemId exact ; pour un ingrédient manquant, mets null.
+- Pour chaque ingrédient venant de la cuisine, renseigne son pantryItemId exact ; pour un ingrédient manquant, mets null.
 - Étapes courtes et concrètes (5 à 8 en général), compréhensibles par quelqu'un qui cuisine rarement.
 - Les 3 recettes doivent être vraiment différentes (pas trois variantes de pâtes).
 - Écris tout le texte (titre, résumé, ingrédients, étapes) en ${language}.`;
@@ -69,7 +84,7 @@ export function recipesUserPrompt(
   const items = pantry
     .map(
       (p) =>
-        `- [${p.id}] ${p.name}${p.quantity ? ` (${p.quantity})` : ""}${p.expiresSoon ? " — bientôt périmé" : ""}`,
+        `- [${p.id}] ${p.name}${p.quantity ? ` (${p.quantity})` : ""} — au ${STORAGE_LABELS[storageOf(p)]}${p.expiresSoon ? " — bientôt périmé" : ""}`,
     )
     .join("\n");
   const tools = kitchen.tools.map((t) => TOOL_LABELS[t] ?? t).join(", ") || "aucun ustensile précisé";
@@ -78,7 +93,7 @@ export function recipesUserPrompt(
   const avoided = kitchen.avoided.length ? kitchen.avoided.join(", ") : "aucun";
   const cuisines = kitchen.cuisines.length ? kitchen.cuisines.join(", ") : "aucune préférence";
 
-  return `Frigo et placards (id entre crochets) :
+  return `Frigo, congélateur et placards (id entre crochets) :
 ${items}
 
 Ustensiles disponibles : ${tools}

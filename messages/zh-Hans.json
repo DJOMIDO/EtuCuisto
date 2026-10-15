@@ -10,15 +10,15 @@
     "forItem": "：{name}"
   },
   "meta": {
-    "description": "清空冰箱：用你已有的食材做快手菜，专为学生厨房设计。",
-    "fridge": "我的冰箱",
+    "description": "看看你的厨房里有什么：用你已有的食材做快手菜，专为学生设计。",
+    "fridge": "我的厨房",
     "recipes": "菜谱",
     "favorites": "我的菜谱",
     "profile": "我的"
   },
   "nav": {
     "label": "主导航",
-    "fridge": "冰箱",
+    "fridge": "厨房",
     "recipes": "菜谱",
     "favorites": "收藏",
     "profile": "我的"
@@ -38,23 +38,31 @@
     "restes": "剩菜剩饭",
     "autre": "其他"
   },
+  "storageZones": {
+    "frigo": "冷藏",
+    "congelateur": "冷冻",
+    "placard": "常温"
+  },
   "fridge": {
-    "title": "我的冰箱",
+    "title": "我的厨房",
     "subtitle": "美味，从手边的食材开始。",
-    "loading": "正在加载冰箱…",
-    "listTitle": "冰箱里有",
+    "loading": "正在加载你的厨房…",
+    "listTitle": "{zone, select, frigo {冷藏室里有} congelateur {冷冻室里有} placard {储物柜里有} other {厨房里有}}",
     "count": "{count, plural, other {# 种食材}}",
     "expiringTitle": "尽快用掉",
-    "emptyTitle": "冰箱是空的",
+    "zonesLabel": "存放区",
+    "emptyZone": "这个区还没有食材。可以在食材菜单里把它挪到这里。",
+    "emptyTitle": "厨房还空空的",
     "emptyText": "写下你有什么，或者拍张照片，我们来帮你整理。",
-    "statusRemoved": "已从冰箱移除{name}。",
+    "statusRemoved": "已从厨房移除{name}。",
     "statusExpiringOn": "已将{name}标记为尽快用掉。",
     "statusExpiringOff": "{name}不再标记为尽快用掉。",
-    "statusCategory": "{name}：{category}。"
+    "statusCategory": "{name}：{category}。",
+    "statusStorage": "已将{name}挪到「{zone}」。"
   },
   "add": {
     "title": "你有什么食材？",
-    "hint": "像说话一样写下来，或者给冰箱拍张照片。",
+    "hint": "像说话一样写下来，或者拍张厨房的照片。",
     "placeholder": "3 个鸡蛋、一点剩饭、一根快放坏的西葫芦…",
     "analyze": "识别",
     "analyzing": "识别中…",
@@ -67,13 +75,14 @@
     "expiringToggle": "尽快用掉：{name}",
     "addCount": "添加 {count, plural, other {# 种食材}}",
     "adding": "添加中…",
-    "added": "已向冰箱添加 {count, plural, other {# 种食材}}。"
+    "added": "已添加 {count, plural, other {# 种食材}}。"
   },
   "itemMenu": {
     "actions": "操作：{name}",
     "markExpiring": "标记为「尽快用掉」",
     "unmarkExpiring": "不急了",
-    "remove": "从冰箱移除",
+    "remove": "移除该食材",
+    "storage": "存放区",
     "category": "类别"
   },
   "recipes": {
@@ -85,11 +94,11 @@
     "moreThanHour": "超过 1 小时",
     "kitchenSummary": "{tools} · 预算{budget} · ",
     "noTools": "没有厨具",
-    "notConfigured": "还没设置你的厨房 · ",
+    "notConfigured": "还没设置你的厨具和偏好 · ",
     "edit": "修改",
     "configure": "去设置",
-    "kitchenHidden": "我的厨房",
-    "emptyFridge": "冰箱是空的。请先<link>添加食材</link>。",
+    "kitchenHidden": "厨具及偏好设置",
+    "emptyFridge": "厨房是空的。请先<link>添加食材</link>。",
     "find": "找菜谱",
     "more": "换一批",
     "thinking": "厨师正在想…",
@@ -99,7 +108,7 @@
     "favoriteRemoved": "已取消收藏。",
     "guestFavorite": "在「我的」页面创建账户，就能保存喜欢的菜谱。",
     "enjoy": "祝你用餐愉快！",
-    "enjoyRemoved": "祝你用餐愉快！已从冰箱移除 {count, plural, other {# 种食材}}。",
+    "enjoyRemoved": "祝你用餐愉快！已从厨房移除 {count, plural, other {# 种食材}}。",
     "kitchenSaved": "厨房设置已保存。"
   },
   "recipeCard": {
@@ -108,7 +117,7 @@
     "toBuy": "需另买 {amount}",
     "nothingToBuy": "不用另买",
     "rescues": "用掉 {count, plural, other {# 种快过期食材}}",
-    "fromFridge": "冰箱里的",
+    "fromFridge": "厨房里的",
     "useSoon": "尽快用掉",
     "buy": "需要买",
     "steps": "查看步骤（{count}）",
@@ -119,8 +128,8 @@
     "delete": "删除"
   },
   "cookedDialog": {
-    "title": "做得好！要从冰箱里拿掉哪些？",
-    "gone": "这些食材已经不在冰箱里了。",
+    "title": "做得好！要拿掉哪些食材？",
+    "gone": "这些食材已经从厨房移除了。",
     "hint": "还有剩的就取消勾选。"
   },
   "favorites": {
@@ -140,8 +149,8 @@
     "enjoy": "祝你用餐愉快！"
   },
   "kitchen": {
-    "titleFirst": "先说说你的厨房",
-    "title": "我的厨房",
+    "titleFirst": "先说说你的厨具和偏好",
+    "title": "我的厨具及饮食偏好",
     "introFirst": "告诉我你有哪些厨具，这样推荐的菜你都能做。之后随时可以改。",
     "intro": "只推荐你真的能做的菜。",
     "tools": "厨具",
@@ -157,7 +166,7 @@
     "avoidedAdd": "添加",
     "avoidedRemove": "移除{item}",
     "cuisines": "喜欢的菜系",
-    "cuisinesHint": "可选：会优先推荐适合你冰箱的这些菜系。",
+    "cuisinesHint": "可选：会优先推荐适合你现有食材的这些菜系。",
     "addOption": "添加",
     "removeOption": "移除{item}",
     "customPlaceholder": "其他…",
@@ -250,8 +259,8 @@
   "auth": {
     "signinTitle": "欢迎回来",
     "signupTitle": "欢迎！",
-    "signinIntro": "登录后就能找回你的冰箱、设置和菜谱。",
-    "signupIntro": "创建账户，在所有设备上保存你的冰箱和菜谱。",
+    "signinIntro": "登录后就能找回你的厨房、设置和菜谱。",
+    "signupIntro": "创建账户，在所有设备上保存你的厨房和菜谱。",
     "google": "使用 Google 继续",
     "or": "或",
     "firstName": "名字",
@@ -295,7 +304,7 @@
   },
   "profile": {
     "title": "我的",
-    "subtitle": "你的冰箱、设置和菜谱在所有设备上都一致。",
+    "subtitle": "你的厨房、设置和菜谱在所有设备上都一致。",
     "noName": "未命名",
     "signOut": "退出登录",
     "preferences": "偏好设置",
@@ -314,7 +323,7 @@
     "intro": "以下内容会被永久删除，无法恢复：",
     "items": {
       "account": "你的账户和登录信息",
-      "fridge": "你的冰箱",
+      "fridge": "你的厨房食材",
       "recipes": "你收藏的菜谱和做菜记录",
       "settings": "你的厨房设置和偏好"
     },
@@ -331,7 +340,7 @@
     "photoMissing": "没有收到照片。",
     "photoFormat": "支持的格式：JPEG、PNG、WebP 或 GIF。",
     "photoTooBig": "照片太大（最大 5 MB）。",
-    "emptyFridge": "冰箱是空的：请先添加食材。",
+    "emptyFridge": "厨房是空的：请先添加食材。",
     "quotaGuest": "今天的试用次数已用完。在「我的」页面创建账户即可继续使用。",
     "quotaUser": "今天的次数已用完，明天再来吧！",
     "refused": "模型拒绝了这个请求。",

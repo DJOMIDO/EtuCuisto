@@ -1,17 +1,21 @@
 "use client";
 
-import { Refrigerator } from "lucide-react";
+import { UtensilsCrossed } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { CategoryId } from "@/lib/categories";
+import { STORAGES, storageOf, type StorageId } from "@/lib/storage";
 import { usePantry, type PantryItem } from "@/lib/client/use-pantry";
 import { AddIngredients } from "./AddIngredients";
 import { PantryList } from "./PantryList";
-import { PageTitle } from "../ui";
+import { STORAGE_ICONS } from "./storageIcons";
+import { choiceChip, PageTitle } from "../ui";
 
 export function FridgePage() {
+  const ids = useId();
   const t = useTranslations();
   const pantry = usePantry();
+  const [zone, setZone] = useState<StorageId>("frigo");
   const [status, setStatus] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -36,6 +40,14 @@ export function FridgePage() {
       () => pantry.update(item.id, { category }),
       t("fridge.statusCategory", { name: item.name, category: t(`categories.${category}`) }),
     );
+  const changeStorage = (item: PantryItem, storage: StorageId) =>
+    run(
+      () => pantry.update(item.id, { storage }),
+      t("fridge.statusStorage", { name: item.name, zone: t(`storageZones.${storage}`) }),
+    );
+
+  // Le badge d'une zone compte ce que ses groupes affichent (l'urgence reste visible partout).
+  const zoneCount = (s: StorageId) => pantry.items.filter((i) => !i.expiresSoon && storageOf(i) === s).length;
 
   return (
     <main id="content" tabIndex={-1} className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-4 py-4">
@@ -52,14 +64,43 @@ export function FridgePage() {
       {!pantry.loaded ? (
         <p className="text-muted">{t("fridge.loading")}</p>
       ) : pantry.items.length === 0 ? (
-        <EmptyFridge />
+        <EmptyKitchen />
       ) : (
         <>
+          <fieldset className="grid grid-cols-3 gap-2">
+            <legend className="visually-hidden">{t("fridge.zonesLabel")}</legend>
+            {STORAGES.map(({ id: s }) => {
+              const Icon = STORAGE_ICONS[s];
+              return (
+                <label key={s} className={`${choiceChip} gap-1.5 justify-center py-2.5`}>
+                  <input
+                    type="radio"
+                    name={`${ids}-zone`}
+                    value={s}
+                    checked={zone === s}
+                    onChange={() => setZone(s)}
+                    className="sr-only"
+                  />
+                  <Icon aria-hidden="true" className="size-5" />
+                  {t(`storageZones.${s}`)}
+                  <span className="text-sm font-bold opacity-70 tabular-nums">{zoneCount(s)}</span>
+                </label>
+              );
+            })}
+          </fieldset>
+
           <h2 className="mt-2 flex items-baseline justify-between text-xl font-extrabold">
-            {t("fridge.listTitle")}
-            <span className="text-sm font-bold text-muted">{t("fridge.count", { count: pantry.items.length })}</span>
+            {t("fridge.listTitle", { zone })}
+            <span className="text-sm font-bold text-muted">{t("fridge.count", { count: zoneCount(zone) })}</span>
           </h2>
-          <PantryList items={pantry.items} onToggleExpiring={toggle} onRemove={remove} onChangeCategory={changeCategory} />
+          <PantryList
+            items={pantry.items}
+            zone={zone}
+            onToggleExpiring={toggle}
+            onRemove={remove}
+            onChangeCategory={changeCategory}
+            onChangeStorage={changeStorage}
+          />
         </>
       )}
 
@@ -71,12 +112,12 @@ export function FridgePage() {
   );
 }
 
-function EmptyFridge() {
+function EmptyKitchen() {
   const t = useTranslations("fridge");
   return (
     <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
       <span aria-hidden="true" className="flex size-16 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
-        <Refrigerator className="size-8" />
+        <UtensilsCrossed className="size-8" />
       </span>
       <p className="text-lg font-extrabold">{t("emptyTitle")}</p>
       <p className="max-w-sm text-muted">{t("emptyText")}</p>

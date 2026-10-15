@@ -74,7 +74,8 @@ export function AddIngredients({ onAdd, announce }: Props) {
     setBusy("save");
     setError(null);
     try {
-      await onAdd(chosen.map(({ name, quantity, category, expiresSoon }) => ({ name, quantity, category, expiresSoon })));
+      // L'IA a aussi rangé chaque aliment (storage) : on suit son jugement, corrigeable ensuite via ItemMenu.
+      await onAdd(chosen.map(({ name, quantity, category, storage, expiresSoon }) => ({ name, quantity, category, storage, expiresSoon })));
       setCandidates(null);
       setText("");
       announce(t("add.added", { count: chosen.length }));

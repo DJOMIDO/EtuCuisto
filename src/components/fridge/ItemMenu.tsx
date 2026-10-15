@@ -4,19 +4,22 @@ import { AlarmClock, EllipsisVertical, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useRef } from "react";
 import { CATEGORIES, type CategoryId } from "@/lib/categories";
+import { STORAGES, storageOf, type StorageId } from "@/lib/storage";
 import type { PantryItem } from "@/lib/client/use-pantry";
 import { CategoryIcon } from "../CategoryIcon";
 import { button } from "../ui";
+import { STORAGE_ICONS } from "./storageIcons";
 
 type Props = {
   item: PantryItem;
   onToggleExpiring: (item: PantryItem) => void;
   onRemove: (item: PantryItem) => void;
   onChangeCategory: (item: PantryItem, category: CategoryId) => void;
+  onChangeStorage: (item: PantryItem, storage: StorageId) => void;
 };
 
 // Actions d'un ingrédient dans une feuille du bas (Popover API, fermeture au clic dehors / Échap).
-export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }: Props) {
+export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory, onChangeStorage }: Props) {
   const id = useId();
   const sheet = useRef<HTMLDivElement>(null);
   const t = useTranslations();
@@ -54,6 +57,28 @@ export function ItemMenu({ item, onToggleExpiring, onRemove, onChangeCategory }:
             <Trash2 aria-hidden="true" className="size-5" />
             {t("itemMenu.remove")}
           </button>
+          <div className="mt-1 border-t border-border px-3 pt-3">
+            <p id={`${id}-storage`} className="mb-2 text-sm font-bold text-muted">
+              {t("itemMenu.storage")}
+            </p>
+            <div role="group" aria-labelledby={`${id}-storage`} className="grid grid-cols-3 gap-1.5">
+              {STORAGES.map(({ id: s }) => {
+                const Icon = STORAGE_ICONS[s];
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    aria-pressed={storageOf(item) === s}
+                    onClick={() => run((i) => storageOf(i) !== s && onChangeStorage(i, s))}
+                    className="flex flex-col items-center gap-1 rounded-2xl px-1 py-2 text-center text-xs font-semibold leading-tight hover:bg-surface-muted aria-pressed:bg-accent-soft aria-pressed:text-accent-strong"
+                  >
+                    <Icon aria-hidden="true" className="size-6" />
+                    {t(`storageZones.${s}`)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <div className="mt-1 border-t border-border px-3 pt-3">
             <p id={`${id}-cat`} className="mb-2 text-sm font-bold text-muted">
               {t("itemMenu.category")}

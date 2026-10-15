@@ -10,15 +10,15 @@
     "forItem": " : {name}"
   },
   "meta": {
-    "description": "Vide ton frigo : des recettes rapides avec ce que tu as déjà, pensées pour les cuisines d'étudiants.",
-    "fridge": "Mon frigo",
+    "description": "Fais le tour de ta cuisine : des recettes rapides avec ce que tu as déjà, pensées pour les étudiants.",
+    "fridge": "Ma cuisine",
     "recipes": "Recettes",
     "favorites": "Mes recettes",
     "profile": "Profil"
   },
   "nav": {
     "label": "Principale",
-    "fridge": "Frigo",
+    "fridge": "Cuisine",
     "recipes": "Recettes",
     "favorites": "Favoris",
     "profile": "Profil"
@@ -38,23 +38,31 @@
     "restes": "Restes & plats cuisinés",
     "autre": "Autres"
   },
+  "storageZones": {
+    "frigo": "Frigo",
+    "congelateur": "Congélateur",
+    "placard": "Placard"
+  },
   "fridge": {
-    "title": "Mon frigo",
+    "title": "Ma cuisine",
     "subtitle": "Ce que tu as sous la main. Les recettes partiront de là.",
-    "loading": "Chargement du frigo…",
-    "listTitle": "Dans ton frigo",
+    "loading": "Chargement de ta cuisine…",
+    "listTitle": "{zone, select, frigo {Dans ton frigo} congelateur {Dans ton congélateur} placard {Dans ton placard} other {Dans ta cuisine}}",
     "count": "{count, plural, one {# ingrédient} other {# ingrédients}}",
     "expiringTitle": "À utiliser vite",
-    "emptyTitle": "Ton frigo est vide",
+    "zonesLabel": "Zone de rangement",
+    "emptyZone": "Rien dans cette zone pour l'instant. Tu peux y ranger un ingrédient depuis son menu.",
+    "emptyTitle": "Ta cuisine est vide",
     "emptyText": "Écris ce que tu as ou prends une photo : on s'occupe de trier.",
-    "statusRemoved": "{name} retiré du frigo.",
+    "statusRemoved": "{name} retiré de ta cuisine.",
     "statusExpiringOn": "{name} est à utiliser vite.",
     "statusExpiringOff": "{name} n'est plus à utiliser vite.",
-    "statusCategory": "{name} : {category}."
+    "statusCategory": "{name} : {category}.",
+    "statusStorage": "« {name} » déplacé : {zone}."
   },
   "add": {
     "title": "Qu'est-ce que tu as ?",
-    "hint": "Écris comme tu parles, ou prends ton frigo en photo.",
+    "hint": "Écris comme tu parles, ou prends ta cuisine en photo.",
     "placeholder": "3 œufs, un reste de riz, une courgette qui va bientôt périmer…",
     "analyze": "Analyser",
     "analyzing": "Analyse…",
@@ -67,13 +75,14 @@
     "expiringToggle": "À utiliser vite : {name}",
     "addCount": "Ajouter {count, plural, one {# ingrédient} other {# ingrédients}}",
     "adding": "Ajout…",
-    "added": "{count, plural, one {# ingrédient ajouté} other {# ingrédients ajoutés}} au frigo."
+    "added": "{count, plural, one {# ingrédient ajouté} other {# ingrédients ajoutés}}."
   },
   "itemMenu": {
     "actions": "Actions : {name}",
     "markExpiring": "Marquer « à utiliser vite »",
     "unmarkExpiring": "Ce n'est plus urgent",
-    "remove": "Retirer du frigo",
+    "remove": "Retirer",
+    "storage": "Rangement",
     "category": "Catégorie"
   },
   "recipes": {
@@ -88,8 +97,8 @@
     "notConfigured": "Ta cuisine n'est pas encore configurée · ",
     "edit": "modifier",
     "configure": "configurer",
-    "kitchenHidden": " ma cuisine",
-    "emptyFridge": "Ton frigo est vide. <link>Ajoute des ingrédients</link> d'abord.",
+    "kitchenHidden": " mes réglages cuisine",
+    "emptyFridge": "Ta cuisine est vide. <link>Ajoute des ingrédients</link> d'abord.",
     "find": "Trouver des recettes",
     "more": "Autres idées",
     "thinking": "Le chef réfléchit…",
@@ -99,7 +108,7 @@
     "favoriteRemoved": "Retirée des favoris.",
     "guestFavorite": "Crée un compte depuis l'onglet Profil pour garder tes recettes favorites.",
     "enjoy": "Bon appétit !",
-    "enjoyRemoved": "Bon appétit ! {count, plural, one {# ingrédient retiré} other {# ingrédients retirés}} du frigo.",
+    "enjoyRemoved": "Bon appétit ! {count, plural, one {# ingrédient retiré} other {# ingrédients retirés}} de ta cuisine.",
     "kitchenSaved": "Réglages de ta cuisine enregistrés."
   },
   "recipeCard": {
@@ -108,7 +117,7 @@
     "toBuy": "{amount} à acheter",
     "nothingToBuy": "Rien à acheter",
     "rescues": "Sauve {count, plural, one {# ingrédient} other {# ingrédients}}",
-    "fromFridge": "De ton frigo",
+    "fromFridge": "De ta cuisine",
     "useSoon": "à utiliser vite",
     "buy": "À acheter",
     "steps": "Voir les étapes ({count})",
@@ -119,8 +128,8 @@
     "delete": "Supprimer"
   },
   "cookedDialog": {
-    "title": "Bravo ! On retire quoi du frigo ?",
-    "gone": "Ces ingrédients ne sont plus dans ton frigo.",
+    "title": "Bravo ! Qu'est-ce qu'on retire ?",
+    "gone": "Ces ingrédients ne sont plus dans ta cuisine.",
     "hint": "Décoche ce qu'il te reste encore."
   },
   "favorites": {
@@ -140,8 +149,8 @@
     "enjoy": "Bon appétit !"
   },
   "kitchen": {
-    "titleFirst": "D'abord, ta cuisine",
-    "title": "Ma cuisine",
+    "titleFirst": "D'abord, ton matériel et tes goûts",
+    "title": "Mon matériel et mes préférences",
     "introFirst": "Dis-moi ce que tu as, pour ne recevoir que des recettes faisables chez toi. Tu pourras changer ça plus tard.",
     "intro": "Pour ne te proposer que des recettes que tu peux vraiment faire.",
     "tools": "Ustensiles",
@@ -157,7 +166,7 @@
     "avoidedAdd": "Ajouter",
     "avoidedRemove": "Retirer {item}",
     "cuisines": "Cuisines appréciées",
-    "cuisinesHint": "Facultatif : on privilégiera ces cuisines quand elles collent avec ton frigo.",
+    "cuisinesHint": "Facultatif : on privilégiera ces cuisines quand elles collent avec ce que tu as.",
     "addOption": "Ajouter",
     "removeOption": "Retirer {item}",
     "customPlaceholder": "Autre…",
@@ -250,8 +259,8 @@
   "auth": {
     "signinTitle": "Content de te revoir",
     "signupTitle": "Bienvenue !",
-    "signinIntro": "Connecte-toi pour retrouver ton frigo, tes réglages et tes recettes.",
-    "signupIntro": "Crée ton compte pour garder ton frigo et tes recettes sur tous tes appareils.",
+    "signinIntro": "Connecte-toi pour retrouver ta cuisine, tes réglages et tes recettes.",
+    "signupIntro": "Crée ton compte pour garder ta cuisine et tes recettes sur tous tes appareils.",
     "google": "Continuer avec Google",
     "or": "ou",
     "firstName": "Prénom",
@@ -295,7 +304,7 @@
   },
   "profile": {
     "title": "Profil",
-    "subtitle": "Ton frigo, tes réglages et tes recettes te suivent sur tous tes appareils.",
+    "subtitle": "Ta cuisine, tes réglages et tes recettes te suivent sur tous tes appareils.",
     "noName": "Sans nom",
     "signOut": "Se déconnecter",
     "preferences": "Préférences",
@@ -314,7 +323,7 @@
     "intro": "Tout sera effacé définitivement, sans retour possible :",
     "items": {
       "account": "ton compte et ta connexion",
-      "fridge": "ton frigo",
+      "fridge": "les ingrédients de ta cuisine",
       "recipes": "tes recettes favorites et ton historique",
       "settings": "les réglages de ta cuisine et tes préférences"
     },
@@ -331,7 +340,7 @@
     "photoMissing": "Photo manquante.",
     "photoFormat": "Format accepté : JPEG, PNG, WebP ou GIF.",
     "photoTooBig": "Photo trop lourde (5 Mo max).",
-    "emptyFridge": "Ton frigo est vide : ajoute des ingrédients.",
+    "emptyFridge": "Ta cuisine est vide : ajoute des ingrédients.",
     "quotaGuest": "Limite d'essai atteinte pour aujourd'hui. Crée un compte depuis l'onglet Profil pour continuer.",
     "quotaUser": "Tu as atteint la limite du jour. Reviens demain !",
     "refused": "La demande a été refusée par le modèle.",
